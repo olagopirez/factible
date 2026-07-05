@@ -15,13 +15,16 @@ const playas = await mvd.playas();               // ¿está apta Pocitos hoy?
 
 ## Estado
 
-🚧 **Esqueleto — no funcional todavía.** Los métodos lanzan `PendienteDeSpec` a propósito.
+🟡 **Capa de conexión implementada contra el manual oficial** (`spec/Manual_de_conexion_a_Montevideo_API_v1.0.pdf`):
 
-Triaje aprobado: el portal [api.montevideo.gub.uy](https://api.montevideo.gub.uy/docs) es de los pocos del Estado con documentación para desarrolladores, y el acceso es **cuenta gratuita autoservicio** (uso intensivo: pci@imm.gub.uy). Lo que falta para completar el cliente:
+- [x] Autenticación OAuth2 Client Credentials contra Keycloak, con caché de token, renovación automática y reintento transparente ante 401.
+- [x] `buses({ lineas })` — endpoint del manual (`/transportepublico/buses?lines=`). Devuelve `BusCrudo[]` (shape sin tipar hasta ver respuestas reales).
+- [x] `get(path, params)` público: cualquier endpoint del portal, autenticado.
+- [x] Mock del portal (Keycloak + API) fiel al manual, para desarrollar sin credenciales.
+- [ ] Fijar tipos definitivos de `Bus` con una respuesta real (`MVD_CLIENT_ID=... MVD_CLIENT_SECRET=... MVD_E2E=1 npx vitest run` imprime el shape).
+- [ ] Relevar endpoints de TEA (arribos) y playas en la doc autenticada del portal.
+- [ ] Validación e2e completa → promover a beta.
 
-- [ ] Registrar cuenta en el portal y relevar la doc autenticada: mecanismo de auth (¿API key? ¿OAuth2?), rutas exactas y shapes de respuesta.
-- [ ] Implementar `buses()`, `arribos()` y `playas()` contra esa spec.
-- [ ] Mock fiel a las respuestas reales (regla del ecosistema: los mocks no mienten).
-- [ ] Validar contra la API en vivo y ajustar los tipos provisorios de `src/tipos.ts`.
+Acceso: cuenta gratuita autoservicio en [api.montevideo.gub.uy](https://api.montevideo.gub.uy) → Mis aplicaciones → crear Aplicación → ID y Secreto del cliente.
 
 Parte del ecosistema [factible](../../README.md). MIT.
