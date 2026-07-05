@@ -6,11 +6,17 @@
 
 Un conector por organismo, misma experiencia: TypeScript tipado, simuladores incluidos para desarrollar sin trámites, y output validado contra las especificaciones oficiales.
 
+```bash
+npm install @factible/validar   # estable
+npm install @factible/bcu       # verificado contra el WS real del BCU
+npm install @factible/cfe       # beta — no usar en producción aún
+```
+
 | Paquete | Qué resuelve | Estado |
 |---|---|---|
 | [`@factible/cfe`](packages/cfe) | Facturación electrónica DGI: e-Ticket, e-Factura, sobres, acuses, reporte diario, representación impresa | 🟡 Beta offline (pendiente homologación DGI) |
 | [`@factible/validar`](packages/validar) | Dígito verificador y validación de CI y RUT uruguayos. Cero dependencias | 🟢 Estable — también en [Python, PHP, Go y Java](ports) |
-| [`@factible/bcu`](packages/bcu) | Cotizaciones oficiales del Banco Central | 🟡 Beta (verificable contra el WS real: `BCU_E2E=1 npm test`) |
+| [`@factible/bcu`](packages/bcu) | Cotizaciones oficiales del Banco Central | 🟢 Estable — verificado contra el servicio real |
 | `@factible/id-uruguay` | Login con cédula (OpenID Connect / AGESIC) | ⏳ En camino |
 | `@factible/bps` | Generación tipada de archivos de nómina | 🔍 Explorando |
 
