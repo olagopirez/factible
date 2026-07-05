@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>e-Ticket A-1</title>
+<style>
+  @page { size: A4; margin: 8mm; }
+  body { font-family: system-ui, sans-serif; font-size: 11px; width: 210mm; margin: 0 auto; color: #000; }
+  h1 { font-size: 14px; margin: 0; }
+  .cabezal, .pie { border: 1px solid #000; padding: 6px; margin-bottom: 6px; }
+  .doc-id { text-align: right; border: 2px solid #000; padding: 6px; float: right; min-width: 40%; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; }
+  th, td { text-align: left; padding: 2px 4px; border-bottom: 1px solid #ccc; }
+  td.n { text-align: right; }
+  tr.total td { font-weight: bold; border-top: 2px solid #000; font-size: 12px; }
+  .sello { display: flex; gap: 8px; align-items: flex-start; }
+  .sello img { width: 22mm; height: 22mm; margin: 3mm; }
+  .cod-seg { font-size: 10px; }
+  .cae-venc { border: 1px solid #000; width: 2cm; min-width: 2cm; min-height: 1cm; padding: 4px; font-size: 10px; float: right; }
+  .leyendas { font-size: 10px; margin-top: 4px; }
+  .clear { clear: both; }
+</style>
+</head>
+<body>
+  <div class="doc-id">
+    <h1>e-Ticket</h1>
+    <div>Serie A — Nº 1</div>
+    <div>Fecha: 5/7/2026</div>
+    <div>RUC: 211234560012</div>
+  </div>
+  <div class="cabezal">
+    <strong>Café Martínez SRL</strong> — Café de la Esquina<br>
+    Av. 18 de Julio 1234, Montevideo, Montevideo
+  </div>
+  <div class="clear"></div>
+  
+  <table>
+    <thead><tr><th>Detalle</th><th class="n">Cant.</th><th class="n">P. unit.</th><th class="n">Importe</th></tr></thead>
+    <tbody><tr><td>Café espresso doble</td><td class="n">2</td><td class="n">190.00</td><td class="n">380.00</td></tr><tr><td>Medialunas x3</td><td class="n">1</td><td class="n">240.00</td><td class="n">240.00</td></tr><tr><td>Libro: El Quijote</td><td class="n">1</td><td class="n">890.00</td><td class="n">890.00</td></tr></tbody>
+  </table>
+  <table><tbody><tr><td>Monto no gravado</td><td class="n">890.00</td></tr><tr><td>Neto IVA tasa mínima</td><td class="n">240.00</td></tr><tr><td>IVA tasa mínima (10%)</td><td class="n">24.00</td></tr><tr><td>Neto IVA tasa básica</td><td class="n">380.00</td></tr><tr><td>IVA tasa básica (22%)</td><td class="n">83.60</td></tr><tr class="total"><td>TOTAL UYU</td><td class="n">1617.60</td></tr></tbody></table>
+  <div class="pie">
+    <div class="cae-venc"><strong>CAE</strong><br>Fecha de vencimiento<br>30/12/2027</div>
+    <div class="sello">
+      <div>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAAklEQVR4AewaftIAAAvmSURBVO3BQY7d2LIgQXci979lb00IxOAfinkrparXCDP7hbXW/+lirXV0sdY6ulhrHV2stY4u1lpHF2uto4u11tEXv6HyN1RMKp+qmFSmiknlVjGpfEfFicpUcaLypGJSeatiUpkqTlSeVLylMlVMKn9DxcnFWuvoYq11dLHWOvrimyp+ispbFZPKWxWTyp+icqt4ojJV3ComlScVN5UnKk9UbhVPKk5UfkrFT1F562KtdXSx1jq6WGsdffEPqbxV8VMqJpWbylTxlspUMalMFZPKScWkMqmcVDxReaviicpN5YnKScWk8lNU3qr41MVa6+hirXX0xX9UxROVqeJTFTeVSWWqmFROVJ5UTCq3ik9VTCpPVE4qJpWpYlJ5q+K/7mKtdXSx1jq6WGsdffEfpTJVTBX/BpWpYlK5VUwqk8qJyndUfKrib6j4X3Ox1jq6WGsdXay1jr74hyr+hIonKicVTyo+VTGpTBVvVbyl8pbKVDGpvFXxROVEZar4KRV/w8Va6+hirXV0sdY6+uKbVP4GlaniScVNZaqYVKaKk4pJZaqYVG4V36Fyq3hSMancKiaVqWJSmSpuKlPFpDJV3FSeqEwVJyr/hou11tHFWuvIfuF/gMpU8ZbKpyomlbcqJpWp4i2VqeJTKk8qTlSmiknlrYr/uou11tHFWuvoYq119MVvqEwVJyp/SsUTlVvFVDGpTBU3le+oOFF5ovJTVE4qpoq3VKaKSeWkYlKZVJ5UnKhMFZPKWxUnF2uto4u11tHFWuvoix9U8URlqnhLZaqYKj6l8imVk4pJ5a2KSeWtikllqphUpopPVdxUpoqfUjGpTBU/4WKtdXSx1jq6WGsdffEbFW+pTBVTxaRyUvFTVJ5U/AkqU8Wk8lbFT1GZKk4qJpUnKreKSWWqeKJyq5hUpoq3VKaKk4u11tHFWuvoYq11ZL/wD6jcKiaVJxU3laniicpUcVOZKp6ovFXxROWtiknlrYoTlaniicpJxaQyVbyl8h0Vb6lMFTeVJxUnF2uto4u11tEXv6Hylsp3qNwqnqhMFT+l4kRlUnmrYlJ5q2JSeaJyq5hUpoonFTeVqWJSeatiUnlLZap4onKrmFTeulhrHV2stY4u1lpH9gvfoPJWxVsqTyqeqPwJFZ9S+Y6Km8pUMalMFScqTypOVD5VMak8qZhU/oSKty7WWkcXa62ji7XWkf3CD1GZKiaVk4qfovKkYlK5VUwqU8Wk8lbFE5WTiicqb1VMKlPFTWWqmFSmir9B5adUnFystY4u1lpHF2utoy9+UMWk8qTipjJVfIfKrWJS+VTFpPKk4qbyX1DxX6QyVUwqt4qpYlI5qZhU3rpYax1drLWO7BceqDypuKk8qZhUbhWTylQxqUwVN5XvqLipTBWTyqcqJpWp4qbypGJSOamYVKaKT6m8VfEplScVJypTxVsXa62ji7XW0cVa68h+4YeoTBWfUvlUxadUvqPiLZWp4r9AZaq4qUwVk8pJxROVqWJS+QkVk8pUcXKx1jq6WGsdXay1juwXfojKVDGpfKpiUjmpmFSmihOVJxWTylTxlspUcaIyVZyoPKl4ovJWxaRyUvFEZap4S+Wtircu1lpHF2uto4u11tEX/5DKpypOVJ5UTCpvqUwVJxWTylQxqZxUTBVvVfwpKicVk8qkMlXcVCaVv6XiRGWqOLlYax1drLWOLtZaR1/8hspU8VNU3lL5VMWkclIxqUwVk8pUcVP5DpU/oWJSeUvlScVbFU9UJpWTiqniRGWqeOtirXV0sdY6+uKbVKaKE5UnFScqU8WkcqIyVfwtKm+pvFUxqbylMlU8UXlLZao4UXlScaLyHSq3ikllqji5WGsdXay1ji7WWkf2C9+gclIxqfyUiknlrYq3VKaKJyr/hooTlaniUypTxaQyVbyl8lMqTlSeVJxcrLWOLtZaRxdrraMvfkPlScVbFW+pTCpTxVsqU8Wk8pbKWxWTylTxlsoTlROVqeJTKp9SeVLxlsqk8idcrLWOLtZaRxdrraMvfqNiUjlR+Q6VW8V3qEwVJxU/peItle9QuVU8UfmUypOKW8Wk8kTlpGJSeaJyq3hSMancKj51sdY6ulhrHX3xTRWTyqcq/gSVqeJJxU3ln1C5VUwqTyr+11T8KRU/QWWqeOtirXV0sdY6ulhrHdkvfIPKVHFT+VMqnqjcKiaVJxU3lScVT1T+DRUnKlPFpPJWxaQyVbyl8lMqTlSeVJxcrLWOLtZaRxdrraMvfkNlqphUbhVPVKaKm8pPUZkqJpVJ5S2VqeJTFW+pvKXyHRWTylsVk8qt4knFE5VbxaQyqUwVt4pJ5a2LtdbRxVrr6GKtdWS/8A0qJxWTylQxqbxVMalMFTeVqeKJyq3iicpbFZPKpyo+pTJVTConFU9U3qqYVKaKE5XvqPgJF2uto4u11tEX31TxUypOVJ5UvKXylspU8aTiUxVvqTypuKlMFZPKVDGp3FSeVEwqJyrfofJWxaRyUvHWxVrr6GKtdXSx1jr64jdUforKp1SeVHyq4qeovKUyVbxVMamcqDxRmSpuKlPFpDJV3FSmiicqJxWTylsVk8pUcXKx1jq6WGsdXay1jr74jYpJZaq4qUwVb6k8qfhUxVsqU8UTlZOKSeVTFZPKVHGiMlVMKicVn6r4W1ROVKaKty7WWkcXa62ji7XW0Re/ofIplaliUvmUyqdUpopbxZOKt1S+Q+VWMak8UXlLZaqYVN6qmFRuFZPKVPGk4qYyVUwqf8LFWuvoYq11dLHWOrJfeKDyqYq3VL6jYlI5qZhUfkrFpHKreKJyUjGpvFUxqXxHxU3lOyo+pTJVnKj8lIqTi7XW0cVa68h+4RtUPlUxqdwqforKd1TcVKaKSWWqOFGZKiaVn1JxojJVTConFZPKVDGpnFRMKm9VTCpPKk5UpoqTi7XW0cVa6+hirXX0xT9U8ZbKVHFTmSq+Q+WkYlI5qfgOlaniJ1Q8UZlUTiomlaliUrmpTBWTylsq31FxU/kOlZ9wsdY6ulhrHV2stY6++A2VqWJSuVVMKlPFpHKr+P+Byq3ip6g8qThRmSomlanipjKpvFUxqUwVT1ROKt5S+dTFWuvoYq11dLHWOvriNyomlanipGJSmSp+SsVN5TtUbhWTylQxqbyl8qTipvKkYlK5VfwTKreKT6lMFZPKVDFV3FQmlanipGJSeetirXV0sdY6+uJfpPI3qEwVk8pJxXdUnFRMKpPKrWJSeVJxUvEdFScqn1KZKiaVn6JyUvHWxVrr6GKtdXSx1jr64h9SOamYKt5S+SkVk8pUcVOZKiaVt1S+o+Km8h0qt4o/peItle+oeEtlUvkTLtZaRxdrraOLtdbRF7+h8lbFd6jcKqaKSeVTKlPFScWk8reofKriLZW3VJ5UTCq3ikllUvkpFScqn7pYax1drLWOLtZaR1/8RsWfUnGi8h0Vb6lMFScVk8pPqXhL5YnKWxV/SsWnKt5SmVSmip9wsdY6ulhrHV2stY6++A2Vv6Hip6g8qThR+SkVk8oTlVvFd1TcVP4JlT+hYlJ5onKr+A6VW8WkMlWcXKy1ji7WWkdffFPFT1H5VMVbFZPKScW/peJTKicVk8pUMVXcVKaKJyo/peKtiknlpvKpi7XW0cVa6+hirXX0xT+k8lbFpyomlZ9ScVOZKiaVJxU3lScqf4PKVPEplU9VTCqTyqdU/oSLtdbRxVrr6GKtdfTF/6iKt1TeqnhSMamcVEwqTypOVJ5U/BSVT1WcqDypOFGZKiaVqeInXKy1ji7WWkcXa62jL/6jKp6onFQ8qZhU3qqYKk5UnlRMKp9SuVVMKlPFpDJVvKUyqfwNKm+pPKk4uVhrHV2stY6++Icq/gsqTiqeVLyl8lbFpyp+SsWTiknlVvEdFW+pTConFU9UJpWfcLHWOrpYax1drLWOvvgmlb9B5UnFpPITKp5UPFG5qUwVn1KZKqaKm8pU8VNUpooTle+omFRuKk8qJpVbxaTy1sVa6+hirXV0sdY6sl9Ya/2fLtZaRxdrraOLtdbRxVrr6GKtdXSx1jr6f1MtoDRXqIdfAAAAAElFTkSuQmCC" alt="QR-Code">
+        <div class="cod-seg">Código de seguridad: <strong>tOBwJX</strong></div>
+      </div>
+      <div class="leyendas">
+        <div>Fecha emisor: 01/03/2026</div>
+        <div>Puede verificar comprobante en www.cafedelaesquina.uy/cfe</div>
+        <div>Nº de CAE: 90230011234 — Serie A, del 1 al 5000</div>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</body>
+</html>

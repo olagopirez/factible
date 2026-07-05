@@ -1,0 +1,47 @@
+{
+  "name": "@factible/validar",
+  "version": "0.1.0",
+  "description": "Validación y dígito verificador de documentos uruguayos: CI y RUT. Cero dependencias.",
+  "keywords": [
+    "cedula",
+    "ci",
+    "rut",
+    "ruc",
+    "uruguay",
+    "digito-verificador",
+    "validacion"
+  ],
+  "license": "MIT",
+  "author": "Oscar Lago",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olagopirez/factible.git",
+    "directory": "packages/validar"
+  },
+  "homepage": "https://github.com/olagopirez/factible/tree/main/packages/validar#readme",
+  "bugs": "https://github.com/olagopirez/factible/issues"
+}

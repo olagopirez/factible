@@ -1,0 +1,17 @@
+{
+  "name": "factible",
+  "private": true,
+  "description": "Infraestructura open source para integrarte con el Estado uruguayo",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "build": "npm run build --workspaces"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

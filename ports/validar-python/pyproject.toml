@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "factible-validar"
+version = "0.1.0"
+description = "Validación y dígito verificador de documentos uruguayos: CI y RUT. Cero dependencias."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Oscar Lago" }]
+requires-python = ">=3.9"
+keywords = ["cedula", "ci", "rut", "ruc", "uruguay", "digito-verificador"]
+
+[tool.setuptools]
+packages = ["factible_validar"]

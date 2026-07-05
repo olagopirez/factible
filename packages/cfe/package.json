@@ -1,0 +1,55 @@
+{
+  "name": "@factible/cfe",
+  "version": "0.0.1",
+  "description": "Facturación electrónica (CFE) de DGI Uruguay para desarrolladores. Construí, firmá y enviá e-Tickets y e-Facturas desde Node/TypeScript.",
+  "keywords": [
+    "cfe",
+    "efactura",
+    "dgi",
+    "uruguay",
+    "facturacion-electronica",
+    "e-ticket",
+    "e-factura"
+  ],
+  "license": "MIT",
+  "author": "Oscar Lago",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "@types/qrcode": "^1.5.6",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.9.10",
+    "qrcode": "^1.5.4",
+    "xml-crypto": "^6.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olagopirez/factible.git",
+    "directory": "packages/cfe"
+  },
+  "homepage": "https://github.com/olagopirez/factible/tree/main/packages/cfe#readme",
+  "bugs": "https://github.com/olagopirez/factible/issues"
+}

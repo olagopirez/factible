@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<DGICFE:EnvioCFE version="1.0" xsi:schemaLocation="http://cfe.dgi.gub.uy EnvioCFE_v1.24.xsd" xmlns:DGICFE="http://cfe.dgi.gub.uy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<DGICFE:Caratula version="1.0">
+	<DGICFE:RutReceptor>219999830019</DGICFE:RutReceptor>
+	<DGICFE:RUCEmisor>219999830019</DGICFE:RUCEmisor>
+	<DGICFE:Idemisor>2020</DGICFE:Idemisor>
+	<DGICFE:CantCFE>8</DGICFE:CantCFE>
+	<DGICFE:Fecha>2016-03-11T13:10:00-03:00</DGICFE:Fecha>
+<DGICFE:X509Certificate>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</DGICFE:X509Certificate>
+
+
+
+
+</DGICFE:Caratula>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eTck><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>101</ns0:TipoCFE><ns0:Serie>A</ns0:Serie><ns0:Nro>1</ns0:Nro><ns0:FchEmis>2013-05-11</ns0:FchEmis><ns0:MntBruto>1</ns0:MntBruto><ns0:FmaPago>1</ns0:FmaPago><ns0:FchVenc>2013-08-21</ns0:FchVenc></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>DGI RUC PRUEBA NO CEDE</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>1534 Avda. Daniel Fernandez Crespo</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>3</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>13353214</ns0:DocRecep><ns0:RznSocRecep>Juan Perez</ns0:RznSocRecep><ns0:DirRecep>18 de Julio 2016</ns0:DirRecep><ns0:CiudadRecep>Montevideo</ns0:CiudadRecep><ns0:DeptoRecep>Montevideo</ns0:DeptoRecep></ns0:Receptor><ns0:Totales><ns0:TpoMoneda>UYU</ns0:TpoMoneda><ns0:MntNoGrv>420</ns0:MntNoGrv><ns0:MntNetoIvaTasaMin>360</ns0:MntNetoIvaTasaMin><ns0:MntNetoIVATasaBasica>137704.92</ns0:MntNetoIVATasaBasica><ns0:IVATasaMin>10</ns0:IVATasaMin><ns0:IVATasaBasica>22</ns0:IVATasaBasica><ns0:MntIVATasaMin>36</ns0:MntIVATasaMin><ns0:MntIVATasaBasica>30295.08</ns0:MntIVATasaBasica><ns0:MntTotal>168816</ns0:MntTotal><ns0:CantLinDet>3</ns0:CantLinDet><ns0:MntPagar>168816</ns0:MntPagar></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>1</ns0:NroLinDet><ns0:IndFact>3</ns0:IndFact><ns0:NomItem>Bananas</ns0:NomItem><ns0:Cantidad>40</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed><ns0:PrecioUnitario>4200</ns0:PrecioUnitario><ns0:MontoItem>168000</ns0:MontoItem></ns0:Item><ns0:Item><ns0:NroLinDet>2</ns0:NroLinDet><ns0:IndFact>2</ns0:IndFact><ns0:NomItem>Manzanas</ns0:NomItem><ns0:Cantidad>18</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed><ns0:PrecioUnitario>22</ns0:PrecioUnitario><ns0:MontoItem>396</ns0:MontoItem></ns0:Item><ns0:Item><ns0:NroLinDet>3</ns0:NroLinDet><ns0:IndFact>
+
+
+
+1</ns0:IndFact><ns0:NomItem>Papas</ns0:NomItem><ns0:Cantidad>12</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed><ns0:PrecioUnitario>35</ns0:PrecioUnitario><ns0:MontoItem>420</ns0:MontoItem></ns0:Item></ns0:Detalle><ns0:CAEData><ns0:CAE_ID>1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eTck><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>xpXiLtg0nWejadP44Gm7ArFMk7Y=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>ke8XBfPeT4OzEK5enxCJ6nK367fS9RFx007Yy+A8NAz1+cPIfSgqJhg68nesUCy/XlxbYkFAEU62GvhDg/XdiBFzkwMXac896pVFZr4S45v4FZX3YkosGIi64honz/2tvyUiN977Ek0HtLMoz6DVK5L/5FspvanZqJLEDqEGqJk=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eTck><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>102</ns0:TipoCFE><ns0:Serie>A</ns0:Serie><ns0:Nro>1</ns0:Nro><ns0:FchEmis>2012-05-11</ns0:FchEmis><ns0:MntBruto>1</ns0:MntBruto><ns0:FmaPago>2</ns0:FmaPago><ns0:FchVenc>2013-03-21</ns0:FchVenc></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>DGI RUC PRUEBA NO CEDE</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>1534 Avda. Daniel Fernandez Crespo</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>3</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>13353214</ns0:DocRecep><ns0:RznSocRecep>Juan Perez</ns0:RznSocRecep><ns0:DirRecep>18 de Julio</ns0:DirRecep><ns0:CiudadRecep>Montevideo</ns0:CiudadRecep><ns0:DeptoRecep>Montevideo</ns0:DeptoRecep></ns0:Receptor><ns0:Totales><ns0:TpoMoneda>UYU</ns0:TpoMoneda><ns0:MntNetoIvaTasaMin>75000</ns0:MntNetoIvaTasaMin><ns0:IVATasaMin>10</ns0:IVATasaMin><ns0:IVATasaBasica>22</ns0:IVATasaBasica><ns0:MntIVATasaMin>7500</ns0:MntIVATasaMin><ns0:MntTotal>82500</ns0:MntTotal><ns0:CantLinDet>1</ns0:CantLinDet><ns0:MntPagar>82500</ns0:MntPagar></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>1</ns0:NroLinDet><ns0:IndFact>2</ns0:IndFact><ns0:NomItem>Manzanas</ns0:NomItem><ns0:Cantidad>50</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed><ns0:PrecioUnitario>1650</ns0:PrecioUnitario><ns0:MontoItem>82500</ns0:MontoItem></ns0:Item></ns0:Detalle><ns0:Referencia><ns0:Referencia><ns0:NroLinRef>1</ns0:NroLinRef><ns0:TpoDocRef>101</ns0:TpoDocRef><ns0:Serie>A</ns0:Serie><ns0:NroCFERef>2</ns0:NroCFERef></ns0:Referencia></ns0:Referencia><ns0:CAEData><ns0:CAE_ID>1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eTck><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>wwNHpZT9gDKlCUalcLcwo5DIkNk=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>Oa6tS9NreWBwRR8RhT2rTOr4Gm3OSWklWzKR3Z+u+LGzQo1C+EskajdxmzdkKvVMgQ4O9CmNL+6RILCFTtFi7j1jFVuAyH5eejLNnNJxFziS0FMYj0uLdj6lqkEO+txlYMXhUG8/k/ZKXC3Ur9Em2/MCAYZB+qFw3DBe7OZcxEk=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eTck><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>103</ns0:TipoCFE><ns0:Serie>A</ns0:Serie><ns0:Nro>1</ns0:Nro><ns0:FchEmis>2012-05-11</ns0:FchEmis><ns0:MntBruto>1</ns0:MntBruto><ns0:FmaPago>1</ns0:FmaPago><ns0:FchVenc>2013-03-21</ns0:FchVenc></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>DGI RUC PRUEBA NO CEDE</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>1534 Avda. Daniel Fernandez Crespo</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>3</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>13353214</ns0:DocRecep><ns0:RznSocRecep>Juan Perez</ns0:RznSocRecep><ns0:DirRecep>18 de Julio</ns0:DirRecep><ns0:CiudadRecep>Montevideo</ns0:CiudadRecep><ns0:DeptoRecep>Montevideo</ns0:DeptoRecep></ns0:Receptor><ns0:Totales><ns0:TpoMoneda>UYU</ns0:TpoMoneda><ns0:MntNetoIVATasaBasica>24790.16</ns0:MntNetoIVATasaBasica><ns0:IVATasaMin>10</ns0:IVATasaMin><ns0:IVATasaBasica>22</ns0:IVATasaBasica><ns0:MntIVATasaBasica>5453.84</ns0:MntIVATasaBasica><ns0:MntTotal>30244</ns0:MntTotal><ns0:CantLinDet>1</ns0:CantLinDet><ns0:MntPagar>30244</ns0:MntPagar></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>1</ns0:NroLinDet><ns0:IndFact>3</ns0:IndFact><ns0:NomItem>Rec.TB</ns0:NomItem><ns0:Cantidad>1</ns0:Cantidad><ns0:UniMed>N/A</ns0:UniMed><ns0:PrecioUnitario>30244</ns0:PrecioUnitario><ns0:MontoItem>30244</ns0:MontoItem></ns0:Item></ns0:Detalle><ns0:Referencia><ns0:Referencia><ns0:NroLinRef>1</ns0:NroLinRef><ns0:TpoDocRef>101</ns0:TpoDocRef><ns0:Serie>A</ns0:Serie><ns0:NroCFERef>4</ns0:NroCFERef></ns0:Referencia></ns0:Referencia><ns0:CAEData><ns0:CAE_ID>1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eTck><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>p1VrpYT0zI7huek2QhjKTGbCBsY=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>Ad2/KMLEZgYPxlDVBUenLJ1L/AGYd9cskYzk09vJr2e6qoO/y6Swt5J5eN2ruPpNDj5HK80Ric+IiEDUdLEjBaveg/6Ao7v8v+biDUWCii7uWhGZ8wfyyEXbcrsZ+oATMmn0g36JWI3nFMkPlTkKvIIGJHPJR8xIQxcOI3vVgr0=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eFact><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>111</ns0:TipoCFE><ns0:Serie>A</ns0:Serie><ns0:Nro>1</ns0:Nro><ns0:FchEmis>2012-05-11</ns0:FchEmis><ns0:FmaPago>1</ns0:FmaPago></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>DGI RUC PRUEBA NO CEDE</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>18 de Julio</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>2</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>214844360018</ns0:DocRecep><ns0:RznSocRecep>DGI</ns0:RznSocRecep><ns0:DirRecep>Fernandez Crespo 1534</ns0:DirRecep><ns0:CiudadRecep>Montevideo</ns0:CiudadRecep></ns0:Receptor><ns0:Totales><ns0:TpoMoneda>UYU</ns0:TpoMoneda><ns0:MntNetoIVATasaBasica>20000</ns0:MntNetoIVATasaBasica><ns0:IVATasaMin>10</ns0:IVATasaMin><ns0:IVATasaBasica>22</ns0:IVATasaBasica><ns0:MntIVATasaBasica>4400</ns0:MntIVATasaBasica><ns0:MntTotal>24400</ns0:MntTotal><ns0:CantLinDet>3</ns0:CantLinDet><ns0:MontoNF>5000</ns0:MontoNF><ns0:MntPagar>29400</ns0:MntPagar></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>1</ns0:NroLinDet><ns0:IndFact>3</ns0:IndFact><ns0:NomItem>Harina</ns0:NomItem><ns0:Cantidad>10</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed><ns0:PrecioUnitario>1000</ns0:PrecioUnitario><ns0:MontoItem>10000</ns0:MontoItem></ns0:Item><ns0:Item><ns0:NroLinDet>2</ns0:NroLinDet><ns0:IndFact>3</ns0:IndFact><ns0:NomItem>Azucar</ns0:NomItem><ns0:Cantidad>5</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed><ns0:PrecioUnitario>2000</ns0:PrecioUnitario><ns0:MontoItem>10000</ns0:MontoItem></ns0:Item><ns0:Item><ns0:NroLinDet>3</ns0:NroLinDet><ns0:IndFact>6</ns0:IndFact><ns0:NomItem>Bicicleta</ns0:NomItem><ns0:Cantidad>1</ns0:Cantidad><ns0:UniMed>N/A</ns0:UniMed><ns0:PrecioUnitario>5000</ns0:PrecioUnitario><ns0:MontoItem>5000</ns0:MontoItem></ns0:Item></ns0:Detalle><ns0:CAEData><ns0:CAE_ID>
+
+
+
+1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eFact><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>Nm3g4Ou7+EU1g2hM3l6qImlJQsA=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>cmabfe/IS2ueLJR5HV/Rdu4Qk1LxFdgp6cYBwADQ9VYuvoCGoE0uJcqdAmXqkNKL4VitVfagx8NzXuGERjMBkt7O7DUtP2VTzVMkGrjLaXeWR7+uHremUYStromQpnt0BggjI5c5fskoHBdAr1/Gg5KBm256/rKSJ3ylnv8SWrI=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eFact><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>112</ns0:TipoCFE><ns0:Serie>A</ns0:Serie><ns0:Nro>1</ns0:Nro><ns0:FchEmis>2012-05-11</ns0:FchEmis><ns0:FmaPago>2</ns0:FmaPago></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>DGI RUC PRUEBA NO CEDE</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>18 de Julio</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>2</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>214844360018</ns0:DocRecep><ns0:RznSocRecep>DGI</ns0:RznSocRecep><ns0:DirRecep>Fernandez Crespo 1534</ns0:DirRecep><ns0:CiudadRecep>Montevideo</ns0:CiudadRecep></ns0:Receptor><ns0:Totales><ns0:TpoMoneda>UYU</ns0:TpoMoneda><ns0:MntNetoIvaTasaMin>150000</ns0:MntNetoIvaTasaMin><ns0:IVATasaMin>10</ns0:IVATasaMin><ns0:IVATasaBasica>22</ns0:IVATasaBasica><ns0:MntIVATasaMin>
+15000</ns0:MntIVATasaMin><ns0:MntTotal>165000</ns0:MntTotal><ns0:CantLinDet>1</ns0:CantLinDet><ns0:MontoNF>0</ns0:MontoNF><ns0:MntPagar>165000</ns0:MntPagar></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>1</ns0:NroLinDet><ns0:IndFact>2</ns0:IndFact><ns0:NomItem>Uvas</ns0:NomItem><ns0:Cantidad>50</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed><ns0:PrecioUnitario>3000</ns0:PrecioUnitario><ns0:MontoItem>150000</ns0:MontoItem></ns0:Item></ns0:Detalle><ns0:Referencia><ns0:Referencia><ns0:NroLinRef>1</ns0:NroLinRef><ns0:TpoDocRef>111</ns0:TpoDocRef><ns0:Serie>A</ns0:Serie><ns0:NroCFERef>2</ns0:NroCFERef></ns0:Referencia></ns0:Referencia><ns0:CAEData><ns0:CAE_ID>1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eFact><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>irre7KmoA1sQTPQ4Qbc6byCsMnM=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>j3nK+JU0nW5W/mMsyTaI8tULzhvM61Q5DWELvXF4zkwCS8kjxJCDUo7M2OXCgY+hFWmXfLBBM+UNgrGXqS52W1+NihaYB7Jr4o7RzZ9y/UG3B6HgYqc4QDai+oUtzxXC0+soTKpMIWF7QrhLzODycvMcYtIcc9inwMtEP3Gs8BA=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eRem><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>181</ns0:TipoCFE><ns0:Serie>A</ns0:Serie><ns0:Nro>1</ns0:Nro><ns0:FchEmis>2012-05-11</ns0:FchEmis><ns0:TipoTraslado>1</ns0:TipoTraslado></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>DGI RUC PRUEBA NO CEDE</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>Fernandez Crespo 1534</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>2</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>214844360018</ns0:DocRecep><ns0:RznSocRecep>DGI</ns0:RznSocRecep><ns0:DirRecep>Fernandez Crespo 1534</ns0:DirRecep><ns0:CiudadRecep>Montevideo</ns0:CiudadRecep></ns0:Receptor><ns0:Totales><ns0:CantLinDet>3</ns0:CantLinDet></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>1</ns0:NroLinDet><ns0:NomItem>Manzanas</ns0:NomItem><ns0:Cantidad>10</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed></ns0:Item><ns0:Item><ns0:NroLinDet>2</ns0:NroLinDet><ns0:NomItem>Papas</ns0:NomItem><ns0:Cantidad>5</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed></ns0:Item><ns0:Item><ns0:NroLinDet>3</ns0:NroLinDet><ns0:NomItem>Uvas</ns0:NomItem><ns0:Cantidad>8</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed></ns0:Item></ns0:Detalle><ns0:CAEData><ns0:CAE_ID>1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eRem><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>Rw3M0mzu2JANirzy6A1Q+HSdUa0=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>Bb4CWIrtkH5fpIztOHKdsWxNWxZRyOU0pNNM3nZ/D0OSEbD9NSs57Zu4d7YgZA73N/e8PrJFwEQGBwpCUzR+D462EPwgaB3JeKbsCKg3IZIkkQWlL2zGQH29dfGjJf/14HaDInL3oPOlGJxbe+gSdTMEz7qSB0QFP8u3ql0my68=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eRem><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>281</ns0:TipoCFE><ns0:Serie>XA</ns0:Serie><ns0:Nro>953001</ns0:Nro><ns0:FchEmis>2012-05-11</ns0:FchEmis><ns0:TipoTraslado>1</ns0:TipoTraslado></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>Fernandez Crespo 1534</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>18 de Julio</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>2</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>214844360018</ns0:DocRecep><ns0:RznSocRecep>DGI</ns0:RznSocRecep><ns0:DirRecep>Fernandez Crespo 1534</ns0:DirRecep><ns0:CiudadRecep>Montevideo</ns0:CiudadRecep></ns0:Receptor><ns0:Totales><ns0:CantLinDet>3</ns0:CantLinDet></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>1</ns0:NroLinDet><ns0:NomItem>Manzanas</ns0:NomItem><ns0:Cantidad>15</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed></ns0:Item><ns0:Item><ns0:NroLinDet>2</ns0:NroLinDet><ns0:NomItem>Zanahorias</ns0:NomItem><ns0:Cantidad>10</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed></ns0:Item><ns0:Item><ns0:NroLinDet>3</ns0:NroLinDet><ns0:NomItem>Arroz</ns0:NomItem><ns0:Cantidad>8.5</ns0:Cantidad><ns0:UniMed>kg</ns0:UniMed></ns0:Item></ns0:Detalle><ns0:CAEData><ns0:CAE_ID>1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eRem><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>M4tCtHKbWCxkBMUaMQ2m3K78OIw=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>IpkQjBYKv79PD0KlN7/+i+fiKtFxFF88rqTcRK8tjeAQGfj+w3SsjPrZV2ccDY+zObsDWsfFT+j/5BVaR7J8MyKSc+4OfOdeGnMy7DKMPVNT5IzkJhSoRakcS4/42WAGF5Ydl5TXgbryrHBrBEP+ENF5p+JOLvAYQD/f2WyK6Ww=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+<ns0:CFE version="1.0" xmlns:ns0="http://cfe.dgi.gub.uy"><ns0:eResg><ns0:TmstFirma>2016-07-19T15:56:20-03:00</ns0:TmstFirma><ns0:Encabezado><ns0:IdDoc><ns0:TipoCFE>182</ns0:TipoCFE><ns0:Serie>A</ns0:Serie><ns0:Nro>1</ns0:Nro><ns0:FchEmis>2012-05-11</ns0:FchEmis></ns0:IdDoc><ns0:Emisor><ns0:RUCEmisor>219999830019</ns0:RUCEmisor><ns0:RznSoc>EmpPrueba</ns0:RznSoc><ns0:CdgDGISucur>1</ns0:CdgDGISucur><ns0:DomFiscal>Colonia 2343</ns0:DomFiscal><ns0:Ciudad>Montevideo</ns0:Ciudad><ns0:Departamento>Montevideo</ns0:Departamento></ns0:Emisor><ns0:Receptor><ns0:TipoDocRecep>2</ns0:TipoDocRecep><ns0:CodPaisRecep>UY</ns0:CodPaisRecep><ns0:DocRecep>214844360018</ns0:DocRecep><ns0:RznSocRecep>DGI</ns0:RznSocRecep></ns0:Receptor><ns0:Totales><ns0:TpoMoneda>UYU</ns0:TpoMoneda><ns0:MntTotRetenido>55000</ns0:MntTotRetenido><ns0:CantLinDet>2</ns0:CantLinDet><ns0:RetencPercep><ns0:CodRet>2183165</ns0:CodRet><ns0:ValRetPerc>55000</ns0:ValRetPerc></ns0:RetencPercep></ns0:Totales></ns0:Encabezado><ns0:Detalle><ns0:Item><ns0:NroLinDet>
+
+
+1</ns0:NroLinDet><ns0:RetencPercep><ns0:CodRet>2183165</ns0:CodRet><ns0:Tasa>50</ns0:Tasa><ns0:MntSujetoaRet>22000</ns0:MntSujetoaRet><ns0:ValRetPerc>11000</ns0:ValRetPerc></ns0:RetencPercep></ns0:Item><ns0:Item><ns0:NroLinDet>2</ns0:NroLinDet><ns0:RetencPercep><ns0:CodRet>2183165</ns0:CodRet><ns0:Tasa>50</ns0:Tasa><ns0:MntSujetoaRet>88000</ns0:MntSujetoaRet><ns0:ValRetPerc>44000</ns0:ValRetPerc></ns0:RetencPercep></ns0:Item></ns0:Detalle><ns0:Referencia><ns0:Referencia xmlns="http://cfe.dgi.gub.uy"><ns0:NroLinRef>1</ns0:NroLinRef><ns0:TpoDocRef>111</ns0:TpoDocRef><ns0:Serie>A</ns0:Serie><ns0:NroCFERef>25</ns0:NroCFERef></ns0:Referencia><ns0:Referencia xmlns="http://cfe.dgi.gub.uy"><ns0:NroLinRef>2</ns0:NroLinRef><ns0:TpoDocRef>111</ns0:TpoDocRef><ns0:Serie>A</ns0:Serie><ns0:NroCFERef>30</ns0:NroCFERef></ns0:Referencia></ns0:Referencia><ns0:CAEData><ns0:CAE_ID>1234567890</ns0:CAE_ID><ns0:DNro>1</ns0:DNro><ns0:HNro>100</ns0:HNro><ns0:FecVenc>2012-12-31</ns0:FecVenc></ns0:CAEData></ns0:eResg><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>uoOCPixqlRDFnHX0PAxKQKKTZGI=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>Mdg3PQUQ3LHCUFB9JgtSPqNTq9DRAVi/Z46bn2a0YwIA8sVVNO9ns6tl5ovKV4Gd2UR+O3MCYJRiYdimIIDlu4XeEga1G22WONZrZ3vIfCFULtYhk03Wa/4YCG8Ul2EpmsVhXmByd/d0YkXsbbSTWzDCExIEUNwqJpN9CC3JUpY=</SignatureValue><KeyInfo><X509Data><X509IssuerSerial><X509IssuerName>CN=Correo Uruguayo - CA, OU=SERVICIOS ELECTRONICOS, O=ADMINISTRACION NACIONAL DE CORREOS, C=UY</X509IssuerName><X509SerialNumber>155761856642617054135126896023459966393</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ns0:CFE>
+</DGICFE:EnvioCFE>
+
+
+
+
+
+

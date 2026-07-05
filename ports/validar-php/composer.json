@@ -1,0 +1,11 @@
+{
+    "name": "factible/validar",
+    "description": "Validación y dígito verificador de documentos uruguayos: CI y RUT. Cero dependencias.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["cedula", "ci", "rut", "ruc", "uruguay", "digito-verificador"],
+    "authors": [{ "name": "Oscar Lago" }],
+    "require": { "php": ">=8.1" },
+    "autoload": { "psr-4": { "Factible\\": "src/" } },
+    "scripts": { "test": "php tests/validar_test.php" }
+}
