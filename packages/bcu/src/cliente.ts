@@ -78,7 +78,8 @@ export class BcuClient {
     const xml = await this.invocar('awsbcucotizaciones', 'wsbcucotizaciones', body);
     this.chequearStatus(xml);
 
-    const datos = xml.match(/<(?:\w+:)?datoscotizaciones\.dato>[\s\S]*?<\/(?:\w+:)?datoscotizaciones\.dato>/gi) ?? [];
+    // Los elementos reales llegan con atributos (xmlns="Cotiza") — el tag no viene "pelado".
+    const datos = xml.match(/<(?:\w+:)?datoscotizaciones\.dato[^>]*>[\s\S]*?<\/(?:\w+:)?datoscotizaciones\.dato>/gi) ?? [];
     return datos.map((b) => {
       const cot: Cotizacion = {
         fecha: texto(b, 'Fecha') ?? '',
@@ -116,7 +117,7 @@ export class BcuClient {
   /** Lista de monedas disponibles en BCU. */
   async monedas(grupo: 0 | 1 | 2 = 0): Promise<Moneda[]> {
     const xml = await this.invocar('awsbcumonedas', 'wsbcumonedas', `<cot:Entrada><cot:Grupo>${grupo}</cot:Grupo></cot:Entrada>`);
-    const datos = xml.match(/<(?:\w+:)?wsmonedasout\.dato>[\s\S]*?<\/(?:\w+:)?wsmonedasout\.dato>/gi) ?? [];
+    const datos = xml.match(/<(?:\w+:)?wsmonedasout\.dato[^>]*>[\s\S]*?<\/(?:\w+:)?wsmonedasout\.dato>/gi) ?? [];
     return datos.map((b) => ({
       codigo: Number(texto(b, 'Codigo')),
       nombre: (texto(b, 'Nombre') ?? '').trim(),

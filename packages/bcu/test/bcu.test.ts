@@ -7,17 +7,17 @@ const RESPUESTA_COTIZACIONES = `<?xml version="1.0" encoding="utf-8"?>
 <SOAP-ENV:Body><cot:wsbcucotizaciones.ExecuteResponse xmlns:cot="Cotiza"><cot:Salida>
 <cot:respuestastatus><cot:status>1</cot:status><cot:codigoerror>0</cot:codigoerror><cot:mensaje/></cot:respuestastatus>
 <cot:datoscotizaciones>
-<cot:datoscotizaciones.dato>
+<cot:datoscotizaciones.dato xmlns:cot="Cotiza">
   <cot:Fecha>2026-07-03</cot:Fecha><cot:Moneda>2225</cot:Moneda>
-  <cot:Nombre>DLS. USA BILLETE</cot:Nombre><cot:CodigoISO>USD</cot:CodigoISO>
-  <cot:Emisor>Estados Unidos</cot:Emisor>
-  <cot:TCC>39.85</cot:TCC><cot:TCV>40.35</cot:TCV>
-  <cot:ArbAct>1</cot:ArbAct><cot:FormaArbitrar>1</cot:FormaArbitrar>
+  <cot:Nombre>DLS. USA BILLETE</cot:Nombre><cot:CodigoISO>DLS.</cot:CodigoISO>
+  <cot:Emisor>ESTADOS UNIDOS</cot:Emisor>
+  <cot:TCC>40.230000</cot:TCC><cot:TCV>40.230000</cot:TCV>
+  <cot:ArbAct>1.000000</cot:ArbAct><cot:FormaArbitrar>0</cot:FormaArbitrar>
 </cot:datoscotizaciones.dato>
-<cot:datoscotizaciones.dato>
+<cot:datoscotizaciones.dato xmlns:cot="Cotiza">
   <cot:Fecha>2026-07-03</cot:Fecha><cot:Moneda>1111</cot:Moneda>
-  <cot:Nombre>EURO</cot:Nombre><cot:CodigoISO>EUR</cot:CodigoISO>
-  <cot:TCC>43.10</cot:TCC><cot:TCV>44.20</cot:TCV>
+  <cot:Nombre>EURO</cot:Nombre><cot:CodigoISO>EURO</cot:CodigoISO>
+  <cot:TCC>43.100000</cot:TCC><cot:TCV>44.200000</cot:TCV>
 </cot:datoscotizaciones.dato>
 </cot:datoscotizaciones>
 </cot:Salida></cot:wsbcucotizaciones.ExecuteResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>`;
@@ -58,8 +58,8 @@ describe('BcuClient', () => {
 
     expect(r).toHaveLength(2);
     expect(r[0]).toMatchObject({
-      fecha: '2026-07-03', moneda: 2225, codigoIso: 'USD',
-      compra: 39.85, venta: 40.35, emisor: 'Estados Unidos',
+      fecha: '2026-07-03', moneda: 2225, codigoIso: 'DLS.',
+      compra: 40.23, venta: 40.23, emisor: 'ESTADOS UNIDOS',
     });
     expect(r[1]!.emisor).toBeUndefined();
 
@@ -78,7 +78,7 @@ describe('BcuClient', () => {
   it('cotizacion() sin fecha usa el último cierre', async () => {
     const bcu = new BcuClient({ baseUrl });
     const c = await bcu.cotizacion(MONEDAS.DOLAR_USA);
-    expect(c.codigoIso).toBe('USD');
+    expect(c.moneda).toBe(2225);
     const consultas = pedidos.slice(-2);
     expect(consultas[0]!.path).toContain('ultimocierre');
     expect(consultas[1]!.body).toContain('2026-07-03');
@@ -101,8 +101,10 @@ describe.skipIf(!process.env['BCU_E2E'])('BCU real (e2e)', () => {
     const cierre = await bcu.ultimoCierre();
     expect(cierre).toMatch(/^\d{4}-\d{2}-\d{2}/);
     const c = await bcu.cotizacion(MONEDAS.DOLAR_USA, cierre);
-    expect(c.codigoIso).toBe('USD');
+    expect(c.moneda).toBe(2225);
+    expect(c.nombre).toContain('DLS');
     expect(c.compra).toBeGreaterThan(10);
-    expect(c.venta).toBeGreaterThan(c.compra);
+    // BCU puede publicar compra=venta (cotización interbancaria/billete)
+    expect(c.venta).toBeGreaterThanOrEqual(c.compra);
   }, 30_000);
 });
