@@ -12,7 +12,7 @@ const certificado = {
 };
 
 const emisor = {
-  ruc: '211234560012',
+  ruc: '211234560019',
   razonSocial: 'Ejemplo SA',
   sucursal: { codigo: 1, domicilio: 'Av. Siempre Viva 123', ciudad: 'Montevideo', departamento: 'Montevideo' },
 };
@@ -44,7 +44,7 @@ describe('Factible.emitir', () => {
     expect(cfe.totales.montoTotal).toBe(231.8);
     expect(verificarFirmaCfe(cfe.xml)).toBe(true);
     expect(cfe.codigoSeguridadImpreso).toHaveLength(6);
-    expect(cfe.urlQr).toContain('consultaQR/cfe?211234560012,101,A,1,');
+    expect(cfe.urlQr).toContain('consultaQR/cfe?211234560019,101,A,1,');
   });
 
   it('la numeración avanza y es única bajo concurrencia', async () => {
@@ -71,7 +71,7 @@ describe('Factible.emitir', () => {
         tipo: TipoCFE.E_FACTURA,
         moneda: 'UYU',
         lineas,
-        receptor: { tipoDocumento: 'RUC', documento: '219876540015', razonSocial: 'Cliente SRL' },
+        receptor: { tipoDocumento: 'RUC', documento: '219876540012', razonSocial: 'Cliente SRL' },
       }),
     ).rejects.toThrow(/tipo 111/);
   });

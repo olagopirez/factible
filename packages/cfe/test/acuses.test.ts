@@ -7,9 +7,9 @@ const ackSobreOk = `<?xml version="1.0" encoding="UTF-8"?>
 <ACKSobre ${NS} version="1.0">
   <Caratula>
     <RUCReceptor>219999830019</RUCReceptor>
-    <RUCEmisor>211234560012</RUCEmisor>
+    <RUCEmisor>211234560019</RUCEmisor>
     <IDRespuesta>555001</IDRespuesta>
-    <NomArch>Sob_211234560012_1.xml</NomArch>
+    <NomArch>Sob_211234560019_1.xml</NomArch>
     <FecHRecibido>2026-07-04T16:00:00-03:00</FecHRecibido>
     <IDEmisor>1</IDEmisor>
     <IDReceptor>900123</IDReceptor>
@@ -33,9 +33,9 @@ const ackCfe = `<?xml version="1.0" encoding="UTF-8"?>
 <ACKCFE ${NS} version="1.0">
   <Caratula>
     <RUCReceptor>219999830019</RUCReceptor>
-    <RUCEmisor>211234560012</RUCEmisor>
+    <RUCEmisor>211234560019</RUCEmisor>
     <IDRespuesta>555002</IDRespuesta>
-    <NomArch>Sob_211234560012_1.xml</NomArch>
+    <NomArch>Sob_211234560019_1.xml</NomArch>
     <FecHRecibido>2026-07-04T16:00:00-03:00</FecHRecibido>
     <IDEmisor>1</IDEmisor>
     <IDReceptor>900123</IDReceptor>

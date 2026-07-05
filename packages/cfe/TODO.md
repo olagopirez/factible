@@ -31,8 +31,9 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 - [ ] `UniMed` hardcodeado en `'N/A'` — exponerlo en `LineaDetalle`.
 - [ ] Tabla completa de `IndicadorFacturacion` (hoy solo exento/mínima/básica; faltan otra tasa, entrega gratuita, no facturable, suspenso, etc.).
 - [ ] `MntPagar` hoy = `MntTotal`; con retenciones/percepciones y montos no facturables difieren.
-- [ ] Dígito verificador de RUC/CI del receptor: ya existe `@factible/validar` en el monorepo — integrarlo al builder para validar antes de enviar.
 ## Resueltas
+
+- [x] **Dígito verificador de RUC/CI:** el builder valida emisor y receptor con `@factible/validar` antes de construir el XML — anticipa los rechazos E de DGI offline.
 
 - [x] **Algoritmo de firma:** DGI no acepta SHA-1 desde el 01/01/2018 — nuestro default SHA-256 es correcto. *(FAQ oficial CFE v12, pregunta 4.15)*
 - [x] **Adenda (Zona J): NO se envía a DGI.** Es solo para el receptor y la representación impresa; el sobre a DGI no la lleva. *(FAQ 4.17 + Cartilla: solo EnvioCFE_entreEmpresas incluye adenda)*

@@ -24,7 +24,7 @@ const cae: Cae = {
 const ticket: CfeInput = {
   tipo: TipoCFE.E_TICKET,
   emisor: {
-    ruc: '211234560012',
+    ruc: '211234560019',
     razonSocial: 'Ejemplo SA',
     sucursal: { codigo: 1, domicilio: 'Av. Siempre Viva 123', ciudad: 'Montevideo', departamento: 'Montevideo' },
   },
@@ -56,7 +56,7 @@ describe('código de seguridad y QR', () => {
     const url = urlQr(firmado);
     expect(url).toMatch(/^https:\/\/www\.efactura\.dgi\.gub\.uy\/consultaQR\/cfe\?/);
     const params = url.split('?')[1]!.split(',');
-    expect(params[0]).toBe('211234560012'); // RUC
+    expect(params[0]).toBe('211234560019'); // RUC
     expect(params[1]).toBe('101'); // TipoCFE
     expect(params[2]).toBe('A'); // Serie
     expect(params[3]).toBe('300'); // Nro

@@ -5,6 +5,7 @@
  * El orden de los elementos respeta estrictamente las secuencias del XSD
  * (spec/xsd/CFEType.xsd): IdDoc → Emisor → Receptor → Totales → Detalle → Referencia → CAEData.
  */
+import { validarCi, validarRut } from '@factible/validar';
 import type { Cae } from '../types/cae.js';
 import { TipoCFE, type CfeInput, type Receptor, type Totales } from '../types/cfe.js';
 import { calcularTotales, TASA_BASICA, TASA_MINIMA } from '../totales.js';
@@ -77,6 +78,16 @@ export function buildCfeXml(p: BuildParams): string {
   // Regla A-C61: documentos uruguayos (NIE/RUC/CI) implican país UY.
   if (input.receptor && DOCS_URUGUAYOS.has(input.receptor.tipoDocumento) && (input.receptor.paisCodigo ?? 'UY') !== 'UY') {
     throw new Error(`Documento ${input.receptor.tipoDocumento} exige país UY (regla A-C61)`);
+  }
+  // Dígitos verificadores: DGI los valida al recibir — mejor fallar acá que recibir un rechazo E.
+  if (!validarRut(input.emisor.ruc)) {
+    throw new Error(`RUC del emisor inválido (dígito verificador): "${input.emisor.ruc}"`);
+  }
+  if (input.receptor?.tipoDocumento === 'RUC' && !validarRut(input.receptor.documento)) {
+    throw new Error(`RUC del receptor inválido (dígito verificador): "${input.receptor.documento}"`);
+  }
+  if (input.receptor?.tipoDocumento === 'CI' && !validarCi(input.receptor.documento)) {
+    throw new Error(`CI del receptor inválida (dígito verificador): "${input.receptor.documento}"`);
   }
   const esNcNd = input.tipo !== TipoCFE.E_TICKET && input.tipo !== TipoCFE.E_FACTURA;
   if (esNcNd && !input.referencias?.length) {

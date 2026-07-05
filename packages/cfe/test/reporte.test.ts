@@ -15,7 +15,7 @@ const certificado = {
 };
 
 const emisor = {
-  ruc: '211234560012',
+  ruc: '211234560019',
   razonSocial: 'Ejemplo SA',
   sucursal: { codigo: 1, domicilio: 'Av. Siempre Viva 123', ciudad: 'Montevideo', departamento: 'Montevideo' },
 };
@@ -34,7 +34,7 @@ async function emitirDia() {
   const lineas = [
     { cantidad: 1, descripcion: 'Café', precioUnitario: 190, indicadorFacturacion: IndicadorFacturacion.TASA_BASICA },
   ];
-  const receptor = { tipoDocumento: 'RUC' as const, documento: '219876540015', razonSocial: 'Cliente SRL' };
+  const receptor = { tipoDocumento: 'RUC' as const, documento: '219876540012', razonSocial: 'Cliente SRL' };
   return Promise.all([
     factible.emitir({ tipo: TipoCFE.E_TICKET, moneda: 'UYU', lineas }),
     factible.emitir({ tipo: TipoCFE.E_TICKET, moneda: 'UYU', lineas }),

@@ -26,7 +26,7 @@ const cae: Cae = {
 const ticket: CfeInput = {
   tipo: TipoCFE.E_TICKET,
   emisor: {
-    ruc: '211234560012',
+    ruc: '211234560019',
     razonSocial: 'Ejemplo SA',
     sucursal: { codigo: 1, domicilio: 'Av. Siempre Viva 123', ciudad: 'Montevideo', departamento: 'Montevideo' },
   },
@@ -43,7 +43,7 @@ const cfeFirmado = (numero: number) =>
 describe('crearSobre', () => {
   it('genera un sobre con 2 CFEs válido contra EnvioCFE.xsd', () => {
     const sobre = crearSobre({
-      rucEmisor: '211234560012',
+      rucEmisor: '211234560019',
       rutReceptor: RUT_DGI,
       idEmisor: 1,
       cfesFirmados: [cfeFirmado(200), cfeFirmado(201)],
@@ -63,14 +63,14 @@ describe('crearSobre', () => {
 
   it('rechaza sobre sin CFEs', () => {
     expect(() =>
-      crearSobre({ rucEmisor: '211234560012', rutReceptor: RUT_DGI, idEmisor: 1, cfesFirmados: [], cert: certificado.cert }),
+      crearSobre({ rucEmisor: '211234560019', rutReceptor: RUT_DGI, idEmisor: 1, cfesFirmados: [], cert: certificado.cert }),
     ).toThrow(/entre 1 y 250/);
   });
 
   it('rechaza contenido que no sea un CFE', () => {
     expect(() =>
       crearSobre({
-        rucEmisor: '211234560012',
+        rucEmisor: '211234560019',
         rutReceptor: RUT_DGI,
         idEmisor: 1,
         cfesFirmados: ['<Otro/>'],

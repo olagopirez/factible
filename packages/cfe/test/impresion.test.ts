@@ -12,7 +12,7 @@ const certificado = {
 };
 
 const emisor = {
-  ruc: '211234560012',
+  ruc: '211234560019',
   razonSocial: 'Ejemplo SA',
   sucursal: { codigo: 1, domicilio: 'Av. Siempre Viva 123', ciudad: 'Montevideo', departamento: 'Montevideo' },
 };

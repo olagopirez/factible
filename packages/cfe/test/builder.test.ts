@@ -8,7 +8,7 @@ import { IndicadorFacturacion, TipoCFE, type CfeInput } from '../src/types/cfe.j
 import type { Cae } from '../src/types/cae.js';
 
 const emisor = {
-  ruc: '211234560012',
+  ruc: '211234560019',
   razonSocial: 'Ejemplo SA',
   sucursal: { codigo: 1, domicilio: 'Av. Siempre Viva 123', ciudad: 'Montevideo', departamento: 'Montevideo' },
 };
@@ -38,7 +38,7 @@ const factura: CfeInput = {
   tipo: TipoCFE.E_FACTURA,
   receptor: {
     tipoDocumento: 'RUC',
-    documento: '219876540015',
+    documento: '219876540012',
     razonSocial: 'Cliente SRL',
     domicilio: '18 de Julio 1000',
     ciudad: 'Montevideo',
@@ -82,7 +82,7 @@ describe('buildCfeXml', () => {
   it('genera una e-Factura con receptor válida contra el XSD', () => {
     const xml = buildCfeXml({ input: factura, serie: 'A', numero: 43, cae });
     expect(xml).toContain('<TipoCFE>111</TipoCFE>');
-    expect(xml).toContain('<DocRecep>219876540015</DocRecep>');
+    expect(xml).toContain('<DocRecep>219876540012</DocRecep>');
     expect(() => validarContraXsd(xml)).not.toThrow();
   });
 
@@ -111,6 +111,16 @@ describe('buildCfeXml', () => {
       receptor: { tipoDocumento: 'CI', documento: '12345672', paisCodigo: 'AR' },
     };
     expect(() => buildCfeXml({ input: mal, serie: 'A', numero: 49, cae })).toThrow(/A-C61/);
+  });
+
+  it('rechaza RUC de emisor con dígito verificador inválido', () => {
+    const malEmisor: CfeInput = { ...ticket, emisor: { ...emisor, ruc: '211234560012' } }; // dv correcto: 9
+    expect(() => buildCfeXml({ input: malEmisor, serie: 'A', numero: 50, cae })).toThrow(/RUC del emisor/);
+  });
+
+  it('rechaza CI de receptor con dígito verificador inválido', () => {
+    const malReceptor: CfeInput = { ...ticket, receptor: { tipoDocumento: 'CI', documento: '12345678' } };
+    expect(() => buildCfeXml({ input: malReceptor, serie: 'A', numero: 51, cae })).toThrow(/CI del receptor/);
   });
 
   it('rechaza e-Factura sin receptor', () => {
