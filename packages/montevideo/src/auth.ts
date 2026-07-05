@@ -38,22 +38,20 @@ export class TokenManager {
       return this.token.accessToken;
     }
 
-    const basic = Buffer.from(`${this.credenciales.clientId}:${this.credenciales.clientSecret}`).toString('base64');
-    const res = await fetch(this.tokenUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${basic}`,
-      },
-      body: new URLSearchParams({ grant_type: 'client_credentials' }),
-      signal: AbortSignal.timeout(this.timeoutMs),
-    });
+    // Keycloak acepta client_secret_basic o client_secret_post según cómo esté
+    // configurado el cliente; el manual no lo especifica. Intentamos Basic y,
+    // si el servidor rechaza las credenciales, reintentamos con secret en el body.
+    let res = await this.pedirToken('basic');
+    if (res.status === 400 || res.status === 401) {
+      res = await this.pedirToken('post');
+    }
 
     const cuerpo = (await res.json().catch(() => ({}))) as Record<string, unknown>;
     if (!res.ok) {
       throw new Error(
         `Montevideo API rechazó las credenciales (HTTP ${res.status}): ${cuerpo['error_description'] ?? cuerpo['error'] ?? 'sin detalle'}. ` +
-          'Verificá el ID y Secreto de tu Aplicación en https://api.montevideo.gub.uy (Mis aplicaciones).',
+          'Verificá que uses el "ID de cliente" y "Secreto del cliente" de una Aplicación creada en ' +
+          'https://api.montevideo.gub.uy → Mis aplicaciones (no tu usuario/contraseña del portal).',
       );
     }
 
@@ -64,6 +62,24 @@ export class TokenManager {
     // Margen de 30s para no usar tokens al borde de expirar.
     this.token = { accessToken, expiraEn: Date.now() + Math.max(expiresIn - 30, 5) * 1000 };
     return accessToken;
+  }
+
+  private pedirToken(modo: 'basic' | 'post'): Promise<Response> {
+    const body = new URLSearchParams({ grant_type: 'client_credentials' });
+    const headers: Record<string, string> = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    if (modo === 'basic') {
+      headers['Authorization'] =
+        `Basic ${Buffer.from(`${this.credenciales.clientId}:${this.credenciales.clientSecret}`).toString('base64')}`;
+    } else {
+      body.set('client_id', this.credenciales.clientId);
+      body.set('client_secret', this.credenciales.clientSecret);
+    }
+    return fetch(this.tokenUrl, {
+      method: 'POST',
+      headers,
+      body,
+      signal: AbortSignal.timeout(this.timeoutMs),
+    });
   }
 
   /** Descarta el token cacheado (ej: tras un 401 inesperado). */

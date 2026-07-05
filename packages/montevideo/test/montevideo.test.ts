@@ -27,15 +27,21 @@ beforeAll(async () => {
       res.end(JSON.stringify(body));
     };
 
-    if (req.url === '/token' && req.method === 'POST') {
+    // /token acepta Basic; /token-solo-post simula un Keycloak configurado
+    // como client_secret_post (rechaza Basic, exige credenciales en el body).
+    if ((req.url === '/token' || req.url === '/token-solo-post') && req.method === 'POST') {
+      const soloPost = req.url === '/token-solo-post';
       let body = '';
       req.on('data', (c) => (body += c));
       req.on('end', () => {
+        const params = new URLSearchParams(body);
         const basic = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
-        if (req.headers.authorization !== `Basic ${basic}`) {
-          return json({ error: 'invalid_client', error_description: 'credenciales inválidas' }, 401);
+        const okBasic = !soloPost && req.headers.authorization === `Basic ${basic}`;
+        const okPost = params.get('client_id') === CLIENT_ID && params.get('client_secret') === CLIENT_SECRET;
+        if (!okBasic && !okPost) {
+          return json({ error: 'invalid_client', error_description: 'Invalid client credentials' }, 400);
         }
-        if (!new URLSearchParams(body).get('grant_type')?.includes('client_credentials')) {
+        if (!params.get('grant_type')?.includes('client_credentials')) {
           return json({ error: 'unsupported_grant_type' }, 400);
         }
         tokensEmitidos += 1;
@@ -106,6 +112,16 @@ describe('MontevideoClient', () => {
 
   it('credenciales inválidas fallan con mensaje útil', async () => {
     await expect(cliente('secreto-malo').buses()).rejects.toThrow(/credenciales|Mis aplicaciones/);
+  });
+
+  it('si el servidor exige client_secret_post, cae al fallback automáticamente', async () => {
+    const mvd = new MontevideoClient({
+      credenciales: { clientId: CLIENT_ID, clientSecret: CLIENT_SECRET },
+      baseUrl,
+      tokenUrl: tokenUrl.replace('/token', '/token-solo-post'),
+    });
+    const buses = await mvd.buses({ lineas: [522] });
+    expect(buses).toHaveLength(2);
   });
 
   it('arribos() y playas() declaran su spec pendiente', async () => {
