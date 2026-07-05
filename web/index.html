@@ -17,11 +17,12 @@
   }
   * { box-sizing: border-box; margin: 0; }
   body { background: var(--fondo); color: var(--texto); font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
+  body::before { content: ''; display: block; height: 4px; background: linear-gradient(90deg, var(--acento2), var(--acento) 50%, var(--acento2)); }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-  header { padding: 96px 0 48px; text-align: center; }
-  .logo { display: flex; justify-content: center; }
+  header.wrap { padding: 96px 24px 48px; text-align: center; }
+  .logo { display: flex; justify-content: center; margin-bottom: 36px; }
   .logo img { height: 40px; }
-  h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.15; margin: 16px 0; font-weight: 800; }
+  h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.15; margin: 0 0 16px; font-weight: 800; }
   h1 em { color: var(--acento); font-style: normal; }
   .sub { color: var(--tenue); font-size: 18px; max-width: 640px; margin: 0 auto 32px; }
   .botones { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
@@ -60,6 +61,8 @@
     <a class="btn btn-primario" href="https://github.com/olagopirez/factible" data-cta="github">Ver en GitHub</a>
     <a class="btn btn-sec" href="#cfe">Facturación electrónica →</a>
   </div>
+  <pre style="display:inline-block; text-align:left; margin-top:28px; padding:12px 20px;"><code><span class="c-com"># ya disponible en npm</span>
+npm install <span class="c-str">@factible/validar</span> <span class="c-str">@factible/bcu</span></code></pre>
 </header>
 
 <main class="wrap">
@@ -69,7 +72,7 @@
     <div class="grid">
       <div class="card"><span class="estado e-beta">BETA</span><h3>@factible/cfe</h3><p>Facturación electrónica DGI: e-Ticket, e-Factura, firma, sobres, acuses, reporte diario y representación impresa con QR.</p></div>
       <div class="card"><span class="estado e-ok">DISPONIBLE</span><h3>@factible/validar</h3><p>Dígito verificador y validación de CI y RUT. Cero dependencias — en TypeScript, Python, PHP, Go y Java.</p></div>
-      <div class="card"><span class="estado e-beta">BETA</span><h3>@factible/bcu</h3><p>Cotizaciones oficiales del Banco Central, tipadas, sin credenciales.</p></div>
+      <div class="card"><span class="estado e-ok">DISPONIBLE</span><h3>@factible/bcu</h3><p>Cotizaciones oficiales del Banco Central, tipadas, sin credenciales — verificado contra el servicio real.</p></div>
       <div class="card"><span class="estado e-beta">BETA</span><h3>@factible/id-uruguay</h3><p>Login con cédula: cliente OpenID Connect para ID Uruguay (AGESIC), con simulador incluido.</p></div>
       <div class="card"><span class="estado e-camino">EXPLORANDO</span><h3>@factible/bps</h3><p>Generación tipada de archivos de nómina (GAFI).</p></div>
       <div class="card"><span class="estado e-camino">¿CUÁL TE FALTA?</span><h3>tu-conector</h3><p><a href="https://github.com/olagopirez/factible/issues/new?template=conector.yml" style="color:var(--acento)">Pedilo acá</a> — contanos qué organismo te hace perder tiempo hoy.</p></div>
