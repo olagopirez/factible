@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="18" fill="#0d1117"/>
+  <!-- factible: {✓} — símbolo de marca -->
+  <g fill="none" stroke="#4ade80" stroke-linecap="round" stroke-linejoin="round">
+    <!-- llave izquierda -->
+    <path d="M42 14 H37 Q28 14 28 23 V37 Q28 45 20 49 Q28 53 28 61 V77 Q28 86 37 86 H42" stroke-width="8"/>
+    <!-- llave derecha (interrumpida arriba, donde pasa el check) -->
+    <path d="M58 86 H63 Q72 86 72 77 V61 Q72 53 80 49 Q72 45 72 37" stroke-width="8"/>
+    <!-- check -->
+    <path d="M38 52 L50 64 L81 27" stroke-width="10.5"/>
+  </g>
+</svg>

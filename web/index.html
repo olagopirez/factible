@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>factible — Infraestructura open source para integrarte con el Estado uruguayo</title>
 <meta name="description" content="Librerías TypeScript open source para integrarte con el Estado uruguayo: facturación electrónica DGI (CFE), cotizaciones BCU, validación de CI/RUT, ID Uruguay y más.">
+<link rel="icon" type="image/svg+xml" href="assets/logo-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:title" content="factible — integrarte con el Estado uruguayo, en una tarde">
+<meta property="og:image" content="assets/logo-dark-512.png">
 <style>
   :root {
     --fondo: #0d1117; --panel: #161b22; --borde: #30363d;
@@ -14,7 +19,8 @@
   body { background: var(--fondo); color: var(--texto); font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
   header { padding: 96px 0 48px; text-align: center; }
-  .logo { font-size: 15px; color: var(--acento); font-weight: 700; letter-spacing: 0.08em; text-transform: lowercase; }
+  .logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 17px; color: var(--acento); font-weight: 700; letter-spacing: 0.08em; text-transform: lowercase; }
+  .logo img { width: 34px; height: 34px; }
   h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.15; margin: 16px 0; font-weight: 800; }
   h1 em { color: var(--acento); font-style: normal; }
   .sub { color: var(--tenue); font-size: 18px; max-width: 640px; margin: 0 auto 32px; }
@@ -47,7 +53,7 @@
 </head>
 <body>
 <header class="wrap">
-  <div class="logo">factible</div>
+  <div class="logo"><img src="assets/logo.svg" alt="">factible</div>
   <h1>Integrarte con el Estado uruguayo,<br>en <em>una tarde</em> y no en un mes</h1>
   <p class="sub">Un conector open source por organismo — DGI, BCU, AGESIC y más — con la misma experiencia: TypeScript tipado, simuladores para desarrollar sin trámites, y todo validado contra las especificaciones oficiales.</p>
   <div class="botones">

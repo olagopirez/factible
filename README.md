@@ -1,3 +1,5 @@
+<p align="center"><img src="web/assets/logo.svg" width="96" alt="factible"></p>
+
 # factible
 
 **Infraestructura open source para integrarte con el Estado uruguayo.** MIT.
