@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
-    "build": "npm run build --workspaces"
+    "build": "npm run build -w @factible/validar && npm run build -w @factible/bcu && npm run build -w @factible/cfe && npm run build -w @factible/id-uruguay"
   },
   "engines": {
     "node": ">=20"
