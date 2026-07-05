@@ -13,6 +13,8 @@
 | **@factible/rut** — consulta/validación de RUT (DGI) | [WS documentado](https://www.efactura.dgi.gub.uy/files/web-services-consulta-de-rut?es) | Probablemente cert de emisor (a confirmar) | ⚠️ Con acceso DGI | Ninguna | 🟡 Construir junto al gateway; reusa transporte de cfe. El **dígito verificador de RUT/CI** (offline) se puede publicar YA como `@factible/validar` |
 | **@factible/bps** — nóminas/GAFI | Sin API para terceros: formatos de archivo (ATYRO) + carga web | Manuales públicos parciales | ⚠️ Solo formato, no envío | ATYRO (software oficial gratuito) | 🟡 Ángulo viable: *generador de archivos* de nómina tipado. Requiere estudiar manuales — más adelante |
 | PDI / e-notificaciones (AGESIC) | SOA para **organismos del Estado**, no para privados | Restringido | ❌ | — | 🔴 Descartar por ahora |
+| **@factible/antel-sms** — SMS número corto (A2P) | Protocolo entregado **por contrato** (Centro Comercial/ejecutivo), no público | Contrato comercial con Antel | ⚠️ Solo con empresa con contrato | Agregadores (Mensajero Automático, Mobility Chasqui) ya venden APIs REST sobre esto | 🟡 Explorar — necesita empresa madrina con contrato; los agregadores son señal de demanda real |
+| **@factible/antel-gateway** — SIM Swap / Number Verification | Estándar **CAMARA (GSMA Open Gateway)**, specs públicas | Acuerdo comercial (canal a confirmar) | ⚠️ Spec pública, endpoint comercial | Ninguna local | 🟡 Explorar — construible contra la spec CAMARA como hicimos con OIDC; útil para fintech/antifraude |
 
 ## Orden de construcción
 
