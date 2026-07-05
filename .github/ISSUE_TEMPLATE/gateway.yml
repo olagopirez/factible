@@ -1,0 +1,37 @@
+name: 💚 Me interesa el gateway hosteado
+description: API REST de facturación electrónica con certificados gestionados — contanos tu caso
+title: "[gateway] Interés: "
+labels: [gateway-interes]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Estamos evaluando construir un **gateway hosteado** sobre @factible/cfe: API REST, certificados gestionados, actualizaciones automáticas de formato y precio transparente por documento. Tu caso nos ayuda a decidir qué construir primero.
+  - type: input
+    id: stack
+    attributes:
+      label: Stack
+      placeholder: "ej: PHP/Laravel, Java/Spring, Genexus..."
+    validations:
+      required: true
+  - type: dropdown
+    id: volumen
+    attributes:
+      label: Documentos por mes (aprox)
+      options:
+        - Menos de 100
+        - 100 a 1.000
+        - 1.000 a 10.000
+        - Más de 10.000
+    validations:
+      required: true
+  - type: input
+    id: proveedor
+    attributes:
+      label: Proveedor actual de facturación (si tenés)
+      placeholder: "ej: Biller, pymo, desarrollo propio, ninguno todavía"
+  - type: textarea
+    id: caso
+    attributes:
+      label: Contanos tu caso
+      placeholder: Qué estás construyendo, qué te duele del proveedor actual, si necesitás on-premise...

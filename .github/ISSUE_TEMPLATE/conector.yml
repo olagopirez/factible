@@ -1,0 +1,24 @@
+name: 🔌 Pedir un conector
+description: ¿Qué organismo estatal te hace perder tiempo hoy?
+title: "[conector] "
+labels: [conector-pedido]
+body:
+  - type: input
+    id: organismo
+    attributes:
+      label: Organismo / servicio
+      placeholder: "ej: BPS nóminas, SUCIVE, e-notificaciones, Intendencia de..."
+    validations:
+      required: true
+  - type: textarea
+    id: necesidad
+    attributes:
+      label: Qué necesitás hacer
+      placeholder: Qué integración harías si existiera el conector, y cómo lo resolvés hoy.
+    validations:
+      required: true
+  - type: input
+    id: docs
+    attributes:
+      label: ¿Conocés documentación oficial de su API/formato?
+      placeholder: Link si tenés — nos ahorra el triaje

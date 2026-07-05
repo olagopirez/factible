@@ -72,7 +72,7 @@
       <div class="card"><span class="estado e-beta">BETA</span><h3>@factible/bcu</h3><p>Cotizaciones oficiales del Banco Central, tipadas, sin credenciales.</p></div>
       <div class="card"><span class="estado e-camino">EN CAMINO</span><h3>@factible/id-uruguay</h3><p>Login con cédula: cliente OpenID Connect para ID Uruguay (AGESIC).</p></div>
       <div class="card"><span class="estado e-camino">EXPLORANDO</span><h3>@factible/bps</h3><p>Generación tipada de archivos de nómina (GAFI).</p></div>
-      <div class="card"><span class="estado e-camino">¿CUÁL TE FALTA?</span><h3>tu-conector</h3><p><a href="mailto:olagopirez@gmail.com?subject=Conector%20que%20necesito" style="color:var(--acento)">Contanos qué organismo</a> te hace perder tiempo hoy.</p></div>
+      <div class="card"><span class="estado e-camino">¿CUÁL TE FALTA?</span><h3>tu-conector</h3><p><a href="https://github.com/olagopirez/factible/issues/new?template=conector.yml" style="color:var(--acento)">Pedilo acá</a> — contanos qué organismo te hace perder tiempo hoy.</p></div>
     </div>
 <pre><code><span class="c-com">// La misma experiencia en todos los conectores:</span>
 <span class="c-kw">import</span> { BcuClient, MONEDAS } <span class="c-kw">from</span> <span class="c-str">'@factible/bcu'</span>;
@@ -112,7 +112,8 @@ resultado.acuseCfe.detalles[0]
   <div class="cta" id="gateway">
     <h2>¿Preferís no gestionar certificados ni XML?</h2>
     <p>Estamos evaluando un <strong>gateway hosteado</strong> sobre estas librerías: API REST con certificados gestionados, actualizaciones automáticas de formato y precio transparente por documento. Contanos si te sirve.</p>
-    <a class="btn btn-primario" href="mailto:olagopirez@gmail.com?subject=Me%20interesa%20el%20gateway%20de%20factible&body=Stack%3A%20%0ADocumentos%20por%20mes%20(aprox)%3A%20%0AProveedor%20actual%3A%20" data-cta="gateway">Me interesa — contarles mi caso</a>
+    <a class="btn btn-primario" href="https://github.com/olagopirez/factible/issues/new?template=gateway.yml" data-cta="gateway">Me interesa — contarles mi caso</a>
+    <p style="margin-top:14px; font-size:13px;">¿Preferís privado? Escribinos: <a href="mailto:olagopirez@gmail.com?subject=Gateway%20factible" style="color:var(--acento)">olagopirez@gmail.com</a></p>
   </div>
 </main>
 
