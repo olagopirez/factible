@@ -17,7 +17,7 @@ npm install @factible/cfe       # beta — no usar en producción aún
 | [`@factible/cfe`](packages/cfe) | Facturación electrónica DGI: e-Ticket, e-Factura, sobres, acuses, reporte diario, representación impresa | 🟡 Beta offline (pendiente homologación DGI) |
 | [`@factible/validar`](packages/validar) | Dígito verificador y validación de CI y RUT uruguayos. Cero dependencias | 🟢 Estable — también en [Python, PHP, Go y Java](ports) |
 | [`@factible/bcu`](packages/bcu) | Cotizaciones oficiales del Banco Central | 🟢 Estable — verificado contra el servicio real |
-| `@factible/id-uruguay` | Login con cédula (OpenID Connect / AGESIC) | ⏳ En camino |
+| [`@factible/id-uruguay`](packages/id-uruguay) | Login con cédula (OpenID Connect / AGESIC), con mock del OP incluido | 🟡 Beta (esperando credenciales de testing de AGESIC) |
 | `@factible/bps` | Generación tipada de archivos de nómina | 🔍 Explorando |
 
 ## Filosofía
