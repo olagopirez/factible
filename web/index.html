@@ -18,10 +18,10 @@
   * { box-sizing: border-box; margin: 0; }
   body { background: var(--fondo); color: var(--texto); font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-  header { padding: 96px 0 48px; text-align: center; }
-  .logo { display: flex; justify-content: center; }
+  header { padding: clamp(72px, 14vh, 140px) 0 48px; text-align: center; }
+  .logo { display: flex; justify-content: center; margin-bottom: 28px; }
   .logo img { height: 40px; }
-  h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.15; margin: 16px 0; font-weight: 800; }
+  h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.15; margin: 0 0 16px; font-weight: 800; }
   h1 em { color: var(--acento); font-style: normal; }
   .sub { color: var(--tenue); font-size: 18px; max-width: 640px; margin: 0 auto 32px; }
   .botones { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
