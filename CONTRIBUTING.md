@@ -37,6 +37,16 @@ Al contribuir aceptás que tu aporte se publica bajo MIT.
 
 Usamos [Changesets](https://github.com/changesets/changesets) con [SemVer](https://semver.org/lang/es/): en 0.x, los cambios que rompen API suben la **minor** y el resto sube la **patch**.
 
+### Qué promete cada versión
+
+| Rango | Estado | Significa |
+|---|---|---|
+| `0.0.x` | Experimental / beta offline | Construido contra la spec, sin validar contra el servicio real (ej: `cfe` hasta homologar ante DGI) |
+| `0.x` (x ≥ 1) | Beta validada | Validado end-to-end contra el servicio real, API aún puede cambiar (ej: `bcu`, `montevideo`) |
+| `1.0.0` | Estable | Apto para producción; la API solo rompe con major |
+
+En SemVer todo `0.x` es inestable por definición — el "beta" está en el rango, no en un sufijo. Los tags de git siempre espejan la versión exacta publicada en npm.
+
 - **En tu PR**, si tocás un paquete publicable, corré `npx changeset` y elegí el paquete y el tipo de cambio. El archivito generado en `.changeset/` viaja con el PR y se convierte en la entrada del CHANGELOG.
 - **Para publicar** (mantenedor): `npm run version` (aplica bumps y changelogs, commitear el resultado) y luego `npm run release` (build + tests + publish a npm + tags git `@factible/paquete@x.y.z`). Después: `git push --follow-tags`.
 - Los tags de git son la referencia: cada versión en npm corresponde a un tag en el repo.
