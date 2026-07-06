@@ -50,6 +50,21 @@
   .cta p { color: var(--tenue); margin-bottom: 24px; max-width: 520px; margin-left: auto; margin-right: auto; }
   footer { border-top: 1px solid var(--borde); padding: 32px 0; color: var(--tenue); font-size: 13px; text-align: center; margin-top: 64px; }
   footer a { color: var(--tenue); }
+  img { max-width: 100%; }
+  /* El pre del header es inline-block (se ajusta al contenido): en pantallas
+     chicas hay que taparlo para que no estire la página entera. */
+  header pre { max-width: 100%; overflow-x: auto; }
+  @media (max-width: 640px) {
+    header.wrap { padding: 56px 16px 32px; }
+    .wrap { padding-left: 16px; padding-right: 16px; }
+    .logo { margin-bottom: 24px; }
+    .sub { font-size: 16px; }
+    pre { padding: 14px; font-size: 12.5px; }
+    section h2 { margin: 48px 0 8px; font-size: 21px; }
+    .cta { padding: 28px 18px; margin-top: 48px; }
+    .btn { width: 100%; text-align: center; }
+    .botones { flex-direction: column; }
+  }
 </style>
 </head>
 <body>
