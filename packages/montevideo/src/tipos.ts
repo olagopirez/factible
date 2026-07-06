@@ -65,13 +65,51 @@ export interface Arribo {
   busId?: string;
 }
 
-/** Estado sanitario / bañabilidad de una playa. */
+/**
+ * Playa de Montevideo (GET /beaches).
+ * Shape según la doc oficial del servicio de playas del portal.
+ */
 export interface Playa {
+  /** Ej: "dda_casillas_playas.1" */
+  id: string;
+  /** Ej: "Pocitos" */
   nombre: string;
-  /** Apta para baños según el índice de bañabilidad. */
-  apta: boolean;
-  /** Detalle del estado sanitario reportado. */
-  estado?: string;
-  /** Última actualización del dato. */
-  actualizado?: Date;
+  /** Ej: "Rambla República del Perú y Gabriel Pereira.Pocitos" */
+  descripcion?: string;
+  latitud: number;
+  longitud: number;
+  /** Registro original de la API. */
+  crudo: Record<string, unknown>;
+}
+
+/**
+ * Casilla de guardavidas con el estado de sus banderas
+ * (GET /beaches/lifeguardstations).
+ */
+export interface Casilla {
+  /** Ej: "MVD:lifeguardstation:12" */
+  id: string;
+  /** Ej: "Batlle y Ordoñez" */
+  nombre: string;
+  direccion?: string;
+  /** Playa a la que pertenece (ej: "Pocitos"). */
+  playa?: string;
+  /** Bandera sanitaria izada (true = alerta sanitaria; ver causa). */
+  banderaSanitaria?: boolean;
+  /** Código de causa de la bandera sanitaria (ej: "2"). */
+  causaSanitaria?: string;
+  /** Descripción de la causa (ej: "Mortandad de peces"). */
+  causaSanitariaDesc?: string;
+  /** Vencimiento del estado sanitario reportado. */
+  venceSanitaria?: Date;
+  /** Bandera de seguridad: "green" | "yellow" | "red" (según la API). */
+  banderaSeguridad?: string;
+  /** Vencimiento del estado de la bandera de seguridad. */
+  venceSeguridad?: Date;
+  /** Link a Cómo Ir. */
+  linkComoIr?: string;
+  latitud: number;
+  longitud: number;
+  /** Registro original de la API. */
+  crudo: Record<string, unknown>;
 }

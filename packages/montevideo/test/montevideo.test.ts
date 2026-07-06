@@ -95,6 +95,40 @@ beforeAll(async () => {
       ]);
     }
 
+    // Servicio de playas (base /api/environment, v1.0.0).
+    // Payloads fieles a los ejemplos de la doc oficial del portal.
+    if (req.url?.startsWith('/api/environment/beaches')) {
+      if (req.headers.authorization !== `Bearer ${tokenVigente}`) {
+        return json({ error: 'invalid_token' }, 401);
+      }
+      if (req.url.startsWith('/api/environment/beaches/lifeguardstations')) {
+        return json([
+          {
+            id: 'MVD:lifeguardstation:12',
+            name: 'Batlle y Ordoñez',
+            address: 'Rambla Republica de Chile y Batlle y Ordoñez.',
+            beach: 'Pocitos',
+            healthFlag: 'true',
+            healthFlagCause: '2',
+            healthFlagCauseDesc: 'Mortandad de peces',
+            healthFlagExpiration: '2020-01-30T23:00:00.00Z',
+            safetyFlag: 'green',
+            safetyFlagExpiration: '2020-01-30T23:00:00.00Z',
+            linkComoIr: 'https://m.montevideo.gub.uy/comoir/destino?td*PLAYA&c1d*2016&ld*Playa%20Buceo',
+            location: { type: 'Point', coordinates: [-56.196167, -34.903778] },
+          },
+        ]);
+      }
+      return json([
+        {
+          id: 'dda_casillas_playas.1',
+          name: 'Pocitos',
+          description: 'Rambla República del Perú y Gabriel Pereira.Pocitos',
+          location: { type: 'Point', coordinates: [-56.196167, -34.903778] },
+        },
+      ]);
+    }
+
     json({ error: 'not_found' }, 404);
   });
   await new Promise<void>((r) => server.listen(0, () => r()));
@@ -182,10 +216,36 @@ describe('MontevideoClient', () => {
     expect(buses).toHaveLength(2);
   });
 
-  it('arribos() y playas() declaran su spec pendiente', async () => {
-    const mvd = cliente();
-    await expect(mvd.arribos(1234)).rejects.toThrow(PendienteDeSpec);
-    await expect(mvd.playas()).rejects.toThrow(/pendiente/);
+  it('lista playas mapeadas al dominio', async () => {
+    const [playa] = await cliente().playas();
+
+    expect(playa).toMatchObject({
+      id: 'dda_casillas_playas.1',
+      nombre: 'Pocitos',
+      descripcion: 'Rambla República del Perú y Gabriel Pereira.Pocitos',
+    });
+    expect(playa!.latitud).toBeCloseTo(-34.903778);
+    expect(playa!.longitud).toBeCloseTo(-56.196167);
+  });
+
+  it('lista casillas con el estado de las banderas', async () => {
+    const [casilla] = await cliente().casillas();
+
+    expect(casilla).toMatchObject({
+      id: 'MVD:lifeguardstation:12',
+      nombre: 'Batlle y Ordoñez',
+      playa: 'Pocitos',
+      banderaSanitaria: true, // healthFlag llega como string "true"
+      causaSanitaria: '2',
+      causaSanitariaDesc: 'Mortandad de peces',
+      banderaSeguridad: 'green',
+      linkComoIr: 'https://m.montevideo.gub.uy/comoir/destino?td*PLAYA&c1d*2016&ld*Playa%20Buceo',
+    });
+    expect(casilla!.venceSanitaria?.toISOString()).toBe('2020-01-30T23:00:00.000Z');
+  });
+
+  it('arribos() declara su spec pendiente', async () => {
+    await expect(cliente().arribos(1234)).rejects.toThrow(PendienteDeSpec);
   });
 });
 
@@ -211,5 +271,27 @@ describe.skipIf(!process.env['MVD_E2E'])('Montevideo API real (e2e)', () => {
       expect(Math.abs(bus.longitud)).toBeGreaterThan(50); // ≈ -56.2
       console.log('bus mapeado:', JSON.stringify({ ...bus, crudo: undefined }));
     }
+  }, 30_000);
+});
+
+// E2E del servicio de playas — requiere una Aplicación aparte (servicio "Playas"):
+//   MVD_PLAYAS_CLIENT_ID=xxx MVD_PLAYAS_CLIENT_SECRET=yyy MVD_PLAYAS_E2E=1 npx vitest run
+describe.skipIf(!process.env['MVD_PLAYAS_E2E'])('Playas real (e2e)', () => {
+  it('lista playas y casillas con banderas', async () => {
+    const mvd = new MontevideoClient({
+      credenciales: {
+        clientId: process.env['MVD_PLAYAS_CLIENT_ID']!,
+        clientSecret: process.env['MVD_PLAYAS_CLIENT_SECRET']!,
+      },
+    });
+
+    const playas = await mvd.playas();
+    expect(playas.length).toBeGreaterThan(0);
+    expect(playas[0]!.nombre).toBeTruthy();
+    console.log('playa mapeada:', JSON.stringify({ ...playas[0], crudo: undefined }));
+
+    const casillas = await mvd.casillas();
+    expect(casillas.length).toBeGreaterThan(0);
+    console.log('casilla mapeada:', JSON.stringify({ ...casillas[0], crudo: undefined }));
   }, 30_000);
 });

@@ -8,11 +8,12 @@
  *   - buses(): GET /api/transportepublico/buses?lines=...
  *
  * buses() está validado e2e contra la API real (2026-07-05) y devuelve Bus
- * tipado. arribos() y playas() esperan relevar sus endpoints (playas es un
- * servicio aparte del portal: requiere su propia Aplicación).
+ * tipado. playas()/casillas() implementados contra la doc oficial del servicio
+ * de playas (es un servicio aparte del portal: requiere su propia Aplicación).
+ * arribos() espera relevar su endpoint.
  */
 import { TokenManager, type Credenciales } from './auth.js';
-import type { Arribo, Bus, BusCrudo, Playa } from './tipos.js';
+import type { Arribo, Bus, BusCrudo, Casilla, Playa } from './tipos.js';
 
 export const BASE_URL = 'https://api.montevideo.gub.uy/api';
 
@@ -87,11 +88,28 @@ export class MontevideoClient {
     throw new PendienteDeSpec('arribos()', 'endpoint de TEA pendiente de relevar en la doc autenticada del portal');
   }
 
-  /** Estado de playas — endpoint aún no relevado del portal. */
+  /**
+   * Lista de playas de Montevideo (GET /beaches).
+   * ⚠️ Servicio aparte del portal: requiere una Aplicación asociada al
+   * servicio "Playas" (credenciales distintas de las de transporte).
+   */
   async playas(): Promise<Playa[]> {
-    throw new PendienteDeSpec('playas()', 'endpoint de playas pendiente de relevar en la doc autenticada del portal');
+    const datos = await this.get<unknown>(`${PLAYAS_PATH}/beaches`);
+    return normalizarLista(datos).map(mapearPlaya);
+  }
+
+  /**
+   * Casillas de guardavidas con el estado de la bandera de seguridad y la
+   * calidad del agua (GET /beaches/lifeguardstations).
+   */
+  async casillas(): Promise<Casilla[]> {
+    const datos = await this.get<unknown>(`${PLAYAS_PATH}/beaches/lifeguardstations`);
+    return normalizarLista(datos).map(mapearCasilla);
   }
 }
+
+/** Base path del servicio de playas según el portal: /api/environment (v1.0.0). */
+export const PLAYAS_PATH = '/environment';
 
 /** La API devuelve lista directa; se tolera también una lista envuelta en un objeto. */
 function normalizarLista(datos: unknown): BusCrudo[] {
@@ -109,14 +127,7 @@ function normalizarLista(datos: unknown): BusCrudo[] {
  * romper: el registro original va siempre en `crudo`.
  */
 export function mapearBus(crudo: BusCrudo): Bus {
-  const loc = crudo['location'] as { coordinates?: unknown } | undefined;
-  const coords = Array.isArray(loc?.coordinates) ? loc.coordinates : [];
-  // GeoJSON Point: [longitud, latitud]
-  const longitud = Number(coords[0] ?? NaN);
-  const latitud = Number(coords[1] ?? NaN);
-
-  const opcional = <T>(v: unknown, tipo: 'string' | 'number' | 'boolean'): T | undefined =>
-    typeof v === tipo ? (v as T) : undefined;
+  const { latitud, longitud } = coordenadas(crudo);
 
   const bus: Bus = {
     busId: Number(crudo['busId'] ?? NaN),
@@ -153,8 +164,79 @@ export function mapearBus(crudo: BusCrudo): Bus {
 }
 
 /**
- * La API usa offset sin minutos ("2026-07-05T21:02:15.000-03"), que no es
- * ISO 8601 estricto: se normaliza a "-03:00" antes de parsear.
+ * Mapea una playa cruda (GET /beaches) al dominio.
+ * Shape según la doc oficial del servicio de playas.
+ */
+export function mapearPlaya(crudo: Record<string, unknown>): Playa {
+  const { latitud, longitud } = coordenadas(crudo);
+  const playa: Playa = {
+    id: String(crudo['id'] ?? ''),
+    nombre: String(crudo['name'] ?? ''),
+    latitud,
+    longitud,
+    crudo,
+  };
+  const descripcion = opcional<string>(crudo['description'], 'string');
+  if (descripcion !== undefined) playa.descripcion = descripcion;
+  return playa;
+}
+
+/**
+ * Mapea una casilla cruda (GET /beaches/lifeguardstations) al dominio.
+ * Nota: healthFlag llega como string ("true"/"false") según el ejemplo oficial.
+ */
+export function mapearCasilla(crudo: Record<string, unknown>): Casilla {
+  const { latitud, longitud } = coordenadas(crudo);
+  const casilla: Casilla = {
+    id: String(crudo['id'] ?? ''),
+    nombre: String(crudo['name'] ?? ''),
+    latitud,
+    longitud,
+    crudo,
+  };
+
+  const direccion = opcional<string>(crudo['address'], 'string');
+  if (direccion !== undefined) casilla.direccion = direccion;
+  const playa = opcional<string>(crudo['beach'], 'string');
+  if (playa !== undefined) casilla.playa = playa;
+
+  const healthFlag = crudo['healthFlag'];
+  if (typeof healthFlag === 'boolean') casilla.banderaSanitaria = healthFlag;
+  else if (typeof healthFlag === 'string') casilla.banderaSanitaria = healthFlag === 'true';
+
+  const causaSanitaria = opcional<string>(crudo['healthFlagCause'], 'string');
+  if (causaSanitaria !== undefined) casilla.causaSanitaria = causaSanitaria;
+  const causaSanitariaDesc = opcional<string>(crudo['healthFlagCauseDesc'], 'string');
+  if (causaSanitariaDesc !== undefined) casilla.causaSanitariaDesc = causaSanitariaDesc;
+  const venceSanitaria = parsearTimestamp(crudo['healthFlagExpiration']);
+  if (venceSanitaria !== undefined) casilla.venceSanitaria = venceSanitaria;
+
+  const banderaSeguridad = opcional<string>(crudo['safetyFlag'], 'string');
+  if (banderaSeguridad !== undefined) casilla.banderaSeguridad = banderaSeguridad;
+  const venceSeguridad = parsearTimestamp(crudo['safetyFlagExpiration']);
+  if (venceSeguridad !== undefined) casilla.venceSeguridad = venceSeguridad;
+
+  const linkComoIr = opcional<string>(crudo['linkComoIr'], 'string');
+  if (linkComoIr !== undefined) casilla.linkComoIr = linkComoIr;
+
+  return casilla;
+}
+
+function opcional<T>(v: unknown, tipo: 'string' | 'number' | 'boolean'): T | undefined {
+  return typeof v === tipo ? (v as T) : undefined;
+}
+
+/** Extrae [longitud, latitud] de un GeoJSON Point en `location`. */
+function coordenadas(crudo: Record<string, unknown>): { latitud: number; longitud: number } {
+  const loc = crudo['location'] as { coordinates?: unknown } | undefined;
+  const coords = Array.isArray(loc?.coordinates) ? loc.coordinates : [];
+  return { longitud: Number(coords[0] ?? NaN), latitud: Number(coords[1] ?? NaN) };
+}
+
+/**
+ * La API de transporte usa offset sin minutos ("2026-07-05T21:02:15.000-03"),
+ * que no es ISO 8601 estricto: se normaliza a "-03:00" antes de parsear.
+ * (Playas usa "Z", que parsea directo.)
  */
 function parsearTimestamp(v: unknown): Date | undefined {
   if (typeof v !== 'string' || !v) return undefined;

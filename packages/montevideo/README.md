@@ -17,9 +17,14 @@ console.log(buses[0]);
 // { busId: 104, empresa: 'CUTCSA', linea: '103', destino: 'PLAZA ESPAÑA',
 //   latitud: -34.909542, longitud: -56.201515, velocidad: 0, ... }
 
-// Próximamente (endpoints pendientes de relevar):
+// Playas (requiere una Aplicación aparte, asociada al servicio "Playas"):
+const playas = await mvd.playas();       // lista de playas con coordenadas
+const casillas = await mvd.casillas();   // banderas por casilla de guardavidas
+// { nombre: 'Batlle y Ordoñez', playa: 'Pocitos', banderaSeguridad: 'green',
+//   banderaSanitaria: true, causaSanitariaDesc: 'Mortandad de peces', ... }
+
+// Próximamente (endpoint pendiente de relevar):
 // const tea = await mvd.arribos(1234);  // ¿cuándo llega a mi parada?
-// const playas = await mvd.playas();    // ¿está apta Pocitos hoy?
 ```
 
 ## Estado
@@ -30,7 +35,9 @@ console.log(buses[0]);
 - [x] `buses({ lineas })` — `/transportepublico/buses?lines=`. Devuelve `Bus[]` tipado (dominio en español) con shape fijado contra una respuesta real; el registro original queda en `bus.crudo`.
 - [x] `get(path, params)` público: cualquier endpoint del portal, autenticado.
 - [x] Mock del portal (Keycloak + API) fiel a las respuestas reales.
-- [ ] Relevar endpoints de TEA (arribos) y playas. ⚠️ Playas es un **servicio aparte** en el portal: requiere su propia Aplicación asociada a ese servicio.
+- [x] `playas()` y `casillas()` — servicio de playas (`/api/environment`, v1.0.0): lista de playas y estado de banderas (seguridad + sanitaria) por casilla, contra la doc oficial del portal. ⚠️ Servicio aparte: requiere su propia Aplicación asociada a "Playas".
+- [ ] Validar playas e2e (`MVD_PLAYAS_CLIENT_ID=... MVD_PLAYAS_CLIENT_SECRET=... MVD_PLAYAS_E2E=1 npx vitest run`).
+- [ ] Relevar endpoint de TEA (arribos).
 - [ ] Publicar en npm al mergear.
 
 Acceso: cuenta gratuita autoservicio en [api.montevideo.gub.uy](https://api.montevideo.gub.uy) → Mis aplicaciones → crear Aplicación sobre el servicio **Transporte publico** → copiar ID y Secreto del cliente. (La Redirect URL que pide el formulario no se usa en este flujo; cualquier URL válida sirve.)
