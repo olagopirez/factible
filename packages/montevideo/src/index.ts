@@ -10,6 +10,7 @@ export {
   mapearCasilla,
   mapearParada,
   mapearVariante,
+  mapearArribo,
 } from './cliente.js';
 export type { MontevideoConfig } from './cliente.js';
 export { TokenManager, TOKEN_URL } from './auth.js';

@@ -98,7 +98,7 @@ export class MontevideoClient {
     if (filtro.variantes?.length) params['lineVariantIds'] = filtro.variantes.join(',');
     if (filtro.cantidadPorLinea !== undefined) params['amountperline'] = String(filtro.cantidadPorLinea);
     const datos = await this.get<unknown>(`/transportepublico/buses/busstops/${paradaId}/upcomingbuses`, params);
-    return normalizarLista(datos).map(mapearVariante);
+    return normalizarLista(datos).map(mapearArribo);
   }
 
   /** Lista de paradas del STM (GET /buses/busstops). */
@@ -107,7 +107,12 @@ export class MontevideoClient {
     return normalizarLista(datos).map(mapearParada);
   }
 
-  /** Líneas que pasan por una parada (GET /buses/busstops/{id}/lines). */
+  /**
+   * Líneas que pasan por una parada (GET /buses/busstops/{id}/lines).
+   * ⚠️ TODO: endpoint documentado, pero la API real respondió HTTP 400 en
+   * todas las paradas probadas (e2e 2026-07-05) — posiblemente fuera de
+   * servicio; reportado el hallazgo, mantener y revisar.
+   */
   async lineasPorParada(paradaId: number): Promise<LineaEnParada[]> {
     const datos = await this.get<unknown>(`/transportepublico/buses/busstops/${paradaId}/lines`);
     return normalizarLista(datos).map((crudo) => {
@@ -308,6 +313,50 @@ export function mapearVariante(crudo: Record<string, unknown>): LineaVariante {
   const especial = opcional<boolean>(crudo['special'], 'boolean');
   if (especial !== undefined) variante.especial = especial;
   return variante;
+}
+
+/**
+ * Mapea un arribo crudo (GET /buses/busstops/{id}/upcomingbuses) al dominio.
+ * Shape fijado contra una respuesta real (e2e 2026-07-05).
+ */
+export function mapearArribo(crudo: Record<string, unknown>): Arribo {
+  const arribo: Arribo = {
+    eta: Number(crudo['eta'] ?? NaN),
+    varianteId: Number(crudo['lineVariantId'] ?? NaN),
+    linea: String(crudo['line'] ?? ''),
+    crudo,
+  };
+
+  const distancia = opcional<number>(crudo['distance'], 'number');
+  if (distancia !== undefined) arribo.distancia = distancia;
+  const posicion = opcional<number>(crudo['position'], 'number');
+  if (posicion !== undefined) arribo.posicion = posicion;
+  const busId = opcional<number>(crudo['busId'], 'number');
+  if (busId !== undefined) arribo.busId = busId;
+  const empresa = opcional<string>(crudo['companyName'], 'string');
+  if (empresa !== undefined) arribo.empresa = empresa;
+  const origen = opcional<string>(crudo['origin'], 'string');
+  if (origen !== undefined) arribo.origen = origen;
+  const destino = opcional<string>(crudo['destination'], 'string');
+  if (destino !== undefined) arribo.destino = destino;
+  const sublinea = opcional<string>(crudo['subline'], 'string');
+  if (sublinea !== undefined) arribo.sublinea = sublinea;
+  const especial = opcional<boolean>(crudo['special'], 'boolean');
+  if (especial !== undefined) arribo.especial = especial;
+  const acceso = opcional<string>(crudo['access'], 'string');
+  if (acceso !== undefined) arribo.acceso = acceso;
+  const confortTermico = opcional<string>(crudo['thermalConfort'], 'string');
+  if (confortTermico !== undefined) arribo.confortTermico = confortTermico;
+  const emisiones = opcional<string>(crudo['emissions'], 'string');
+  if (emisiones !== undefined) arribo.emisiones = emisiones;
+
+  const { latitud, longitud } = coordenadas(crudo);
+  if (Number.isFinite(latitud) && Number.isFinite(longitud)) {
+    arribo.latitud = latitud;
+    arribo.longitud = longitud;
+  }
+
+  return arribo;
 }
 
 function opcional<T>(v: unknown, tipo: 'string' | 'number' | 'boolean'): T | undefined {

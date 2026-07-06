@@ -60,16 +60,26 @@ beforeAll(async () => {
       // Endpoints específicos antes que el genérico /buses.
       // Payloads fieles a los ejemplos de la doc oficial (spec/Documentacion_
       // servicios_transporte_publico.pdf).
+      // Shape fiel a una respuesta real de upcomingbuses (e2e 2026-07-05) —
+      // la doc oficial muestra un modelo incompleto sin eta/distance/position.
       if (req.url.includes('/buses/busstops/546/upcomingbuses')) {
         return json([
           {
-            lineVariantId: 1234,
-            line: '123SD',
-            lineId: '324',
-            origin: 'CIUDAD VIEJA',
-            destination: 'MALVIN',
-            subline: 'CIUDAD VIEJA - MALVIN',
-            special: true,
+            busId: 50,
+            companyName: 'COETC',
+            lineVariantId: 37,
+            line: '405',
+            origin: 'PEÑAROL',
+            destination: 'PARQUE RODÓ',
+            subline: 'PEÑAROL - PARQUE RODÓ',
+            special: false,
+            eta: 4,
+            distance: 23921,
+            position: 84,
+            access: 'COMÚN',
+            thermalConfort: 'Sin datos',
+            emissions: 'Euro III',
+            location: { type: 'Point', coordinates: [-56.170216, -34.912666] },
           },
         ]);
       }
@@ -309,19 +319,25 @@ describe('MontevideoClient', () => {
   });
 
   it('consulta arribos (TEA) a una parada con líneas obligatorias', async () => {
-    const arribos = await cliente().arribos(546, { lineas: ['123SD'], cantidadPorLinea: 2 });
+    const arribos = await cliente().arribos(546, { lineas: ['405'], cantidadPorLinea: 2 });
 
     expect(arribos).toHaveLength(1);
     expect(arribos[0]).toMatchObject({
-      varianteId: 1234,
-      linea: '123SD',
-      origen: 'CIUDAD VIEJA',
-      destino: 'MALVIN',
-      especial: true,
+      eta: 4, // minutos hasta el arribo
+      distancia: 23921,
+      posicion: 84,
+      busId: 50,
+      empresa: 'COETC',
+      varianteId: 37,
+      linea: '405',
+      origen: 'PEÑAROL',
+      destino: 'PARQUE RODÓ',
+      especial: false,
     });
+    expect(arribos[0]!.latitud).toBeCloseTo(-34.912666);
     const pedido = pedidosApi.at(-1)!.path;
     expect(pedido).toContain('/busstops/546/upcomingbuses');
-    expect(pedido).toContain('lines=123SD');
+    expect(pedido).toContain('lines=405');
     expect(pedido).toContain('amountperline=2');
   });
 

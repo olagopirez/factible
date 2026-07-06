@@ -93,10 +93,37 @@ export interface LineaEnParada {
 
 /**
  * Próximo bus a llegar a una parada (GET /buses/busstops/{id}/upcomingbuses).
- * TODO(⚠️): el modelo documentado es idéntico al de variantes de línea y no
- * muestra el ETA en minutos — confirmar los campos reales con un e2e.
+ * Shape fijado contra una respuesta real (e2e 2026-07-05) — la doc oficial
+ * muestra un modelo incompleto, sin eta/distance/position.
+ * Ejemplo real: { busId: 50, companyName: "COETC", lineVariantId: 37,
+ * line: "405", eta: 4, distance: 23921, position: 84, location: {...}, ... }
  */
-export type Arribo = LineaVariante;
+export interface Arribo {
+  /** Minutos estimados hasta el arribo (campo `eta`). */
+  eta: number;
+  /** Metros reportados por la API (`distance`) — semántica exacta a confirmar. */
+  distancia?: number;
+  /** Campo `position` de la API — semántica a confirmar. */
+  posicion?: number;
+  /** Identificador del coche que viene en camino. */
+  busId?: number;
+  /** Empresa operadora (`companyName`, ej: "COETC"). */
+  empresa?: string;
+  varianteId: number;
+  linea: string;
+  origen?: string;
+  destino?: string;
+  sublinea?: string;
+  especial?: boolean;
+  acceso?: string;
+  confortTermico?: string;
+  emisiones?: string;
+  /** Última posición conocida del bus que viene en camino. */
+  latitud?: number;
+  longitud?: number;
+  /** Registro original de la API. */
+  crudo: Record<string, unknown>;
+}
 
 /**
  * Playa de Montevideo (GET /beaches).
