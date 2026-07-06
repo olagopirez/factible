@@ -35,8 +35,7 @@ const casillas = await mvd.casillas();   // banderas por casilla de guardavidas
 - [x] `buses({ lineas })` — `/transportepublico/buses?lines=`. Devuelve `Bus[]` tipado (dominio en español) con shape fijado contra una respuesta real; el registro original queda en `bus.crudo`.
 - [x] `get(path, params)` público: cualquier endpoint del portal, autenticado.
 - [x] Mock del portal (Keycloak + API) fiel a las respuestas reales.
-- [x] `playas()` y `casillas()` — servicio de playas (`/api/environment`, v1.0.0): lista de playas y estado de banderas (seguridad + sanitaria) por casilla, contra la doc oficial del portal. ⚠️ Servicio aparte: requiere su propia Aplicación asociada a "Playas".
-- [ ] Validar playas e2e (`MVD_PLAYAS_CLIENT_ID=... MVD_PLAYAS_CLIENT_SECRET=... MVD_PLAYAS_E2E=1 npx vitest run`).
+- [x] `playas()` y `casillas()` — servicio de playas (`/api/environment`, v1.0.0): lista de playas y estado de banderas (seguridad + sanitaria) por casilla. **Validado e2e contra la API real** (2026-07-05). ⚠️ Servicio aparte: requiere su propia Aplicación asociada a "Playas". Fuera de temporada las casillas vienen sin banderas (campos opcionales).
 - [ ] Relevar endpoint de TEA (arribos).
 - [ ] Publicar en npm al mergear.
 

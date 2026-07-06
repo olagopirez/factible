@@ -117,6 +117,15 @@ beforeAll(async () => {
             linkComoIr: 'https://m.montevideo.gub.uy/comoir/destino?td*PLAYA&c1d*2016&ld*Playa%20Buceo',
             location: { type: 'Point', coordinates: [-56.196167, -34.903778] },
           },
+          // Fuera de temporada las casillas vienen SIN banderas (observado
+          // contra la API real el 2026-07-05, invierno):
+          {
+            id: 'MVD:lifeguardstation:1',
+            name: 'Marti',
+            address: 'Jose Marti Republica del Peru y Marti.',
+            beach: 'pocitos',
+            location: { type: 'Point', coordinates: [-56.14743268, -34.91392318] },
+          },
         ]);
       }
       return json([
@@ -242,6 +251,16 @@ describe('MontevideoClient', () => {
       linkComoIr: 'https://m.montevideo.gub.uy/comoir/destino?td*PLAYA&c1d*2016&ld*Playa%20Buceo',
     });
     expect(casilla!.venceSanitaria?.toISOString()).toBe('2020-01-30T23:00:00.000Z');
+  });
+
+  it('fuera de temporada las casillas vienen sin banderas y el mapeo lo tolera', async () => {
+    const casillas = await cliente().casillas();
+    const invierno = casillas[1]!;
+
+    expect(invierno.nombre).toBe('Marti');
+    expect(invierno.playa).toBe('pocitos');
+    expect(invierno.banderaSeguridad).toBeUndefined();
+    expect(invierno.banderaSanitaria).toBeUndefined();
   });
 
   it('arribos() declara su spec pendiente', async () => {
