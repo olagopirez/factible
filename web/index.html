@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>factible — Infraestructura open source para integrarte con el Estado uruguayo</title>
-<meta name="description" content="Librerías TypeScript open source para integrarte con el Estado uruguayo: facturación electrónica DGI (CFE), cotizaciones BCU, validación de CI/RUT, ID Uruguay y más.">
+<meta name="description" content="Librerías TypeScript open source para integrarte con el Estado uruguayo: facturación electrónica DGI (CFE), cotizaciones BCU, validación de CI/RUT, ID Uruguay, APIs de la Intendencia de Montevideo y más.">
 <link rel="icon" type="image/svg+xml" href="assets/logo-dark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -56,13 +56,13 @@
 <header class="wrap">
   <div class="logo"><img src="assets/logo-lockup.svg" alt="factible"></div>
   <h1>Integrarte con el Estado uruguayo,<br>en <em>una tarde</em> y no en un mes</h1>
-  <p class="sub">Un conector open source por organismo — DGI, BCU, AGESIC y más — con la misma experiencia: TypeScript tipado, simuladores para desarrollar sin trámites, y todo validado contra las especificaciones oficiales.</p>
+  <p class="sub">Un conector open source por organismo — DGI, BCU, AGESIC, Intendencia de Montevideo y más — con la misma experiencia: TypeScript tipado, simuladores para desarrollar sin trámites, y todo validado contra las especificaciones oficiales.</p>
   <div class="botones">
     <a class="btn btn-primario" href="https://github.com/olagopirez/factible" data-cta="github">Ver en GitHub</a>
     <a class="btn btn-sec" href="#cfe">Facturación electrónica →</a>
   </div>
   <pre style="display:inline-block; text-align:left; margin-top:28px; padding:12px 20px;"><code><span class="c-com"># ya disponible en npm</span>
-npm install <span class="c-str">@factible/validar</span> <span class="c-str">@factible/bcu</span></code></pre>
+npm install <span class="c-str">@factible/validar</span> <span class="c-str">@factible/bcu</span> <span class="c-str">@factible/montevideo</span></code></pre>
 </header>
 
 <main class="wrap">
@@ -73,6 +73,7 @@ npm install <span class="c-str">@factible/validar</span> <span class="c-str">@fa
       <div class="card"><span class="estado e-beta">BETA</span><h3>@factible/cfe</h3><p>Facturación electrónica DGI: e-Ticket, e-Factura, firma, sobres, acuses, reporte diario y representación impresa con QR.</p></div>
       <div class="card"><span class="estado e-ok">DISPONIBLE</span><h3>@factible/validar</h3><p>Dígito verificador y validación de CI y RUT. Cero dependencias — en TypeScript, Python, PHP, Go y Java.</p></div>
       <div class="card"><span class="estado e-ok">DISPONIBLE</span><h3>@factible/bcu</h3><p>Cotizaciones oficiales del Banco Central, tipadas, sin credenciales — verificado contra el servicio real.</p></div>
+      <div class="card"><span class="estado e-ok">DISPONIBLE</span><h3>@factible/montevideo</h3><p>Intendencia de Montevideo: buses del STM en tiempo real, arribos a tu parada (TEA) y banderas de playas — validado contra las APIs reales.</p></div>
       <div class="card"><span class="estado e-beta">BETA</span><h3>@factible/id-uruguay</h3><p>Login con cédula: cliente OpenID Connect para ID Uruguay (AGESIC), con simulador incluido.</p></div>
       <div class="card"><span class="estado e-camino">EXPLORANDO</span><h3>@factible/bps</h3><p>Generación tipada de archivos de nómina (GAFI).</p></div>
       <div class="card"><span class="estado e-camino">¿CUÁL TE FALTA?</span><h3>tu-conector</h3><p><a href="https://github.com/olagopirez/factible/issues/new?template=conector.yml" style="color:var(--acento)">Pedilo acá</a> — contanos qué organismo te hace perder tiempo hoy.</p></div>
@@ -80,9 +81,11 @@ npm install <span class="c-str">@factible/validar</span> <span class="c-str">@fa
 <pre><code><span class="c-com">// La misma experiencia en todos los conectores:</span>
 <span class="c-kw">import</span> { BcuClient, MONEDAS } <span class="c-kw">from</span> <span class="c-str">'@factible/bcu'</span>;
 <span class="c-kw">import</span> { validarRut } <span class="c-kw">from</span> <span class="c-str">'@factible/validar'</span>;
+<span class="c-kw">import</span> { MontevideoClient } <span class="c-kw">from</span> <span class="c-str">'@factible/montevideo'</span>;
 
 <span class="c-kw">const</span> usd = <span class="c-kw">await</span> <span class="c-kw">new</span> <span class="c-fn">BcuClient</span>().<span class="c-fn">cotizacion</span>(MONEDAS.DOLAR_USA); <span class="c-com">// { venta: 40.35, ... }</span>
-<span class="c-fn">validarRut</span>(<span class="c-str">'219999830019'</span>); <span class="c-com">// true</span></code></pre>
+<span class="c-fn">validarRut</span>(<span class="c-str">'219999830019'</span>); <span class="c-com">// true</span>
+<span class="c-kw">const</span> tea = <span class="c-kw">await</span> mvd.<span class="c-fn">arribos</span>(<span class="c-str">546</span>, { lineas: [<span class="c-str">'405'</span>] }); <span class="c-com">// [{ eta: 4, ... }] minutos</span></code></pre>
   </section>
 
   <section>

@@ -1,7 +1,7 @@
 {
   "name": "@factible/montevideo",
-  "version": "0.0.1",
-  "description": "APIs de la Intendencia de Montevideo: buses del STM en tiempo real, arribos a paradas y estado de playas.",
+  "version": "0.1.0",
+  "description": "APIs de la Intendencia de Montevideo: buses del STM en tiempo real, arribos a paradas (TEA) y banderas de playas. Validado contra las APIs reales.",
   "keywords": ["montevideo", "stm", "buses", "transporte", "como-ir", "playas", "uruguay", "intendencia"],
   "license": "MIT",
   "author": "Oscar Lago",
