@@ -42,6 +42,10 @@
   .e-ok { background: #12261b; color: var(--acento); border: 1px solid #1f4430; }
   .e-beta { background: #251e10; color: #d29922; border: 1px solid #453413; }
   .e-camino { background: #1c2128; color: var(--tenue); border: 1px solid var(--borde); }
+  .card-pedido { border: 1px dashed var(--acento2); background: rgba(74, 222, 128, 0.05); transition: background 0.15s, border-color 0.15s; }
+  .card-pedido:hover { border-color: var(--acento); background: rgba(74, 222, 128, 0.1); }
+  .card-pedido .estado { background: #12261b; color: var(--acento); border: 1px solid #1f4430; }
+  .card-pedido p { color: var(--texto); }
   section h2 { font-size: 24px; margin: 72px 0 8px; }
   section > p.intro { color: var(--tenue); margin-bottom: 16px; }
   .aviso { background: #1c2128; border: 1px solid #3d2e1a; border-left: 3px solid #d29922; border-radius: 8px; padding: 14px 18px; color: var(--tenue); font-size: 14px; margin: 20px 0; }
@@ -91,7 +95,7 @@ npm install <span class="c-str">@factible/validar</span> <span class="c-str">@fa
       <div class="card"><span class="estado e-ok">DISPONIBLE</span><h3>@factible/montevideo</h3><p>Intendencia de Montevideo: buses del STM en tiempo real, arribos a tu parada (TEA) y banderas de playas — validado contra las APIs reales.</p></div>
       <div class="card"><span class="estado e-beta">BETA</span><h3>@factible/id-uruguay</h3><p>Login con cédula: cliente OpenID Connect para ID Uruguay (AGESIC), con simulador incluido.</p></div>
       <div class="card"><span class="estado e-camino">EXPLORANDO</span><h3>@factible/bps</h3><p>Generación tipada de archivos de nómina (GAFI).</p></div>
-      <div class="card"><span class="estado e-camino">¿CUÁL TE FALTA?</span><h3>tu-conector</h3><p><a href="https://github.com/olagopirez/factible/issues/new?template=conector.yml" style="color:var(--acento)">Pedilo acá</a> — contanos qué organismo te hace perder tiempo hoy.</p></div>
+      <div class="card card-pedido"><span class="estado">¿CUÁL TE FALTA?</span><h3>tu-conector</h3><p><a href="https://github.com/olagopirez/factible/issues/new?template=conector.yml" style="color:var(--acento); font-weight:600">Pedilo acá →</a> contanos qué organismo te hace perder tiempo hoy.</p></div>
     </div>
 <pre><code><span class="c-com">// La misma experiencia en todos los conectores:</span>
 <span class="c-kw">import</span> { BcuClient, MONEDAS } <span class="c-kw">from</span> <span class="c-str">'@factible/bcu'</span>;
