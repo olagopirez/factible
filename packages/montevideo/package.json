@@ -1,0 +1,38 @@
+{
+  "name": "@factible/montevideo",
+  "version": "0.1.0",
+  "description": "APIs de la Intendencia de Montevideo: buses del STM en tiempo real, arribos a paradas (TEA) y banderas de playas. Validado contra las APIs reales.",
+  "keywords": ["montevideo", "stm", "buses", "transporte", "como-ir", "playas", "uruguay", "intendencia"],
+  "license": "MIT",
+  "author": "Oscar Lago",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olagopirez/factible.git",
+    "directory": "packages/montevideo"
+  },
+  "homepage": "https://github.com/olagopirez/factible/tree/main/packages/montevideo#readme",
+  "bugs": "https://github.com/olagopirez/factible/issues"
+}
