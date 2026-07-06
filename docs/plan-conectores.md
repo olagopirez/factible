@@ -11,7 +11,6 @@
 | **@factible/bcu** — cotizaciones de monedas | SOAP público, [WSDL abierto](https://cotizaciones.bcu.gub.uy/wscotizaciones/servlet/awsbcucotizaciones?wsdl), sin auth | Ninguno | ✅ **Hoy, sin trámites** | Libs viejas/parciales (PHP, Python, alguna TS) | ✅ Construido y en npm |
 | **@factible/id-uruguay** — login con cédula (OpenID Connect) | [Documentado por AGESIC](https://centroderecursos.agesic.gub.uy/web/seguridad/wiki/-/wiki/Main/ID+Uruguay+-+Integraci%C3%B3n+con+OpenID+Connect), OIDC estándar | Credenciales de testing por trámite liviano (email a AGESIC) | ✅ En testing de AGESIC | Solo un SDK React Native abandonado (2020); **no hay lib server-side Node** | ✅ Construido (beta); credenciales AGESIC en trámite |
 | **@factible/rut** — consulta/validación de RUT (DGI) | [WS documentado](https://www.efactura.dgi.gub.uy/files/web-services-consulta-de-rut?es) | Probablemente cert de emisor (a confirmar) | ⚠️ Con acceso DGI | Ninguna | 🟡 Construir junto al gateway; reusa transporte de cfe. El **dígito verificador de RUT/CI** (offline) ya salió como `@factible/validar` |
-| **@factible/montevideo** — buses STM en tiempo real, TEA, playas | [Portal de APIs autoservicio](https://api.montevideo.gub.uy) con doc Swagger (transporte + playas) | Cuenta gratuita, una Aplicación por servicio | ✅ **Validado e2e** (buses, paradas, arribos, playas) | Ninguna | ✅ Construido y validado — el mejor acceso de todo el Estado |
 | **@factible/bps** — nóminas/GAFI | Sin API para terceros: formatos de archivo (ATYRO) + carga web | Manuales públicos parciales | ⚠️ Solo formato, no envío | ATYRO (software oficial gratuito) | 🟡 Ángulo viable: *generador de archivos* de nómina tipado. Requiere estudiar manuales — más adelante |
 | PDI / e-notificaciones (AGESIC) | SOA para **organismos del Estado**, no para privados | Restringido | ❌ | — | 🔴 Descartar por ahora |
 | **@factible/antel-sms** — SMS número corto (A2P) | Protocolo entregado **por contrato** (Centro Comercial/ejecutivo), no público | Contrato comercial con Antel | ⚠️ Solo con empresa con contrato | Agregadores (Mensajero Automático, Mobility Chasqui) ya venden APIs REST sobre esto | 🟡 Explorar — necesita empresa madrina con contrato; los agregadores son señal de demanda real |
@@ -21,12 +20,10 @@
 
 1. ✅ **`@factible/validar`** — publicado en npm (estable), con ports a Python, PHP, Go y Java validados en CI. Integrado en cfe (valida RUC/CI antes de construir el XML).
 2. ✅ **`@factible/bcu`** — publicado en npm, verificado contra el WS real del Banco Central (e2e).
-3. ✅ **`@factible/montevideo`** — construido y **validado e2e contra las APIs reales** (buses en tiempo real, paradas, arribos/TEA con `eta` en minutos, playas y banderas). Hallazgos documentados: la doc oficial de arribos está incompleta (sin `eta`/`distance`/`position`) y `/busstops/{id}/lines` responde 400.
-4. ✅ **`@factible/id-uruguay`** — construido y verificado contra mock OIDC (JWT RS256 real). Sin publicar: espera credenciales de testing de AGESIC (trámite enviado).
-5. ⏳ **`@factible/rut`** — espera acceso al ambiente de DGI (misma empresa madrina que cfe).
-6. 🔍 **`@factible/bps`** — investigación abierta (issue en el tracker): formatos de archivo de nómina.
-7. 🔍 **Antel** (SMS corto / Open Gateway) — triaje hecho (ver tabla); espera empresa con contrato o definición del canal comercial CAMARA.
-8. 🔍 **UTE** — sin API pública relevada (issue de investigación en el tracker).
+3. ✅ **`@factible/id-uruguay`** — construido y verificado contra mock OIDC (JWT RS256 real). Sin publicar: espera credenciales de testing de AGESIC (trámite enviado).
+4. ⏳ **`@factible/rut`** — espera acceso al ambiente de DGI (misma empresa madrina que cfe).
+5. 🔍 **`@factible/bps`** — investigación abierta (issue en el tracker): formatos de archivo de nómina.
+6. 🔍 **Antel** (SMS corto / Open Gateway) — triaje hecho (ver tabla); espera empresa con contrato o definición del canal comercial CAMARA.
 
 ## Estructura: monorepo
 
@@ -38,8 +35,7 @@ factible/
 │   ├── cfe/
 │   ├── validar/
 │   ├── bcu/
-│   ├── id-uruguay/
-│   └── montevideo/
+│   └── id-uruguay/
 ├── web/                   (landing)
 └── docs/                  (protocolo-dgi, guías, este plan)
 ```
