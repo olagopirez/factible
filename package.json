@@ -9,9 +9,15 @@
   "scripts": {
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
-    "build": "npm run build -w @factible/validar && npm run build -w @factible/bcu && npm run build -w @factible/cfe && npm run build -w @factible/id-uruguay && npm run build -w @factible/montevideo"
+    "build": "npm run build -w @factible/validar && npm run build -w @factible/bcu && npm run build -w @factible/cfe && npm run build -w @factible/id-uruguay && npm run build -w @factible/montevideo",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "npm run build && npm test && changeset publish"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0"
   }
 }

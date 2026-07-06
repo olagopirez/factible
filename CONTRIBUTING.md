@@ -32,3 +32,11 @@ npm test        # requiere xmllint (libxml2-utils) para los tests de cfe
 ## Licencia
 
 Al contribuir aceptás que tu aporte se publica bajo MIT.
+
+## Versionado y releases
+
+Usamos [Changesets](https://github.com/changesets/changesets) con [SemVer](https://semver.org/lang/es/): en 0.x, los cambios que rompen API suben la **minor** y el resto sube la **patch**.
+
+- **En tu PR**, si tocás un paquete publicable, corré `npx changeset` y elegí el paquete y el tipo de cambio. El archivito generado en `.changeset/` viaja con el PR y se convierte en la entrada del CHANGELOG.
+- **Para publicar** (mantenedor): `npm run version` (aplica bumps y changelogs, commitear el resultado) y luego `npm run release` (build + tests + publish a npm + tags git `@factible/paquete@x.y.z`). Después: `git push --follow-tags`.
+- Los tags de git son la referencia: cada versión en npm corresponde a un tag en el repo.
