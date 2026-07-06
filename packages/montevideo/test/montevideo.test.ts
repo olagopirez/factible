@@ -384,15 +384,32 @@ describe.skipIf(!process.env['MVD_E2E'])('Montevideo API real (e2e)', () => {
     expect(paradas[0]!.paradaId).toBeTypeOf('number');
     console.log('parada mapeada:', JSON.stringify({ ...paradas[0], crudo: undefined }));
 
-    // TEA sobre la primera parada que tenga líneas asignadas:
-    for (const parada of paradas.slice(0, 10)) {
-      const lineas = await mvd.lineasPorParada(parada.paradaId);
-      if (lineas.length === 0) continue;
-      const arribos = await mvd.arribos(parada.paradaId, { lineas: [lineas[0]!.linea] });
-      // Dejar visible el registro crudo: la doc no muestra el campo del ETA
-      // (ver TODO en tipos.ts) — esto lo confirma.
-      console.log('arribo crudo:', JSON.stringify(arribos[0]?.crudo ?? null));
-      break;
+    // TEA: tomar un bus en circulación y probar contra las paradas más
+    // cercanas a su posición (garantiza que la línea pasa por ahí).
+    const buses = await mvd.buses();
+    const bus = buses.find((b) => (b.velocidad ?? 0) > 0) ?? buses[0]!;
+    const dist = (p: { latitud: number; longitud: number }) =>
+      (p.latitud - bus.latitud) ** 2 + (p.longitud - bus.longitud) ** 2;
+    const cercanas = [...paradas].sort((a, b) => dist(a) - dist(b)).slice(0, 5);
+
+    for (const parada of cercanas) {
+      // lineasPorParada devolvió 400 en el primer intento real — explorar en
+      // qué casos funciona:
+      try {
+        const lineas = await mvd.lineasPorParada(parada.paradaId);
+        console.log(`lineasPorParada(${parada.paradaId}):`, JSON.stringify(lineas.map((l) => l.linea)));
+      } catch (e) {
+        console.warn(`lineasPorParada(${parada.paradaId}) falló:`, String(e).slice(0, 120));
+      }
+      try {
+        const arribos = await mvd.arribos(parada.paradaId, { lineas: [bus.linea] });
+        // La doc no muestra el campo del ETA (ver TODO en tipos.ts) — el
+        // registro crudo lo confirma:
+        console.log(`arribo crudo (parada ${parada.paradaId}, línea ${bus.linea}):`, JSON.stringify(arribos[0]?.crudo ?? null));
+        if (arribos.length > 0) break;
+      } catch (e) {
+        console.warn(`arribos(${parada.paradaId}) falló:`, String(e).slice(0, 120));
+      }
     }
   }, 60_000);
 });
