@@ -10,6 +10,7 @@
 - [ ] Si tuve que asumir algo que la spec no aclara, lo anoté en el `TODO.md` del paquete con ⚠️.
 - [ ] Los mocks siguen siendo fieles al servicio real ("los mocks no mienten") — si el cambio surge de una respuesta real observada, la incluyo o la describo.
 - [ ] README/docs del paquete actualizados si cambia la API pública.
+- [ ] Si el cambio toca un paquete publicable, agregué un changeset (`npx changeset`).
 
 ## Cómo probarlo
 
