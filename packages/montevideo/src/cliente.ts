@@ -7,13 +7,14 @@
  *   - GET autenticado genérico con reintento ante token expirado.
  *   - buses(): GET /api/transportepublico/buses?lines=...
  *
- * buses() está validado e2e contra la API real (2026-07-05) y devuelve Bus
- * tipado. playas()/casillas() implementados contra la doc oficial del servicio
- * de playas (es un servicio aparte del portal: requiere su propia Aplicación).
- * arribos() espera relevar su endpoint.
+ * buses() y playas()/casillas() están validados e2e contra las APIs reales
+ * (2026-07-05). El resto de transporte (paradas, variantes, arribos/TEA) está
+ * implementado contra la doc oficial del servicio (spec/Documentacion_servicios_
+ * transporte_publico.pdf). Playas es un servicio aparte del portal: requiere su
+ * propia Aplicación.
  */
 import { TokenManager, type Credenciales } from './auth.js';
-import type { Arribo, Bus, BusCrudo, Casilla, Playa } from './tipos.js';
+import type { Arribo, Bus, BusCrudo, Casilla, LineaEnParada, LineaVariante, Parada, Playa } from './tipos.js';
 
 export const BASE_URL = 'https://api.montevideo.gub.uy/api';
 
@@ -23,12 +24,6 @@ export interface MontevideoConfig {
   baseUrl?: string;
   tokenUrl?: string;
   timeoutMs?: number;
-}
-
-export class PendienteDeSpec extends Error {
-  constructor(metodo: string, detalle: string) {
-    super(`${metodo}: ${detalle}`);
-  }
 }
 
 export class MontevideoClient {
@@ -83,9 +78,57 @@ export class MontevideoClient {
     return normalizarLista(datos).map(mapearBus);
   }
 
-  /** Tiempo estimado de arribo a una parada — endpoint aún no relevado del portal. */
-  async arribos(_parada: number): Promise<Arribo[]> {
-    throw new PendienteDeSpec('arribos()', 'endpoint de TEA pendiente de relevar en la doc autenticada del portal');
+  /**
+   * Próximos buses a llegar a una parada (TEA).
+   * GET /buses/busstops/{paradaId}/upcomingbuses — la doc exige indicar qué
+   * líneas se quieren ver (`lines`).
+   */
+  async arribos(
+    paradaId: number,
+    filtro: {
+      /** Líneas a consultar — obligatorio según la doc. */
+      lineas: (string | number)[];
+      /** Variantes de línea (lineVariantIds). */
+      variantes?: number[];
+      /** Resultados por línea (amountperline, default 1 en la API). */
+      cantidadPorLinea?: number;
+    },
+  ): Promise<Arribo[]> {
+    const params: Record<string, string> = { lines: filtro.lineas.join(',') };
+    if (filtro.variantes?.length) params['lineVariantIds'] = filtro.variantes.join(',');
+    if (filtro.cantidadPorLinea !== undefined) params['amountperline'] = String(filtro.cantidadPorLinea);
+    const datos = await this.get<unknown>(`/transportepublico/buses/busstops/${paradaId}/upcomingbuses`, params);
+    return normalizarLista(datos).map(mapearVariante);
+  }
+
+  /** Lista de paradas del STM (GET /buses/busstops). */
+  async paradas(): Promise<Parada[]> {
+    const datos = await this.get<unknown>('/transportepublico/buses/busstops');
+    return normalizarLista(datos).map(mapearParada);
+  }
+
+  /** Líneas que pasan por una parada (GET /buses/busstops/{id}/lines). */
+  async lineasPorParada(paradaId: number): Promise<LineaEnParada[]> {
+    const datos = await this.get<unknown>(`/transportepublico/buses/busstops/${paradaId}/lines`);
+    return normalizarLista(datos).map((crudo) => {
+      const item: LineaEnParada = { linea: String(crudo['line'] ?? ''), crudo };
+      const lineaId = opcional<string>(crudo['lineId'], 'string');
+      if (lineaId !== undefined) item.lineaId = lineaId;
+      return item;
+    });
+  }
+
+  /**
+   * Variantes de línea (GET /buses/linevariants). Con `varianteId` consulta
+   * el detalle de una variante puntual.
+   */
+  async variantes(varianteId?: number): Promise<LineaVariante[]> {
+    const path =
+      varianteId === undefined
+        ? '/transportepublico/buses/linevariants'
+        : `/transportepublico/buses/linevariants/${varianteId}`;
+    const datos = await this.get<unknown>(path);
+    return normalizarLista(datos).map(mapearVariante);
   }
 
   /**
@@ -129,9 +172,11 @@ function normalizarLista(datos: unknown): BusCrudo[] {
 export function mapearBus(crudo: BusCrudo): Bus {
   const { latitud, longitud } = coordenadas(crudo);
 
+  // La respuesta real usa busId/company; la doc oficial muestra
+  // vehicleIdentificationNumber/companyName — se toleran ambos.
   const bus: Bus = {
-    busId: Number(crudo['busId'] ?? NaN),
-    empresa: String(crudo['company'] ?? ''),
+    busId: Number(crudo['busId'] ?? crudo['vehicleIdentificationNumber'] ?? NaN),
+    empresa: String(crudo['company'] ?? crudo['companyName'] ?? ''),
     linea: String(crudo['line'] ?? ''),
     latitud,
     longitud,
@@ -220,6 +265,49 @@ export function mapearCasilla(crudo: Record<string, unknown>): Casilla {
   if (linkComoIr !== undefined) casilla.linkComoIr = linkComoIr;
 
   return casilla;
+}
+
+/** Mapea una parada cruda (GET /buses/busstops) al dominio. */
+export function mapearParada(crudo: Record<string, unknown>): Parada {
+  const { latitud, longitud } = coordenadas(crudo);
+  const parada: Parada = {
+    paradaId: Number(crudo['busstopId'] ?? NaN),
+    latitud,
+    longitud,
+    crudo,
+  };
+  const calle1 = opcional<string>(crudo['street1'], 'string');
+  if (calle1 !== undefined) parada.calle1 = calle1;
+  const calle2 = opcional<string>(crudo['street2'], 'string');
+  if (calle2 !== undefined) parada.calle2 = calle2;
+  const calle1Id = opcional<number>(crudo['street1Id'], 'number');
+  if (calle1Id !== undefined) parada.calle1Id = calle1Id;
+  const calle2Id = opcional<number>(crudo['street2Id'], 'number');
+  if (calle2Id !== undefined) parada.calle2Id = calle2Id;
+  return parada;
+}
+
+/**
+ * Mapea una variante de línea cruda al dominio. Lo usan variantes() y
+ * arribos() (la doc muestra el mismo modelo para upcomingbuses).
+ */
+export function mapearVariante(crudo: Record<string, unknown>): LineaVariante {
+  const variante: LineaVariante = {
+    varianteId: Number(crudo['lineVariantId'] ?? NaN),
+    linea: String(crudo['line'] ?? ''),
+    crudo,
+  };
+  const lineaId = opcional<string>(crudo['lineId'], 'string');
+  if (lineaId !== undefined) variante.lineaId = lineaId;
+  const origen = opcional<string>(crudo['origin'], 'string');
+  if (origen !== undefined) variante.origen = origen;
+  const destino = opcional<string>(crudo['destination'], 'string');
+  if (destino !== undefined) variante.destino = destino;
+  const sublinea = opcional<string>(crudo['subline'], 'string');
+  if (sublinea !== undefined) variante.sublinea = sublinea;
+  const especial = opcional<boolean>(crudo['special'], 'boolean');
+  if (especial !== undefined) variante.especial = especial;
+  return variante;
 }
 
 function opcional<T>(v: unknown, tipo: 'string' | 'number' | 'boolean'): T | undefined {

@@ -1,6 +1,6 @@
 import { createServer, type Server } from 'node:http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { MontevideoClient, PendienteDeSpec } from '../src/index.js';
+import { MontevideoClient } from '../src/index.js';
 
 /**
  * Mock del portal: Keycloak (token endpoint, client credentials por Basic auth,
@@ -55,6 +55,51 @@ beforeAll(async () => {
       pedidosApi.push({ path: req.url, auth: req.headers.authorization ?? '' });
       if (req.headers.authorization !== `Bearer ${tokenVigente}`) {
         return json({ error: 'invalid_token' }, 401);
+      }
+
+      // Endpoints específicos antes que el genérico /buses.
+      // Payloads fieles a los ejemplos de la doc oficial (spec/Documentacion_
+      // servicios_transporte_publico.pdf).
+      if (req.url.includes('/buses/busstops/546/upcomingbuses')) {
+        return json([
+          {
+            lineVariantId: 1234,
+            line: '123SD',
+            lineId: '324',
+            origin: 'CIUDAD VIEJA',
+            destination: 'MALVIN',
+            subline: 'CIUDAD VIEJA - MALVIN',
+            special: true,
+          },
+        ]);
+      }
+      if (req.url.includes('/buses/busstops/546/lines')) {
+        return json([{ line: '123SD', lineId: '324' }]);
+      }
+      if (req.url.includes('/buses/busstops')) {
+        return json([
+          {
+            busstopId: 546,
+            street1: 'CORUÑA',
+            street2: 'PURIFICACION',
+            street1Id: 2187,
+            street2Id: 5733,
+            location: { type: 'Point', coordinates: [-56.196167, -34.903778] },
+          },
+        ]);
+      }
+      if (req.url.includes('/buses/linevariants')) {
+        return json([
+          {
+            lineVariantId: 1234,
+            line: '123SD',
+            lineId: '324',
+            origin: 'CIUDAD VIEJA',
+            destination: 'MALVIN',
+            subline: 'CIUDAD VIEJA - MALVIN',
+            special: true,
+          },
+        ]);
       }
       // Shape fiel a una respuesta real de la API (e2e 2026-07-05).
       return json([
@@ -263,8 +308,42 @@ describe('MontevideoClient', () => {
     expect(invierno.banderaSanitaria).toBeUndefined();
   });
 
-  it('arribos() declara su spec pendiente', async () => {
-    await expect(cliente().arribos(1234)).rejects.toThrow(PendienteDeSpec);
+  it('consulta arribos (TEA) a una parada con líneas obligatorias', async () => {
+    const arribos = await cliente().arribos(546, { lineas: ['123SD'], cantidadPorLinea: 2 });
+
+    expect(arribos).toHaveLength(1);
+    expect(arribos[0]).toMatchObject({
+      varianteId: 1234,
+      linea: '123SD',
+      origen: 'CIUDAD VIEJA',
+      destino: 'MALVIN',
+      especial: true,
+    });
+    const pedido = pedidosApi.at(-1)!.path;
+    expect(pedido).toContain('/busstops/546/upcomingbuses');
+    expect(pedido).toContain('lines=123SD');
+    expect(pedido).toContain('amountperline=2');
+  });
+
+  it('lista paradas y líneas por parada', async () => {
+    const mvd = cliente();
+
+    const [parada] = await mvd.paradas();
+    expect(parada).toMatchObject({ paradaId: 546, calle1: 'CORUÑA', calle2: 'PURIFICACION' });
+    expect(parada!.latitud).toBeCloseTo(-34.903778);
+
+    const lineas = await mvd.lineasPorParada(546);
+    expect(lineas).toEqual([{ linea: '123SD', lineaId: '324', crudo: { line: '123SD', lineId: '324' } }]);
+  });
+
+  it('lista variantes de línea, y el detalle por id', async () => {
+    const mvd = cliente();
+
+    const [variante] = await mvd.variantes();
+    expect(variante).toMatchObject({ varianteId: 1234, linea: '123SD', sublinea: 'CIUDAD VIEJA - MALVIN' });
+
+    await mvd.variantes(1234);
+    expect(pedidosApi.at(-1)!.path).toContain('/buses/linevariants/1234');
   });
 });
 
@@ -291,6 +370,31 @@ describe.skipIf(!process.env['MVD_E2E'])('Montevideo API real (e2e)', () => {
       console.log('bus mapeado:', JSON.stringify({ ...bus, crudo: undefined }));
     }
   }, 30_000);
+
+  it('lista paradas y consulta arribos reales', async () => {
+    const mvd = new MontevideoClient({
+      credenciales: {
+        clientId: process.env['MVD_CLIENT_ID']!,
+        clientSecret: process.env['MVD_CLIENT_SECRET']!,
+      },
+    });
+
+    const paradas = await mvd.paradas();
+    expect(paradas.length).toBeGreaterThan(0);
+    expect(paradas[0]!.paradaId).toBeTypeOf('number');
+    console.log('parada mapeada:', JSON.stringify({ ...paradas[0], crudo: undefined }));
+
+    // TEA sobre la primera parada que tenga líneas asignadas:
+    for (const parada of paradas.slice(0, 10)) {
+      const lineas = await mvd.lineasPorParada(parada.paradaId);
+      if (lineas.length === 0) continue;
+      const arribos = await mvd.arribos(parada.paradaId, { lineas: [lineas[0]!.linea] });
+      // Dejar visible el registro crudo: la doc no muestra el campo del ETA
+      // (ver TODO en tipos.ts) — esto lo confirma.
+      console.log('arribo crudo:', JSON.stringify(arribos[0]?.crudo ?? null));
+      break;
+    }
+  }, 60_000);
 });
 
 // E2E del servicio de playas — requiere una Aplicación aparte (servicio "Playas"):

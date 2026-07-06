@@ -46,24 +46,57 @@ export interface Bus {
   crudo: BusCrudo;
 }
 
-/** Parada del STM. */
+/**
+ * Parada del STM (GET /buses/busstops).
+ * Shape según la doc oficial del servicio de transporte.
+ */
 export interface Parada {
-  id: number;
-  calle?: string;
-  esquina?: string;
-  latitud?: number;
-  longitud?: number;
+  /** Identificador de la parada (busstopId, ej: 546). */
+  paradaId: number;
+  /** Calle principal (ej: "CORUÑA"). */
+  calle1?: string;
+  /** Calle de la esquina (ej: "PURIFICACION"). */
+  calle2?: string;
+  calle1Id?: number;
+  calle2Id?: number;
+  latitud: number;
+  longitud: number;
+  /** Registro original de la API. */
+  crudo: Record<string, unknown>;
 }
 
-/** Tiempo estimado de arribo de una línea a una parada. */
-export interface Arribo {
-  parada: number;
+/**
+ * Variante de línea (GET /buses/linevariants).
+ */
+export interface LineaVariante {
+  /** Ej: 1234 */
+  varianteId: number;
+  /** Ej: "123SD" */
   linea: string;
-  /** Minutos estimados hasta el arribo. */
-  minutos: number;
-  /** Bus asignado a ese arribo, si la API lo identifica. */
-  busId?: string;
+  /** Ej: "324" */
+  lineaId?: string;
+  origen?: string;
+  destino?: string;
+  sublinea?: string;
+  especial?: boolean;
+  /** Registro original de la API. */
+  crudo: Record<string, unknown>;
 }
+
+/** Línea que pasa por una parada (GET /buses/busstops/{id}/lines). */
+export interface LineaEnParada {
+  linea: string;
+  lineaId?: string;
+  /** Registro original de la API. */
+  crudo: Record<string, unknown>;
+}
+
+/**
+ * Próximo bus a llegar a una parada (GET /buses/busstops/{id}/upcomingbuses).
+ * TODO(⚠️): el modelo documentado es idéntico al de variantes de línea y no
+ * muestra el ETA en minutos — confirmar los campos reales con un e2e.
+ */
+export type Arribo = LineaVariante;
 
 /**
  * Playa de Montevideo (GET /beaches).
