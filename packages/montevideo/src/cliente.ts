@@ -7,20 +7,14 @@
  *   - GET autenticado genérico con reintento ante token expirado.
  *   - buses(): GET /api/transportepublico/buses?lines=...
  *
- * ⚠️ El shape exacto de las respuestas no está en el manual — buses() devuelve
- * los datos crudos tipados como BusCrudo hasta validar contra la API real
- * (ver README §Estado). arribos() y playas() esperan relevar sus endpoints.
+ * buses() está validado e2e contra la API real (2026-07-05) y devuelve Bus
+ * tipado. arribos() y playas() esperan relevar sus endpoints (playas es un
+ * servicio aparte del portal: requiere su propia Aplicación).
  */
 import { TokenManager, type Credenciales } from './auth.js';
-import type { Arribo, Playa } from './tipos.js';
+import type { Arribo, Bus, BusCrudo, Playa } from './tipos.js';
 
 export const BASE_URL = 'https://api.montevideo.gub.uy/api';
-
-/**
- * Posición de bus tal como la devuelve la API. Los campos exactos se fijan
- * al validar contra el servicio real; mientras tanto es un registro abierto.
- */
-export type BusCrudo = Record<string, unknown>;
 
 export interface MontevideoConfig {
   credenciales: Credenciales;
@@ -77,20 +71,15 @@ export class MontevideoClient {
   }
 
   /**
-   * Posiciones en tiempo real de los buses del STM.
+   * Posiciones en tiempo real de los buses del STM, tipadas.
    * Endpoint del manual: /transportepublico/buses?lines=522
+   * Shape fijado contra una respuesta real de la API (e2e 2026-07-05).
    */
-  async buses(filtro?: { lineas?: (string | number)[] }): Promise<BusCrudo[]> {
+  async buses(filtro?: { lineas?: (string | number)[] }): Promise<Bus[]> {
     const params: Record<string, string> = {};
     if (filtro?.lineas?.length) params['lines'] = filtro.lineas.join(',');
     const datos = await this.get<unknown>('/transportepublico/buses', params);
-    // La API puede devolver lista directa o envuelta — se normaliza al validar el shape real.
-    if (Array.isArray(datos)) return datos as BusCrudo[];
-    if (datos && typeof datos === 'object') {
-      const posible = Object.values(datos).find(Array.isArray);
-      if (posible) return posible as BusCrudo[];
-    }
-    return [datos as BusCrudo];
+    return normalizarLista(datos).map(mapearBus);
   }
 
   /** Tiempo estimado de arribo a una parada — endpoint aún no relevado del portal. */
@@ -102,4 +91,74 @@ export class MontevideoClient {
   async playas(): Promise<Playa[]> {
     throw new PendienteDeSpec('playas()', 'endpoint de playas pendiente de relevar en la doc autenticada del portal');
   }
+}
+
+/** La API devuelve lista directa; se tolera también una lista envuelta en un objeto. */
+function normalizarLista(datos: unknown): BusCrudo[] {
+  if (Array.isArray(datos)) return datos as BusCrudo[];
+  if (datos && typeof datos === 'object') {
+    const posible = Object.values(datos).find(Array.isArray);
+    if (posible) return posible as BusCrudo[];
+  }
+  return [datos as BusCrudo];
+}
+
+/**
+ * Mapea el registro crudo de la API (campos en inglés, ver BusCrudo) al
+ * dominio. Campos ausentes o con tipo inesperado quedan undefined en vez de
+ * romper: el registro original va siempre en `crudo`.
+ */
+export function mapearBus(crudo: BusCrudo): Bus {
+  const loc = crudo['location'] as { coordinates?: unknown } | undefined;
+  const coords = Array.isArray(loc?.coordinates) ? loc.coordinates : [];
+  // GeoJSON Point: [longitud, latitud]
+  const longitud = Number(coords[0] ?? NaN);
+  const latitud = Number(coords[1] ?? NaN);
+
+  const opcional = <T>(v: unknown, tipo: 'string' | 'number' | 'boolean'): T | undefined =>
+    typeof v === tipo ? (v as T) : undefined;
+
+  const bus: Bus = {
+    busId: Number(crudo['busId'] ?? NaN),
+    empresa: String(crudo['company'] ?? ''),
+    linea: String(crudo['line'] ?? ''),
+    latitud,
+    longitud,
+    crudo,
+  };
+
+  const varianteId = opcional<number>(crudo['lineVariantId'], 'number');
+  if (varianteId !== undefined) bus.varianteId = varianteId;
+  const sublinea = opcional<string>(crudo['subline'], 'string');
+  if (sublinea !== undefined) bus.sublinea = sublinea;
+  const origen = opcional<string>(crudo['origin'], 'string');
+  if (origen !== undefined) bus.origen = origen;
+  const destino = opcional<string>(crudo['destination'], 'string');
+  if (destino !== undefined) bus.destino = destino;
+  const velocidad = opcional<number>(crudo['speed'], 'number');
+  if (velocidad !== undefined) bus.velocidad = velocidad;
+  const especial = opcional<boolean>(crudo['special'], 'boolean');
+  if (especial !== undefined) bus.especial = especial;
+  const acceso = opcional<string>(crudo['access'], 'string');
+  if (acceso !== undefined) bus.acceso = acceso;
+  const confortTermico = opcional<string>(crudo['thermalConfort'], 'string');
+  if (confortTermico !== undefined) bus.confortTermico = confortTermico;
+  const emisiones = opcional<string>(crudo['emissions'], 'string');
+  if (emisiones !== undefined) bus.emisiones = emisiones;
+
+  const timestamp = parsearTimestamp(crudo['timestamp']);
+  if (timestamp !== undefined) bus.timestamp = timestamp;
+
+  return bus;
+}
+
+/**
+ * La API usa offset sin minutos ("2026-07-05T21:02:15.000-03"), que no es
+ * ISO 8601 estricto: se normaliza a "-03:00" antes de parsear.
+ */
+function parsearTimestamp(v: unknown): Date | undefined {
+  if (typeof v !== 'string' || !v) return undefined;
+  const normalizado = v.replace(/([+-]\d{2})$/, '$1:00');
+  const fecha = new Date(normalizado);
+  return Number.isNaN(fecha.getTime()) ? undefined : fecha;
 }

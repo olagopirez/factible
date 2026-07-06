@@ -1,26 +1,49 @@
 /**
  * Tipos de dominio para las APIs de la Intendencia de Montevideo.
  *
- * ⚠️ PROVISORIOS: modelados desde la información pública del catálogo
- * (https://api.montevideo.gub.uy/docs). Los shapes exactos se ajustan contra la
- * documentación autenticada del portal — ver README §Estado.
+ * Bus está fijado contra una respuesta real de /transportepublico/buses
+ * (e2e del 2026-07-05). Arribo y Playa siguen provisorios — ver README §Estado.
  */
+
+/**
+ * Registro crudo tal como lo devuelve la API (campos en inglés).
+ * Ejemplo real: { eType: "buses", company: "CUTCSA", busId: 104, line: "103",
+ * lineVariantId: 343, location: { type: "Point", coordinates: [lon, lat] },
+ * origin, destination, subline, special, speed, access, thermalConfort,
+ * emissions, timestamp: "2026-07-05T21:02:15.000-03" }
+ */
+export type BusCrudo = Record<string, unknown>;
 
 /** Posición de un bus del STM en tiempo real. */
 export interface Bus {
-  /** Identificador del coche. */
-  id: string;
+  /** Identificador del coche (ej: 104). */
+  busId: number;
+  /** Empresa operadora (ej: "CUTCSA"). */
+  empresa: string;
   /** Línea (ej: "103", "D10"). */
   linea: string;
-  /** Sublínea/variante, si la API la distingue. */
+  /** Variante de la línea (lineVariantId). */
+  varianteId?: number;
+  /** Sublínea (ej: "PZA. ESPAÑA - LOS AROMOS"). */
   sublinea?: string;
+  origen?: string;
   destino?: string;
   latitud: number;
   longitud: number;
-  /** Velocidad en km/h, si la API la reporta. */
+  /** Velocidad reportada en km/h. */
   velocidad?: number;
+  /** Servicio especial. */
+  especial?: boolean;
+  /** Accesibilidad (ej: "COMÚN"). */
+  acceso?: string;
+  /** Confort térmico (ej: "Sin datos"). */
+  confortTermico?: string;
+  /** Norma de emisiones (ej: "Euro III"). */
+  emisiones?: string;
   /** Momento de la última posición reportada. */
   timestamp?: Date;
+  /** Registro original de la API, por si aparecen campos nuevos. */
+  crudo: BusCrudo;
 }
 
 /** Parada del STM. */

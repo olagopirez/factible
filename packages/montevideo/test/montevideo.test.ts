@@ -56,9 +56,42 @@ beforeAll(async () => {
       if (req.headers.authorization !== `Bearer ${tokenVigente}`) {
         return json({ error: 'invalid_token' }, 401);
       }
+      // Shape fiel a una respuesta real de la API (e2e 2026-07-05).
       return json([
-        { id: 'B1', line: '522', location: { coordinates: [-56.18, -34.89] } },
-        { id: 'B2', line: '522', location: { coordinates: [-56.16, -34.9] } },
+        {
+          eType: 'buses',
+          company: 'CUTCSA',
+          timestamp: '2026-07-05T21:02:15.000-03',
+          busId: 104,
+          line: '522',
+          lineVariantId: 343,
+          location: { type: 'Point', coordinates: [-56.201515, -34.909542] },
+          origin: 'LOS AROMOS',
+          destination: 'PLAZA ESPAÑA',
+          subline: 'PZA. ESPAÑA - LOS AROMOS',
+          special: false,
+          speed: 0,
+          access: 'COMÚN',
+          thermalConfort: 'Sin datos',
+          emissions: 'Euro III',
+        },
+        {
+          eType: 'buses',
+          company: 'CUTCSA',
+          timestamp: '2026-07-05T21:02:18.000-03',
+          busId: 271,
+          line: '522',
+          lineVariantId: 344,
+          location: { type: 'Point', coordinates: [-56.16, -34.9] },
+          origin: 'PLAZA ESPAÑA',
+          destination: 'LOS AROMOS',
+          subline: 'LOS AROMOS - PZA. ESPAÑA',
+          special: false,
+          speed: 32,
+          access: 'COMÚN',
+          thermalConfort: 'Sin datos',
+          emissions: 'Euro V',
+        },
       ]);
     }
 
@@ -87,6 +120,31 @@ describe('MontevideoClient', () => {
     expect(buses).toHaveLength(2);
     expect(pedidosApi.at(-1)!.path).toContain('lines=522');
     expect(pedidosApi.at(-1)!.auth).toMatch(/^Bearer tok-/);
+  });
+
+  it('mapea el shape real de la API al dominio tipado', async () => {
+    const [bus] = await cliente().buses({ lineas: [522] });
+
+    expect(bus).toMatchObject({
+      busId: 104,
+      empresa: 'CUTCSA',
+      linea: '522',
+      varianteId: 343,
+      origen: 'LOS AROMOS',
+      destino: 'PLAZA ESPAÑA',
+      sublinea: 'PZA. ESPAÑA - LOS AROMOS',
+      especial: false,
+      velocidad: 0,
+      acceso: 'COMÚN',
+      emisiones: 'Euro III',
+    });
+    // GeoJSON Point: [longitud, latitud]
+    expect(bus!.latitud).toBeCloseTo(-34.909542);
+    expect(bus!.longitud).toBeCloseTo(-56.201515);
+    // Offset "-03" sin minutos, normalizado al parsear
+    expect(bus!.timestamp?.toISOString()).toBe('2026-07-06T00:02:15.000Z');
+    // El registro original queda accesible
+    expect(bus!.crudo['eType']).toBe('buses');
   });
 
   it('reusa el token cacheado entre llamadas', async () => {
@@ -143,7 +201,15 @@ describe.skipIf(!process.env['MVD_E2E'])('Montevideo API real (e2e)', () => {
     });
     const buses = await mvd.buses();
     expect(Array.isArray(buses)).toBe(true);
-    // Dejar visible un ejemplo real para fijar los tipos definitivos:
-    console.log('shape de ejemplo:', JSON.stringify(buses[0], null, 2)?.slice(0, 600));
+    if (buses.length > 0) {
+      const bus = buses[0]!;
+      // Invariantes del mapeo sobre datos reales:
+      expect(bus.busId).toBeTypeOf('number');
+      expect(bus.linea).toBeTruthy();
+      expect(bus.empresa).toBeTruthy();
+      expect(Math.abs(bus.latitud)).toBeGreaterThan(30); // Montevideo ≈ -34.9
+      expect(Math.abs(bus.longitud)).toBeGreaterThan(50); // ≈ -56.2
+      console.log('bus mapeado:', JSON.stringify({ ...bus, crudo: undefined }));
+    }
   }, 30_000);
 });
