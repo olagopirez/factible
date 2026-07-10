@@ -10,13 +10,12 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 - [ ] **Formato de parámetros del QR:** la spec los muestra separados por coma (no query string estándar). Implementado literal; confirmar si el hash va URL-encoded.
 - [ ] **Encoding del envío: ¿ISO-8859-1 o UTF-8?** El ejemplo oficial (2016) declara `encoding="iso-8859-1"`. Emitimos UTF-8; confirmar qué acepta el WS de recepción hoy (relevante para tildes y ñ).
 - [ ] **Certificados reales con serial >64 bits:** libxml2/xmllint falla validando `X509SerialNumber` grandes (limitación del validador, no del contenido — el fixture de test usa serial chico). Si un cert de Abitab/Correo trae serial grande, nuestros propios tests de validación no aplican; DGI valida con otra infraestructura.
-- [ ] **RUT_DGI (receptor de sobres a DGI):** usamos `219999830019` como constante — confirmar contra el ejemplo de sobre oficial o la doc del WS de recepción.
+- [ ] **¿Testing valida el CAE?** Los envíos con CAE ficticio `90230011234` no fueron observados por CAE (el rechazo fue siempre por certificado, etapa anterior). Con certificado real se sabrá si Testing exige CAE emitido o acepta cualquiera.
 - [ ] **¿La tasa de IVA se informa como `10`/`22` o `10.000`/`22.000`?** v25 agregó 3 decimales a las tasas (C119/C120). Hoy emitimos enteros; el XSD acepta ambos pero la validación de DGI puede ser estricta.
 
 ## Para investigar (no bloquea el desarrollo)
 
-- [ ] **Usuario Testing de DGI — vía empresa madrina.** Oscar no quiere abrir empresa; el usuario Testing va atado a un RUT pero la "persona autorizada" (CI + correo) puede ser cualquiera. Plan: conseguir una empresa conocida/entrevistada de Fase 0 que solicite el usuario Testing designando a Oscar. Mientras tanto: validar output contra el [ejemplo de sobre oficial](https://www.efactura.dgi.gub.uy/files/ejemplo-de-sobre?es). Ver docs/protocolo-dgi.md §Acceso al ambiente de Testing.
-- [ ] **Trámite Oscar: certificado digital** de proveedor autorizado (Abitab/Correo) — necesario para firmar contra testing. ¿Aceptan testing con cert de persona física o exige el de la empresa?
+- [ ] **Certificado digital de facturación electrónica real** (Abitab/Correo/Antel, a nombre de la empresa del RUT de Testing) — el ÚNICO bloqueante restante para el círculo completo: el nivel CFE rechaza self-signed con `E04 certificate not trusted`.
 - [ ] **Proceso de homologación:** set de pruebas exacto que exige DGI para autorizar un emisor/software (Portal eFactura → Servicios → Postulación, por etapas).
 - [ ] **Algoritmo del código de seguridad / QR** de la representación impresa (Formato v25.2 §representación impresa — está en el PDF, falta extraerlo).
 - [ ] **Tabla E:** topes vigentes para exigir identificación del receptor en e-Ticket.
@@ -32,6 +31,18 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 - [ ] Tabla completa de `IndicadorFacturacion` (hoy solo exento/mínima/básica; faltan otra tasa, entrega gratuita, no facturable, suspenso, etc.).
 - [ ] `MntPagar` hoy = `MntTotal`; con retenciones/percepciones y montos no facturables difieren.
 ## Resueltas
+
+### Validadas contra el ambiente de Testing REAL de DGI (2026-07-08, envío manual por portal)
+
+- [x] **El pipeline completo funciona contra DGI:** un sobre generado con `buildCfeXml` + `firmarCfe` + `crearSobre` fue **aceptado (Estado AS)** por el ambiente de Testing (envío 306849522). Formato v25.2, firma XMLDSig enveloped SHA-256 y sobre v05: todo correcto.
+- [x] **RUT_DGI confirmado:** `219999830019` — aparece como `RUCReceptor` en los acuses reales y como RUC del propio certificado de DGI (`serialNumber=RUC219999830019`).
+- [x] **Vínculo RUC↔certificado:** DGI exige que el subject del certificado tenga `serialNumber` (OID 2.5.4.5) = `"RUC" + RUT` (sin separador). Si no coincide con `RUCEmisor`: rechazo `S02` a nivel sobre.
+- [x] **Validación de certificado en dos etapas:** a nivel *sobre* solo se chequea RUC y vigencia (un self-signed con el RUC correcto pasa → AS); a nivel *CFE* se valida la cadena de confianza contra las CA acreditadas → `BE/E04 "certificate not trusted"`.
+- [x] **Vigencia del cert vs fecha de emisión (S03):** un CFE emitido en el mismo instante del `notBefore` del cert fue rechazado ("La fecha de emisión no corresponde con el certificado") — la comparación parece hacerse sin timezone. El cert debe preceder holgadamente a la emisión.
+- [x] **UTF-8 aceptado:** el sobre se envió con `encoding="UTF-8"` y fue aceptado (AS) — el `iso-8859-1` del ejemplo de 2016 no es obligatorio.
+- [x] **Parser de acuses validado con respuestas reales:** ACKSobre (AS y BS/S02) y ACKCFE (BE/E04) parsean sin cambios — fixtures en `test/fixtures/acuses-reales/`.
+- [x] **DGI firma sus acuses con rsa-sha1** (cert `***TEST*** DGI-RUC PRUEBA CEDE` emitido por Correo Uruguayo - CA) — al verificar acuses no exigir SHA-2.
+- [x] **Envío manual por portal:** `Envíos → Sobre` sube el archivo a `/ePruebaRecepcionFE/servlet/efacreceenviomanual` (multipart `upfile.jsp`, campo `FILE1`) y los acuses se descargan de `aefacreceopenxml?RESPUESTA,false` (sobre) / `?RESPUESTA,true` (comprobantes). Sirve como e2e sin WS.
 
 - [x] **Dígito verificador de RUC/CI:** el builder valida emisor y receptor con `@factible/validar` antes de construir el XML — anticipa los rechazos E de DGI offline.
 

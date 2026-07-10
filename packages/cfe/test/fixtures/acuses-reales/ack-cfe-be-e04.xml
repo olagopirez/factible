@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Acuse REAL del ambiente de Testing de DGI, capturado el 2026-07-08. El sobre fue aceptado (AS) pero el CFE rechazado a nivel comprobante: DGI valida la cadena de confianza del certificado contra las CA acreditadas. RUC del emisor y nombre de archivo ANONIMIZADOS; estructura, estados, motivos y glosas verbatim. Firma de DGI omitida del fixture. -->
+<ACKCFE xmlns="http://cfe.dgi.gub.uy" version="1.0"><Caratula><RUCReceptor>219999830019</RUCReceptor><RUCEmisor>211234560019</RUCEmisor><IDRespuesta>306849522</IDRespuesta><NomArch>sobre-testing-2.xml</NomArch><FecHRecibido>2026-07-08T18:08:10-03:00</FecHRecibido><IDEmisor>1</IDEmisor><IDReceptor>306849522</IDReceptor><CantenSobre>1</CantenSobre><CantResponden>1</CantResponden><CantCFEAceptados>0</CantCFEAceptados><CantCFERechazados>1</CantCFERechazados><CantCFCAceptados>0</CantCFCAceptados><CantCFCObservados>0</CantCFCObservados><CantOtrosRechazados>0</CantOtrosRechazados><Tmst>2026-07-08T18:08:10-03:00</Tmst></Caratula><ACKCFE_Det><Nro_ordinal>1</Nro_ordinal><TipoCFE>101</TipoCFE><Serie>A</Serie><NroCFE>1</NroCFE><FechaCFE>2026-07-08</FechaCFE><TmstCFE>2026-07-08T18:06:51-03:00</TmstCFE><Estado>BE</Estado><MotivosRechazoCF><Motivo>E04</Motivo><Glosa>Firma electrónica no es válida</Glosa><Detalle>Error al validar el Certificado - certificate not trusted</Detalle></MotivosRechazoCF></ACKCFE_Det><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>WkZv8CkZURLgN5M20eAh1pqWPXo=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>FIRMA_DGI_OMITIDA</SignatureValue><KeyInfo><X509Data><X509Certificate>CERT_DGI_OMITIDO</X509Certificate><X509IssuerSerial><X509IssuerName>C=UY, O="Administraci\C3\B3n Nacional de Correos", CN=Correo Uruguayo - CA</X509IssuerName><X509SerialNumber>74286699559980043759578292481083978778321847507</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ACKCFE>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Acuse REAL del ambiente de Testing de DGI, capturado el 2026-07-08 (sobre firmado con certificado cuyo subject NO contenía el RUC del emisor). RUC del emisor y nombre de archivo ANONIMIZADOS; estructura, estados, motivos y glosas verbatim. Firma de DGI omitida del fixture. -->
+<ACKSobre xmlns="http://cfe.dgi.gub.uy" version="1.0"><Caratula><RUCReceptor>219999830019</RUCReceptor><RUCEmisor>211234560019</RUCEmisor><IDRespuesta>306849304</IDRespuesta><NomArch>sobre-testing.xml</NomArch><FecHRecibido>2026-07-08T18:00:46-03:00</FecHRecibido><IDEmisor>1</IDEmisor><IDReceptor>306849304</IDReceptor><CantidadCFE>1</CantidadCFE><Tmst>2026-07-08T18:00:46-03:00</Tmst></Caratula><Detalle><Estado>BS</Estado><MotivosRechazo><Motivo>S02</Motivo><Glosa>No coincide RUC de Sobre, Certificado, envío o CFE</Glosa><Detalle>EL RUC del Emisor no corresponde con el del certificado. -</Detalle></MotivosRechazo></Detalle><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+      <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>qY/7tD2msPy8GU6eVwnk765LzMY=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>FIRMA_DGI_OMITIDA</SignatureValue><KeyInfo><X509Data><X509Certificate>CERT_DGI_OMITIDO</X509Certificate><X509IssuerSerial><X509IssuerName>C=UY, O="Administraci\C3\B3n Nacional de Correos", CN=Correo Uruguayo - CA</X509IssuerName><X509SerialNumber>74286699559980043759578292481083978778321847507</X509SerialNumber></X509IssuerSerial></X509Data></KeyInfo></Signature></ACKSobre>
