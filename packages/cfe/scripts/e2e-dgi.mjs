@@ -46,7 +46,7 @@ if (!lib) {
 }
 const {
   buildCfeXml, firmarCfe, crearSobre, RUT_DGI, TipoCFE, IndicadorFacturacion,
-  buildSoapEnvelope, ENDPOINTS, SoapDgiClient, enviarSobreADgi,
+  buildSoapEnvelopeWss, ENDPOINTS, SoapDgiClient, enviarSobreADgi,
 } = lib;
 
 const rut = process.env.DGI_E2E_RUT;
@@ -196,42 +196,49 @@ const sobre = `<?xml version="1.0" encoding="UTF-8"?>${crearSobre({
 })}`;
 console.log(`  sobre generado: ${sobre.length} bytes (e-Ticket ${serie}-${numero}) → ${guardar('sobre-enviado.xml', sobre)}`);
 
-// ---------------------------------------------- Sonda 2: envelope crudo al WS
-titulo('Sonda 2 — POST SOAP crudo (envelope por convención GeneXus)');
-const envelope = buildSoapEnvelope('EFACRECEPCIONSOBRE', sobre);
-const r = await pedir(urlBase, {
-  body: envelope,
-  conCert: true,
-  estricto: tlsEstricto,
-  headers: { 'Content-Type': 'text/xml; charset=utf-8', SOAPAction: '"http://dgi.gub.uyaction/AWS_EFACTURA.EFACRECEPCIONSOBRE"' },
-});
-if (!r.ok) {
-  anotar(`el POST falló a nivel conexión: ${r.error}`);
-  process.exit(0);
+// ------------------- Sonda 2: envelope firmado (WS-Security) — matriz sha256/sha1
+titulo('Sonda 2 — POST SOAP con Body firmado (WS-Security obligatorio)');
+const certificadoWss = { cert, privateKey: key };
+let algoritmoOk = null;
+let r = null;
+for (const algoritmo of ['sha256', 'sha1']) {
+  const envelope = buildSoapEnvelopeWss('EFACRECEPCIONSOBRE', sobre, certificadoWss, { algoritmo });
+  guardar(`envelope-wss-${algoritmo}.xml`, envelope);
+  r = await pedir(urlBase, {
+    body: envelope,
+    conCert: true,
+    estricto: tlsEstricto,
+    headers: { 'Content-Type': 'text/xml; charset=utf-8', SOAPAction: '"http://dgi.gub.uyaction/AWS_EFACTURA.EFACRECEPCIONSOBRE"' },
+  });
+  if (!r.ok) {
+    anotar(`[wss ${algoritmo}] el POST falló a nivel conexión: ${r.error}`);
+    continue;
+  }
+  const fRespuesta = guardar(`respuesta-wss-${algoritmo}.xml`, r.body);
+  const fault = r.body.match(/<(?:\w+:)?faultstring[^>]*>([\s\S]*?)<\/(?:\w+:)?faultstring>/i);
+  const detalleFault = r.body.match(/<Detalle>([\s\S]*?)<\/Detalle>/i);
+  if (fault) {
+    anotar(`[wss ${algoritmo}] HTTP ${r.status} — Fault: "${fault[1].trim().slice(0, 120)}"${detalleFault ? ` | Detalle: "${detalleFault[1].trim().slice(0, 200)}"` : ''} → ${fRespuesta}`);
+  } else if (/<(?:\w+:)?xmlData/i.test(r.body)) {
+    anotar(`[wss ${algoritmo}] ✅ la respuesta trae <xmlData> — envelope firmado ACEPTADO → ${fRespuesta}`);
+    algoritmoOk = algoritmo;
+    break;
+  } else {
+    anotar(`[wss ${algoritmo}] HTTP ${r.status} sin fault ni xmlData — inspeccionar ${fRespuesta}`);
+  }
 }
-const fRespuesta = guardar('respuesta-cruda.xml', r.body);
-anotar(`HTTP ${r.status} (${r.body.length} bytes) → ${fRespuesta}`);
-if (r.tls) anotar(`TLS: servidor emitido por "${r.tls.emisorServidor}", verificación ${r.tls.autorizado ? 'OK' : `NO (${r.tls.errorAutorizacion})`}`);
-
-const fault = r.body.match(/<(?:\w+:)?faultstring[^>]*>([\s\S]*?)<\/(?:\w+:)?faultstring>/i);
-if (fault) {
-  anotar(`SOAP Fault: "${fault[1].trim().slice(0, 200)}" — probable pista sobre el nombre real del envelope/operación`);
-  console.log('\nSi el fault menciona el elemento esperado, ajustar buildSoapEnvelope y reintentar.');
-} else if (/<(?:\w+:)?xmlData/i.test(r.body)) {
-  anotar('la respuesta trae <xmlData> — el envelope GeneXus fue ACEPTADO tal cual lo construimos');
-} else {
-  anotar(`respuesta sin fault ni xmlData — inspeccionar ${fRespuesta} (primeros 300: "${r.body.replace(/\s+/g, ' ').slice(0, 300)}")`);
-}
+if (r?.tls) anotar(`TLS: servidor emitido por "${r.tls.emisorServidor}", verificación ${r.tls.autorizado ? 'OK' : `NO (${r.tls.errorAutorizacion})`}`);
 
 // ------------------------------------- Sonda 3: flujo completo con la lib
-if (!fault && /<(?:\w+:)?xmlData/i.test(r.body)) {
-  titulo('Sonda 3 — flujo completo con SoapDgiClient + enviarSobreADgi');
+if (algoritmoOk) {
+  titulo(`Sonda 3 — flujo completo con SoapDgiClient (wss ${algoritmoOk}) + enviarSobreADgi`);
   const cliente = new SoapDgiClient({
     ambiente: 'testing',
     cert,
     key,
     url: process.env.DGI_E2E_URL,
     verificarServidor: tlsEstricto,
+    algoritmoWss: algoritmoOk,
   });
   try {
     const resultado = await enviarSobreADgi(cliente, sobre);

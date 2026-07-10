@@ -1,3 +1,4 @@
+import { SignedXml } from 'xml-crypto';
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -132,5 +133,12 @@ describe('SoapDgiClient contra servidor local', () => {
     expect(recibido.body).toContain('xmlns:dgi="http://dgi.gub.uy"');
     expect(recibido.body).toContain('WS_eFactura.EFACRECEPCIONSOBRE');
     expect(recibido.body).toContain('&lt;EnvioCFE/&gt;');
+    // WS-Security obligatorio (manual oficial + fault real "No signature in message!")
+    expect(recibido.body).toContain('<wsse:Security');
+    expect(recibido.body).toContain('BinarySecurityToken');
+    expect(recibido.body).toContain('Reference URI="#Body-factible"');
+    const sigWss = new SignedXml({ idMode: 'wssecurity', publicCert: certificado.cert });
+    sigWss.loadSignature(recibido.body!.match(/<Signature[\s\S]*?<\/Signature>/)![0]);
+    expect(sigWss.checkSignature(recibido.body!)).toBe(true);
   });
 });

@@ -1,18 +1,15 @@
 /**
- * Cliente SOAP real contra DGI: HTTPS con certificado cliente (mTLS).
+ * Cliente SOAP real contra DGI.
  *
- * Sin probar contra el ambiente real (requiere usuario de testing + certificado
- * de proveedor autorizado). La estructura del envelope y el SOAPAction se
- * confirman contra el WSDL en la primera conexión — ver TODO.md.
+ * Contrato confirmado contra el WSDL y el manual oficial (ver transporte.ts y
+ * spec/). El envelope va con el Body firmado (WS-Security, obligatorio); el
+ * certificado cliente se presenta ademas en el TLS aunque el handshake no lo
+ * exige — no hace daño y es lo que hacen los clientes GeneXus.
  */
 import { request as httpsRequest } from 'node:https';
 import { request as httpRequest } from 'node:http';
-import {
-  buildSoapEnvelope,
-  extractSoapResult,
-  ENDPOINTS,
-  type DgiTransport,
-} from './transporte.js';
+import { extractSoapResult, ENDPOINTS, type DgiTransport } from './transporte.js';
+import { buildSoapEnvelopeWss, xmlDataConsulta } from './wss.js';
 
 export interface SoapClientConfig {
   ambiente: 'testing' | 'produccion';
@@ -28,6 +25,11 @@ export interface SoapClientConfig {
    * certificado que no encadena a una CA pública (documentar el hallazgo).
    */
   verificarServidor?: boolean;
+  /**
+   * Algoritmo de la firma WS-Security del envelope. El ejemplo oficial y las
+   * respuestas de DGI usan sha1; default sha256 hasta confirmar qué acepta.
+   */
+  algoritmoWss?: 'sha256' | 'sha1';
 }
 
 export class SoapDgiClient implements DgiTransport {
@@ -42,18 +44,18 @@ export class SoapDgiClient implements DgiTransport {
   }
 
   async consultarEstadoEnvio(idReceptor: number, token: string): Promise<string> {
-    // ⚠️ El XSD real del contrato (spec/ws_eprueba.xsd1.xsd) define Datain SOLO
-    // con <xmlData> — mandar idReceptor/token como elementos hermanos viola el
-    // schema. El formato interno del xmlData de la consulta se confirma contra
-    // el manual "Web Services Externos" de DGI (ver TODO.md).
-    return this.invocar('EFACCONSULTARESTADOENVIO', '', {
-      idReceptor: String(idReceptor),
-      token,
-    });
+    // Formato del manual oficial (spec/ws-externos-recepcion.pdf §CONSULTARESTADOENVIO).
+    return this.invocar('EFACCONSULTARESTADOENVIO', xmlDataConsulta(idReceptor, token));
   }
 
-  private invocar(operacion: string, xmlData: string, extra?: Record<string, string>): Promise<string> {
-    const envelope = buildSoapEnvelope(operacion, xmlData, extra);
+  private invocar(operacion: string, xmlData: string): Promise<string> {
+    // WS-Security obligatorio: Body firmado (ver wss.ts).
+    const envelope = buildSoapEnvelopeWss(
+      operacion,
+      xmlData,
+      { cert: this.config.cert, privateKey: this.config.key },
+      { algoritmo: this.config.algoritmoWss ?? 'sha256' },
+    );
     const url = new URL(this.config.url ?? ENDPOINTS[this.config.ambiente]);
     // http solo para tests locales; DGI es siempre https con mTLS.
     const request = url.protocol === 'http:' ? httpRequest : httpsRequest;

@@ -17,7 +17,10 @@
  *   - el handshake TLS NO exige certificado cliente (validado 2026-07-09)
  *   - la policy del WSDL declara WS-Security SignedParts (Body) — ⚠️ TODO:
  *     confirmar si se exige en la práctica o solo se "soporta" (DataPower)
- * ⚠️ TODO: nombres del payload (Datain/xmlData) — falta ws_eprueba.xsd1.xsd.
+ * Payload confirmado por el XSD del contrato (spec/ws_eprueba.xsd1.xsd) y el
+ * manual oficial (spec/ws-externos-recepcion.pdf): Datain{xmlData}; la consulta
+ * manda dentro de xmlData un <ConsultaCFE> con IdReceptor y Token.
+ * WS-Security es OBLIGATORIO (fault "No signature in message!") — ver wss.ts.
  */
 
 /** Contrato del transporte. Implementaciones: SoapDgiClient (real), MockDgiTransport (tests). */
@@ -35,7 +38,7 @@ export const ENDPOINTS = {
   produccion: 'https://efactura.dgi.gub.uy:6443/eFactura/ws_efactura',
 } as const;
 
-const escXml = (s: string) =>
+export const escXml = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /** Construye el envelope SOAP 1.1 de una operación DGI. */
