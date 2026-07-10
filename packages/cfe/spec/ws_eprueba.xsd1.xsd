@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdlns="http://dgi.gub.uy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dgi.gub.uy" targetNamespace="http://dgi.gub.uy" elementFormDefault="qualified">
+			
+<complexType name="Data">
+				
+<all>
+					
+<element name="xmlData" type="xsd:string">
+					</element>
+				</all>
+			</complexType>
+			
+<element name="WS_eFactura.EFACRECEPCIONSOBRE">
+				
+<complexType>
+					
+<sequence>
+						
+<element minOccurs="1" maxOccurs="1" name="Datain" type="tns:Data"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+<element name="WS_eFactura.EFACRECEPCIONSOBREResponse">
+				
+<complexType>
+					
+<sequence>
+						
+<element minOccurs="1" maxOccurs="1" name="Dataout" type="tns:Data"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+<element name="WS_eFactura.EFACRECEPCIONREPORTE">
+				
+<complexType>
+					
+<sequence>
+						
+<element minOccurs="1" maxOccurs="1" name="Datain" type="tns:Data"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+<element name="WS_eFactura.EFACRECEPCIONREPORTEResponse">
+				
+<complexType>
+					
+<sequence>
+						
+<element minOccurs="1" maxOccurs="1" name="Dataout" type="tns:Data"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+<element name="WS_eFactura.EFACCONSULTARESTADOENVIO">
+				
+<complexType>
+					
+<sequence>
+						
+<element minOccurs="1" maxOccurs="1" name="Datain" type="tns:Data"/>
+					</sequence>
+				</complexType>
+			</element>
+			
+<element name="WS_eFactura.EFACCONSULTARESTADOENVIOResponse">
+				
+<complexType>
+					
+<sequence>
+						
+<element minOccurs="1" maxOccurs="1" name="Dataout" type="tns:Data"/>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>

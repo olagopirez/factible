@@ -4,7 +4,8 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 
 ## Para confirmar en homologación con DGI
 
-- [ ] **Envelope SOAP del WS de recepción:** nombres exactos de elementos (`Datain`/`xmlData`), namespace y SOAPAction implementados por convención GeneXus — confirmar contra el WSDL real (requiere acceso al endpoint, que parece exigir cert cliente). Igual que si exige WS-Security además del mTLS.
+- [ ] **¿WSS con sha256 llega hasta el final?** Con self-signed, sha256 y sha1 avanzan AMBOS hasta la validación de cadena ("certificate not trusted") sin queja de algoritmo — evidencia débil de que ambos sirven. Confirmación definitiva con cert real.
+- [ ] **¿El `xmlData` va escapado o CDATA?** El ejemplo oficial usa CDATA; emitimos escapado (equivalente tras el parseo XML). Si aparece un fault de parseo, probar CDATA.
 
 - [ ] **Código de seguridad = ¿DigestValue de la firma?** El Formato solo dice "hash SHA-2" vinculado a la firma. Implementamos DigestValue (Base64) de la Reference; verificar contra el portal consultaQR con un CFE real en testing.
 - [ ] **Formato de parámetros del QR:** la spec los muestra separados por coma (no query string estándar). Implementado literal; confirmar si el hash va URL-encoded.
@@ -15,7 +16,7 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 
 ## Para investigar (no bloquea el desarrollo)
 
-- [ ] **Certificado digital de facturación electrónica real** (Abitab/Correo/Antel, a nombre de la empresa del RUT de Testing) — el ÚNICO bloqueante restante para el círculo completo: el nivel CFE rechaza self-signed con `E04 certificate not trusted`.
+- [ ] **Certificado digital de facturación electrónica real** (Abitab/Correo/Antel, a nombre de la empresa del RUT de Testing) — el ÚNICO bloqueante restante, ahora confirmado en AMBOS canales: el portal rechaza self-signed a nivel CFE (`E04`) y el WS lo rechaza antes, en la capa WS-Security ("certificate not trusted"). Con cert real, todo lo demás ya está validado.
 - [ ] **Proceso de homologación:** set de pruebas exacto que exige DGI para autorizar un emisor/software (Portal eFactura → Servicios → Postulación, por etapas).
 - [ ] **Algoritmo del código de seguridad / QR** de la representación impresa (Formato v25.2 §representación impresa — está en el PDF, falta extraerlo).
 - [ ] **Tabla E:** topes vigentes para exigir identificación del receptor en e-Ticket.
@@ -33,6 +34,13 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 ## Resueltas
 
 ### Validadas contra el ambiente de Testing REAL de DGI (2026-07-08, envío manual por portal)
+
+- [x] **WSDL real obtenido SIN autenticación** (2026-07-09, `{endpoint}?wsdl` → `spec/ws_eprueba.wsdl`): namespace `http://dgi.gub.uy` (doc/literal), operaciones `WS_eFactura.EFACRECEPCION{SOBRE,REPORTE}` y `EFACCONSULTARESTADOENVIO`, SOAPAction `http://dgi.gub.uyaction/AWS_EFACTURA.<OP>` (sic, sin barra y con prefijo A). Nuestro namespace "DGI" y SOAPAction eran incorrectos — corregidos.
+- [x] **La firma WS-Security implementada es estructuralmente CORRECTA** (2026-07-09): la secuencia de faults lo prueba — sin firma "No signature in message!", con nuestra firma el error avanza a "certificate not trusted" (la capa WSS del WS valida la cadena de CA, más estricta que el nivel sobre del portal). sha256 y sha1 llegan ambos a esa instancia sin queja de algoritmo.
+- [x] **WS-Security es OBLIGATORIO** (2026-07-09): sin firma, fault `GenericFault` "No signature in message!". Implementado espejo del ejemplo oficial: BST X509v3 + Signature exc-c14n sobre el Body (`wsu:Id`) + SecurityTokenReference. *(manual T-5.020.00.001-004 v1.1, spec/ws-externos-recepcion.pdf + fault real)*
+- [x] **Formato de la consulta confirmado:** `xmlData` de EFACCONSULTARESTADOENVIO lleva `<ConsultaCFE xmlns="http://dgi.gub.uy"><IdReceptor/><Token/></ConsultaCFE>` — los `idReceptor`/`token` como elementos del Datain violaban el XSD del contrato; corregido. *(manual §CONSULTARESTADOENVIO)*
+- [x] **Manuales oficiales del WS archivados:** spec/ws-externos-recepcion.pdf y spec/ws-externos-consultas.pdf (de "Documentos de interés" del portal e-Factura) — incluyen ejemplos completos de request/response firmados y walkthrough de SoapUI.
+- [x] **El TLS del WS NO exige certificado cliente:** el handshake completa sin cert (el "mTLS obligatorio" era un mito de la doc de terceros). Cert del servidor emitido por Abitab SSL, encadena a CA pública.
 
 - [x] **El pipeline completo funciona contra DGI:** un sobre generado con `buildCfeXml` + `firmarCfe` + `crearSobre` fue **aceptado (Estado AS)** por el ambiente de Testing (envío 306849522). Formato v25.2, firma XMLDSig enveloped SHA-256 y sobre v05: todo correcto.
 - [x] **RUT_DGI confirmado:** `219999830019` — aparece como `RUCReceptor` en los acuses reales y como RUC del propio certificado de DGI (`serialNumber=RUC219999830019`).

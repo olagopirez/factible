@@ -1,3 +1,4 @@
+import { SignedXml } from 'xml-crypto';
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -127,8 +128,17 @@ describe('SoapDgiClient contra servidor local', () => {
     const ack = await cliente.enviarSobre('<EnvioCFE/>');
 
     expect(ack).toBe('<ACKSobre>ok</ACKSobre>');
-    expect(recibido.soapAction).toBe('DGI/WS_eFactura.EFACRECEPCIONSOBRE');
+    // Verbatim del WSDL real (spec/ws_eprueba.wsdl).
+    expect(recibido.soapAction).toBe('"http://dgi.gub.uyaction/AWS_EFACTURA.EFACRECEPCIONSOBRE"');
+    expect(recibido.body).toContain('xmlns:dgi="http://dgi.gub.uy"');
     expect(recibido.body).toContain('WS_eFactura.EFACRECEPCIONSOBRE');
     expect(recibido.body).toContain('&lt;EnvioCFE/&gt;');
+    // WS-Security obligatorio (manual oficial + fault real "No signature in message!")
+    expect(recibido.body).toContain('<wsse:Security');
+    expect(recibido.body).toContain('BinarySecurityToken');
+    expect(recibido.body).toContain('Reference URI="#Body-factible"');
+    const sigWss = new SignedXml({ idMode: 'wssecurity', publicCert: certificado.cert });
+    sigWss.loadSignature(recibido.body!.match(/<Signature[\s\S]*?<\/Signature>/)![0]);
+    expect(sigWss.checkSignature(recibido.body!)).toBe(true);
   });
 });

@@ -25,6 +25,7 @@ export { MemoryCaeStore } from './cae/memory-store.js';
 export { Factible, type FactibleConfig, type Emitido } from './factible.js';
 export { representacionImpresa, type OpcionesImpresion } from './impresion/html.js';
 export { buildSoapEnvelope, extractSoapResult, ENDPOINTS, type DgiTransport } from './transporte/transporte.js';
+export { buildSoapEnvelopeWss, xmlDataConsulta } from './transporte/wss.js';
 export { SoapDgiClient, type SoapClientConfig } from './transporte/soap-client.js';
 export { MockDgiTransport, type MockConfig } from './transporte/mock.js';
 export { enviarSobreADgi, type ResultadoEnvio, type OpcionesEnvio } from './transporte/flujo.js';
