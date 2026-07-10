@@ -4,7 +4,8 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 
 ## Para confirmar en homologación con DGI
 
-- [ ] **Envelope SOAP del WS de recepción:** nombres exactos de elementos (`Datain`/`xmlData`), namespace y SOAPAction implementados por convención GeneXus — confirmar contra el WSDL real (requiere acceso al endpoint, que parece exigir cert cliente). Igual que si exige WS-Security además del mTLS.
+- [ ] **Payload del envelope (`Datain`/`xmlData`):** el WSDL importa `ws_eprueba.xsd1.xsd` con los tipos — el arnés lo baja en la próxima corrida. Namespace y SOAPAction ya confirmados (ver Resueltas).
+- [ ] **¿WS-Security se exige o solo se "soporta"?** La policy del WSDL declara SignedParts (Body) vía DataPower. Si tras corregir namespace/SOAPAction sigue el fault, lo próximo es firmar el Body (WS-Security) — el dominio XMLDSig ya lo tenemos.
 
 - [ ] **Código de seguridad = ¿DigestValue de la firma?** El Formato solo dice "hash SHA-2" vinculado a la firma. Implementamos DigestValue (Base64) de la Reference; verificar contra el portal consultaQR con un CFE real en testing.
 - [ ] **Formato de parámetros del QR:** la spec los muestra separados por coma (no query string estándar). Implementado literal; confirmar si el hash va URL-encoded.
@@ -33,6 +34,9 @@ Cosas que no queremos olvidar mientras avanzamos. Cuando se resuelva una, moverl
 ## Resueltas
 
 ### Validadas contra el ambiente de Testing REAL de DGI (2026-07-08, envío manual por portal)
+
+- [x] **WSDL real obtenido SIN autenticación** (2026-07-09, `{endpoint}?wsdl` → `spec/ws_eprueba.wsdl`): namespace `http://dgi.gub.uy` (doc/literal), operaciones `WS_eFactura.EFACRECEPCION{SOBRE,REPORTE}` y `EFACCONSULTARESTADOENVIO`, SOAPAction `http://dgi.gub.uyaction/AWS_EFACTURA.<OP>` (sic, sin barra y con prefijo A). Nuestro namespace "DGI" y SOAPAction eran incorrectos — corregidos.
+- [x] **El TLS del WS NO exige certificado cliente:** el handshake completa sin cert (el "mTLS obligatorio" era un mito de la doc de terceros). Cert del servidor emitido por Abitab SSL, encadena a CA pública.
 
 - [x] **El pipeline completo funciona contra DGI:** un sobre generado con `buildCfeXml` + `firmarCfe` + `crearSobre` fue **aceptado (Estado AS)** por el ambiente de Testing (envío 306849522). Formato v25.2, firma XMLDSig enveloped SHA-256 y sobre v05: todo correcto.
 - [x] **RUT_DGI confirmado:** `219999830019` — aparece como `RUCReceptor` en los acuses reales y como RUC del propio certificado de DGI (`serialNumber=RUC219999830019`).

@@ -67,7 +67,8 @@ export class SoapDgiClient implements DgiTransport {
           timeout: this.config.timeoutMs ?? 30_000,
           headers: {
             'Content-Type': 'text/xml; charset=utf-8',
-            SOAPAction: `DGI/WS_eFactura.${operacion}`,
+            // Verbatim del WSDL real (spec/ws_eprueba.wsdl): sin barra tras "uy".
+            SOAPAction: `http://dgi.gub.uyaction/AWS_EFACTURA.${operacion}`,
             'Content-Length': Buffer.byteLength(envelope),
           },
         },

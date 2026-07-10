@@ -147,6 +147,17 @@ for (const conCert of [false, true]) {
   if (r.ok && r.status === 200 && /wsdl|definitions/i.test(r.body)) {
     const f = guardar(`wsdl-${conCert ? 'con' : 'sin'}-cert.xml`, r.body);
     anotar(`WSDL OBTENIDO ${etiqueta} (${r.body.length} bytes) → ${f} — ¡compararlo contra buildSoapEnvelope!`);
+    // Bajar también los XSD que el WSDL referencia (ahí están los nombres del payload).
+    const schemas = [...r.body.matchAll(/schemaLocation="([^"]+)"/g)].map((m) => m[1]);
+    for (const s of schemas) {
+      const urlXsd = new URL(s, urlBase).href;
+      const rx = await pedir(urlXsd, { metodo: 'GET', estricto: tlsEstricto, conCert });
+      if (rx.ok && rx.status === 200 && rx.body.length) {
+        anotar(`XSD del contrato OBTENIDO (${s}, ${rx.body.length} bytes) → ${guardar(s.replace(/[^\w.]/g, '_'), rx.body)}`);
+      } else {
+        anotar(`XSD ${s}: ${rx.ok ? `HTTP ${rx.status}` : rx.error}`);
+      }
+    }
     break;
   }
   anotar(`?wsdl ${etiqueta}: ${r.ok ? `HTTP ${r.status}, body ${r.body.length} bytes` : r.error}${r.ok && r.body.length < 400 ? ` — "${r.body.replace(/\s+/g, ' ').slice(0, 120)}"` : ''}`);
