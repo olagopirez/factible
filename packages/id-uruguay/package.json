@@ -1,8 +1,18 @@
 {
   "name": "@factible/id-uruguay",
   "version": "0.1.0",
+  "private": true,
   "description": "Login con cédula: cliente OpenID Connect server-side para ID Uruguay / Usuario gub.uy (AGESIC).",
-  "keywords": ["id-uruguay", "gub.uy", "agesic", "oidc", "openid-connect", "login", "cedula", "uruguay"],
+  "keywords": [
+    "id-uruguay",
+    "gub.uy",
+    "agesic",
+    "oidc",
+    "openid-connect",
+    "login",
+    "cedula",
+    "uruguay"
+  ],
   "license": "MIT",
   "author": "Oscar Lago",
   "type": "module",
@@ -14,7 +24,9 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
