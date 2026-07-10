@@ -48,7 +48,7 @@ cfe.codigoSeguridadImpreso;               // los 6 caracteres bajo el QR
 | Transporte SOAP mTLS + mock de DGI | ✅ estructura; ⚠️ sin validar contra endpoint real |
 | Homologación ante DGI | ⏳ pendiente |
 
-**Estado: beta offline.** El pipeline completo funciona y está testeado (42 tests), pero aún no fue validado contra el ambiente de testing de DGI. **No usar en producción todavía.** Los supuestos pendientes de confirmación están documentados en [TODO.md](TODO.md).
+**Estado: beta validada contra el ambiente de Testing real de DGI** (2026-07). Un sobre generado y firmado con esta librería fue **aceptado (Estado AS)** por DGI, los acuses reales parsean sin cambios (fixtures en `test/fixtures/acuses-reales/`), y el transporte SOAP quedó confirmado contra el WSDL y el manual oficial: namespace, SOAPAction y WS-Security (obligatorio) incluidos. Lo único que un certificado de prueba no puede validar es la aceptación a nivel comprobante (`AE`), que exige un certificado de CA acreditada (Abitab/Correo/Antel). **No usar en producción todavía** (falta homologación). Los hallazgos y supuestos restantes están documentados en [TODO.md](TODO.md).
 
 ## Empezar
 

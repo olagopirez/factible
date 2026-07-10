@@ -131,7 +131,7 @@ npm install <span class="c-str">@factible/validar</span> <span class="c-str">@fa
 <span class="c-kw">const</span> resultado = <span class="c-kw">await</span> <span class="c-fn">enviarSobreADgi</span>(transporte, sobre);
 resultado.acuseCfe.detalles[0]
 <span class="c-com">// → { aceptado: false, motivosRechazo: [{ motivo: 'E05', glosa: 'Firma electrónica no es válida' }] }</span></code></pre>
-    <div class="aviso">⚠️ <strong>Beta offline.</strong> El pipeline completo funciona y está testeado contra los esquemas oficiales, pero aún no fue homologado contra el ambiente de testing de DGI. No usar en producción todavía.</div>
+    <div class="aviso">⚠️ <strong>Beta validada contra el ambiente de Testing de DGI.</strong> Sobres generados con la librería ya fueron aceptados por DGI (Estado AS) y el canal SOAP con WS-Security está confirmado contra el WSDL oficial. Falta la homologación formal: no usar en producción todavía.</div>
   </section>
 
   <div class="cta" id="gateway">
