@@ -22,6 +22,12 @@ export interface SoapClientConfig {
   /** Override del endpoint (para proxies o cambios de DGI). */
   url?: string;
   timeoutMs?: number;
+  /**
+   * Verificar el certificado TLS del servidor contra las CAs del sistema.
+   * Default: true. Solo ponerlo en false si el endpoint de DGI presenta un
+   * certificado que no encadena a una CA pública (documentar el hallazgo).
+   */
+  verificarServidor?: boolean;
 }
 
 export class SoapDgiClient implements DgiTransport {
@@ -57,6 +63,7 @@ export class SoapDgiClient implements DgiTransport {
           method: 'POST',
           cert: this.config.cert,
           key: this.config.key,
+          rejectUnauthorized: this.config.verificarServidor ?? true,
           timeout: this.config.timeoutMs ?? 30_000,
           headers: {
             'Content-Type': 'text/xml; charset=utf-8',
