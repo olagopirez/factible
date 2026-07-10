@@ -10,12 +10,12 @@ Un conector por organismo, misma experiencia: TypeScript tipado, simuladores inc
 npm install @factible/validar     # estable
 npm install @factible/bcu         # verificado contra el WS real del BCU
 npm install @factible/montevideo  # verificado contra las APIs reales de la IM
-npm install @factible/cfe         # beta — no usar en producción aún
+npm install @factible/cfe         # beta — validada contra DGI Testing; falta homologación
 ```
 
 | Paquete | Qué resuelve | Estado |
 |---|---|---|
-| [`@factible/cfe`](packages/cfe) | Facturación electrónica DGI: e-Ticket, e-Factura, sobres, acuses, reporte diario, representación impresa | 🟡 Beta offline (pendiente homologación DGI) |
+| [`@factible/cfe`](packages/cfe) | Facturación electrónica DGI: e-Ticket, e-Factura, sobres, acuses, reporte diario, representación impresa | 🟡 Beta — validada contra el ambiente de Testing real de DGI (sobre aceptado, WS con WS-Security); faltan certificado de CA acreditada y homologación |
 | [`@factible/validar`](packages/validar) | Dígito verificador y validación de CI y RUT uruguayos. Cero dependencias | 🟢 Estable — también en [Python, PHP, Go y Java](ports) |
 | [`@factible/bcu`](packages/bcu) | Cotizaciones oficiales del Banco Central | 🟢 Estable — verificado contra el servicio real |
 | [`@factible/montevideo`](packages/montevideo) | Intendencia de Montevideo: buses del STM en tiempo real, arribos a paradas (TEA) y banderas de playas | 🟢 Validado contra las APIs reales |
