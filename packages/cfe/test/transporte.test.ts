@@ -128,7 +128,7 @@ describe('SoapDgiClient contra servidor local', () => {
 
     expect(ack).toBe('<ACKSobre>ok</ACKSobre>');
     // Verbatim del WSDL real (spec/ws_eprueba.wsdl).
-    expect(recibido.soapAction).toBe('http://dgi.gub.uyaction/AWS_EFACTURA.EFACRECEPCIONSOBRE');
+    expect(recibido.soapAction).toBe('"http://dgi.gub.uyaction/AWS_EFACTURA.EFACRECEPCIONSOBRE"');
     expect(recibido.body).toContain('xmlns:dgi="http://dgi.gub.uy"');
     expect(recibido.body).toContain('WS_eFactura.EFACRECEPCIONSOBRE');
     expect(recibido.body).toContain('&lt;EnvioCFE/&gt;');

@@ -203,7 +203,7 @@ const r = await pedir(urlBase, {
   body: envelope,
   conCert: true,
   estricto: tlsEstricto,
-  headers: { 'Content-Type': 'text/xml; charset=utf-8', SOAPAction: 'DGI/WS_eFactura.EFACRECEPCIONSOBRE' },
+  headers: { 'Content-Type': 'text/xml; charset=utf-8', SOAPAction: '"http://dgi.gub.uyaction/AWS_EFACTURA.EFACRECEPCIONSOBRE"' },
 });
 if (!r.ok) {
   anotar(`el POST falló a nivel conexión: ${r.error}`);

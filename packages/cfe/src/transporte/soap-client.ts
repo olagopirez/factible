@@ -42,6 +42,10 @@ export class SoapDgiClient implements DgiTransport {
   }
 
   async consultarEstadoEnvio(idReceptor: number, token: string): Promise<string> {
+    // ⚠️ El XSD real del contrato (spec/ws_eprueba.xsd1.xsd) define Datain SOLO
+    // con <xmlData> — mandar idReceptor/token como elementos hermanos viola el
+    // schema. El formato interno del xmlData de la consulta se confirma contra
+    // el manual "Web Services Externos" de DGI (ver TODO.md).
     return this.invocar('EFACCONSULTARESTADOENVIO', '', {
       idReceptor: String(idReceptor),
       token,
@@ -68,7 +72,8 @@ export class SoapDgiClient implements DgiTransport {
           headers: {
             'Content-Type': 'text/xml; charset=utf-8',
             // Verbatim del WSDL real (spec/ws_eprueba.wsdl): sin barra tras "uy".
-            SOAPAction: `http://dgi.gub.uyaction/AWS_EFACTURA.${operacion}`,
+            // Entre comillas: SOAP 1.1 define SOAPAction como quoted string.
+            SOAPAction: `"http://dgi.gub.uyaction/AWS_EFACTURA.${operacion}"`,
             'Content-Length': Buffer.byteLength(envelope),
           },
         },
