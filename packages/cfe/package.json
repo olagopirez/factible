@@ -1,6 +1,6 @@
 {
   "name": "@factible/cfe",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Facturación electrónica (CFE) de DGI Uruguay para desarrolladores. Construí, firmá y enviá e-Tickets y e-Facturas desde Node/TypeScript.",
   "keywords": [
     "cfe",
