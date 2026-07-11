@@ -1,0 +1,89 @@
+---
+title: '@factible/cfe'
+description: Facturación electrónica de DGI (Uruguay) para desarrolladores — e-Ticket, e-Factura, firma, sobres, acuses y representación impresa.
+sidebar:
+  label: cfe — Facturación DGI
+  badge:
+    text: Beta
+    variant: caution
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+**Facturación electrónica de DGI para desarrolladores.** Integrar CFE hoy significa semanas leyendo PDFs de DGI, firmando XML con SOAP de 2012, o pagar un gateway propietario sin saber qué hay adentro. `@factible/cfe` es la alternativa: una librería TypeScript moderna, tipada y testeada que habla el protocolo de DGI por vos — y una DGI simulada para que desarrolles sin trámites.
+
+<Aside type="caution" title="Beta validada contra el ambiente de Testing de DGI">
+Un sobre generado y firmado con esta librería fue **aceptado (Estado AS)** por DGI, los acuses reales parsean sin cambios y el transporte SOAP quedó confirmado contra el WSDL y el manual oficial (namespace, SOAPAction y WS-Security incluidos). Falta la homologación formal: **no usar en producción todavía**.
+</Aside>
+
+## Instalación
+
+```bash
+npm install @factible/cfe
+```
+
+## Uso
+
+```ts
+import { Factible, MemoryCaeStore, MockDgiTransport, crearSobre, enviarSobreADgi, RUT_DGI, TipoCFE } from '@factible/cfe';
+
+const factible = new Factible({ emisor, certificado, caeStore });
+
+// Emitir: numeración CAE + XML v25.2 + firma + sello digital, en una llamada
+const cfe = await factible.emitir({
+  tipo: TipoCFE.E_TICKET,
+  moneda: 'UYU',
+  lineas: [{ cantidad: 2, descripcion: 'Café', precioUnitario: 190, indicadorFacturacion: 3 }],
+});
+
+// Enviar: sobre → ACKSobre → consulta con token → resultado por comprobante
+const sobre = crearSobre({ rucEmisor: emisor.ruc, rutReceptor: RUT_DGI, idEmisor: 1, cfesFirmados: [cfe.xml], cert });
+const resultado = await enviarSobreADgi(new MockDgiTransport(), sobre);
+
+resultado.acuseCfe?.detalles[0].aceptado; // true
+cfe.urlQr;                                // QR de verificación DGI
+cfe.codigoSeguridadImpreso;               // los 6 caracteres bajo el QR
+```
+
+## Desarrollá sin DGI
+
+`MockDgiTransport` simula el ciclo completo de DGI — aceptaciones, rechazos con motivos reales (S01-S20, E01-E15), flujo asíncrono con token. Tu integración se testea entera sin certificados ni trámites, y los rechazos llegan con glosa en español, no códigos crípticos:
+
+```ts
+resultado.acuseCfe.detalles[0]
+// → { aceptado: false, motivosRechazo: [{ motivo: 'E05', glosa: 'Firma electrónica no es válida' }] }
+```
+
+## Qué cubre
+
+| Etapa | Estado |
+| --- | --- |
+| Construcción XML CFE v25.2 (e-Ticket, e-Factura, NC/ND con reglas v25) | ✅ validado contra XSD |
+| Totales e IVA (básica/mínima/exento) | ✅ |
+| Firma y verificación XMLDSig (formato del ejemplo oficial) | ✅ |
+| Numeración CAE atómica (`CaeStore`) | ✅ memoria; contrato para SQL |
+| Sobre EnvioCFE v05 | ✅ validado contra XSD |
+| Sello digital: código de seguridad + QR | ✅ |
+| Representación impresa (A4 / ticket 80mm, QR embebido) | ✅ |
+| Reporte diario v13.2 (incluso sin movimiento) | ✅ validado contra XSD |
+| Acuses ACKSobre/ACKCFE con tablas de motivos | ✅ |
+| Transporte SOAP mTLS + mock de DGI | ✅ validado contra DGI Testing |
+| Homologación ante DGI | ⏳ pendiente |
+
+## Alcance y roadmap
+
+MVP: **e-Ticket (101) y e-Factura (111) + NC/ND** — la gran mayoría de las emisiones domésticas. Después: exportación, cuenta ajena, e-Remito, e-Resguardo, intercambio entre emisores.
+
+<Aside type="note" title="¿No usás TypeScript?">
+Esta librería no se porta a otros lenguajes: la lógica es demasiado pesada para mantener N implementaciones fieles a la spec. El plan multi-lenguaje es el [gateway REST](/factible/gateway/) — cualquier stack integra por HTTP — y SDKs finos por lenguaje encima.
+</Aside>
+
+## Documentación completa
+
+- [Guía de uso](https://github.com/olagopirez/factible/blob/main/packages/cfe/docs/guia.md) — de cero a CFE enviado, incluyendo representación impresa y reporte diario.
+- [Protocolo DGI](https://github.com/olagopirez/factible/blob/main/packages/cfe/docs/protocolo-dgi.md) — versiones vigentes, WSDLs, acceso a testing, hallazgos verificados.
+- [`spec/`](https://github.com/olagopirez/factible/tree/main/packages/cfe/spec) — XSDs y formatos oficiales de DGI usados como fuente de verdad.
+
+## Licencia
+
+MIT. Código en [`packages/cfe`](https://github.com/olagopirez/factible/tree/main/packages/cfe).

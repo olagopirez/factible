@@ -1,0 +1,50 @@
+---
+title: Empezar
+description: Qué es factible, qué conector necesitás y cómo instalarlo.
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+**factible** es infraestructura open source (MIT) para integrarte con el Estado uruguayo: un conector por organismo, todos con la misma experiencia — API tipada, simuladores para desarrollar sin trámites, y todo validado contra las especificaciones oficiales.
+
+```bash
+# ya disponible en npm
+npm install @factible/validar @factible/bcu @factible/montevideo
+```
+
+## Elegí tu conector
+
+<CardGrid>
+  <LinkCard title="@factible/cfe" href="/factible/cfe/" description="Facturación electrónica DGI: e-Ticket, e-Factura, firma, sobres, acuses y representación impresa con QR. (Beta)" />
+  <LinkCard title="@factible/validar" href="/factible/validar/" description="Validación y dígito verificador de CI y RUT. En TypeScript, Python, PHP, Go y Java." />
+  <LinkCard title="@factible/bcu" href="/factible/bcu/" description="Cotizaciones oficiales del Banco Central, sin credenciales." />
+  <LinkCard title="@factible/montevideo" href="/factible/montevideo/" description="Buses del STM en tiempo real, arribos a tu parada (TEA) y banderas de playas." />
+  <LinkCard title="@factible/id-uruguay" href="/factible/id-uruguay/" description="Login con cédula: cliente OpenID Connect para ID Uruguay (AGESIC). (Beta)" />
+</CardGrid>
+
+## ¿En qué lenguaje?
+
+- **TypeScript / JavaScript** es el lenguaje principal: todos los conectores están en npm.
+- **Python, PHP, Go y Java**: los paquetes diminutos y de spec congelada tienen ports oficiales — hoy [`validar`](/factible/validar/), con el mismo algoritmo y los mismos tests en los cinco lenguajes.
+- **Cualquier otro stack**: la lógica pesada (como `cfe`) no se porta; llegará vía [gateway REST](/factible/gateway/) para integrar por HTTP desde cualquier lenguaje.
+
+## Cómo está construido
+
+<CardGrid>
+  <Card title="DX primero" icon="rocket">
+    Tipos estrictos, quickstart en minutos y errores del Estado traducidos a mensajes útiles en español.
+  </Card>
+  <Card title="Simuladores incluidos" icon="seti:lock">
+    Cada conector trae un mock del organismo: testeá tu integración completa sin certificados ni trámites.
+  </Card>
+  <Card title="Fiel a la spec" icon="document">
+    Los esquemas oficiales viven en el repo y los tests validan contra ellos en cada cambio.
+  </Card>
+  <Card title="Open source" icon="github">
+    MIT, autohosteable, sin lock-in. El protocolo documentado, no enterrado en una caja negra.
+  </Card>
+</CardGrid>
+
+## ¿Te falta un conector?
+
+[Pedilo acá](https://github.com/olagopirez/factible/issues/new?template=conector.yml) — contanos qué organismo te hace perder tiempo hoy.

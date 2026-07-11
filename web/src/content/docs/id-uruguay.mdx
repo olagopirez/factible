@@ -1,0 +1,96 @@
+---
+title: '@factible/id-uruguay'
+description: Login con cédula — cliente OpenID Connect para ID Uruguay / Usuario gub.uy (AGESIC), con simulador incluido.
+sidebar:
+  label: id-uruguay — Login con cédula
+  badge:
+    text: Beta
+    variant: caution
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+**Login con cédula** para tu aplicación: cliente OpenID Connect server-side para **ID Uruguay / Usuario gub.uy** (AGESIC).
+
+<Aside type="caution" title="Beta">
+Construido contra la [documentación pública de AGESIC](https://centroderecursos.agesic.gub.uy/web/seguridad/wiki/-/wiki/Main/ID+Uruguay+-+Integraci%C3%B3n+con+OpenID+Connect) (OIDC estándar + descubrimiento automático), verificado contra el mock. Pendiente de probar con credenciales reales del ambiente de testing (trámite ante AGESIC en curso). Las credenciales se solicitan a soporte@agesic.gub.uy.
+</Aside>
+
+## Instalación
+
+<Tabs syncKey="lang">
+  <TabItem label="TypeScript">
+    ```bash
+    npm install @factible/id-uruguay
+    ```
+  </TabItem>
+  <TabItem label="Java (Spring Security)">
+    En camino — la integración con Spring Security (cliente OAuth2/OIDC) está planificada. Mientras tanto, ID Uruguay es OIDC estándar: podés configurarlo hoy como `ClientRegistration` manual en Spring Security. [Seguí el avance acá](https://github.com/olagopirez/factible/issues).
+  </TabItem>
+</Tabs>
+
+## Uso
+
+<Tabs syncKey="lang">
+  <TabItem label="TypeScript">
+    ```ts
+    import { IdUruguayClient, NIVELES_ACR } from '@factible/id-uruguay';
+
+    const idUruguay = new IdUruguayClient({
+      clientId: process.env.IDU_CLIENT_ID!,
+      clientSecret: process.env.IDU_CLIENT_SECRET!,
+      redirectUri: 'https://miapp.uy/callback',
+      ambiente: 'testing', // o 'produccion'
+    });
+
+    // 1. Redirigir al usuario a autenticarse
+    const url = await idUruguay.urlAutorizacion({ state, nonce, acr: NIVELES_ACR.NID_2 });
+
+    // 2. En el callback: canjear el código
+    //    (el id_token se verifica contra el JWKS: firma, issuer, audience, nonce)
+    const tokens = await idUruguay.intercambiarCodigo({ code, nonce });
+
+    // 3. Perfil del usuario
+    const usuario = await idUruguay.usuario(tokens.accessToken);
+    usuario.ci;             // '12345672' — extraída del uid y validada con @factible/validar
+    usuario.nombreCompleto; // 'Juana de América'
+    ```
+  </TabItem>
+  <TabItem label="Java (Spring Security)">
+    ```yaml
+    # Mientras el port oficial no existe: ID Uruguay como proveedor OIDC
+    # estándar en Spring Security (application.yaml)
+    spring:
+      security:
+        oauth2:
+          client:
+            registration:
+              id-uruguay:
+                client-id: ${IDU_CLIENT_ID}
+                client-secret: ${IDU_CLIENT_SECRET}
+                scope: openid, personal_info
+                redirect-uri: "{baseUrl}/login/oauth2/code/id-uruguay"
+                authorization-grant-type: authorization_code
+            provider:
+              id-uruguay:
+                issuer-uri: https://auth-testing.iduruguay.gub.uy/oidc/v1
+    ```
+  </TabItem>
+</Tabs>
+
+## Desarrollá sin credenciales
+
+Incluye `MockIdUruguay`: un servidor OIDC local que simula a AGESIC (descubrimiento, authorize, token con JWT RS256 real, userinfo, JWKS). Tu flujo de login se testea completo sin esperar el trámite:
+
+```ts
+import { MockIdUruguay } from '@factible/id-uruguay';
+
+const mock = new MockIdUruguay();
+const issuerUrl = await mock.iniciar();
+const cliente = new IdUruguayClient({ ...config, issuerUrl });
+const { code } = mock.autorizar(await cliente.urlAutorizacion({ state, nonce }));
+```
+
+## Licencia
+
+MIT. Código en [`packages/id-uruguay`](https://github.com/olagopirez/factible/tree/main/packages/id-uruguay).

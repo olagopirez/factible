@@ -1,0 +1,17 @@
+/* Acento verde de la marca factible sobre el tema de Starlight. */
+:root {
+  --sl-color-accent-low: #12261b;
+  --sl-color-accent: #22c55e;
+  --sl-color-accent-high: #a7f3d0;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #d1fae5;
+  --sl-color-accent: #16a34a;
+  --sl-color-accent-high: #14532d;
+}
+
+/* Logo un poco más contenido en el header. */
+.site-title img {
+  height: 1.75rem;
+}

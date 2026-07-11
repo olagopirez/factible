@@ -1,0 +1,82 @@
+---
+title: '@factible/montevideo'
+description: APIs de la Intendencia de Montevideo — buses del STM en tiempo real, arribos a paradas (TEA) y banderas de playas.
+sidebar:
+  label: montevideo — STM y playas
+  badge:
+    text: Disponible
+    variant: success
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+APIs de la **Intendencia de Montevideo**: posiciones de los buses del STM en tiempo real, tiempos de arribo a paradas (los mismos servicios de la app "Cómo Ir") y estado de bañabilidad de las playas. Buses, paradas, arribos (TEA) y playas **validados end-to-end contra las APIs reales**.
+
+## Instalación
+
+```bash
+npm install @factible/montevideo
+```
+
+## Credenciales
+
+<Steps>
+
+1. Creá una cuenta gratuita autoservicio en [api.montevideo.gub.uy](https://api.montevideo.gub.uy).
+
+2. En **Mis aplicaciones**, creá una Aplicación sobre el servicio **Transporte publico**.
+
+3. Copiá el **ID de cliente** y el **Secreto del cliente**. (La Redirect URL que pide el formulario no se usa en este flujo; cualquier URL válida sirve.)
+
+</Steps>
+
+La autenticación OAuth2 (Client Credentials contra Keycloak) la maneja el cliente: caché de token, renovación automática y reintento transparente ante 401.
+
+## Uso
+
+```ts
+import { MontevideoClient } from '@factible/montevideo';
+
+const mvd = new MontevideoClient({
+  credenciales: {
+    clientId: process.env.MVD_CLIENT_ID!,
+    clientSecret: process.env.MVD_CLIENT_SECRET!,
+  },
+});
+
+const buses = await mvd.buses({ lineas: [103] }); // Bus[] tipado, en tiempo real
+console.log(buses[0]);
+// { busId: 104, empresa: 'CUTCSA', linea: '103', destino: 'PLAZA ESPAÑA',
+//   latitud: -34.909542, longitud: -56.201515, velocidad: 0, ... }
+
+// Paradas y TEA (¿cuándo llega a mi parada?):
+const paradas = await mvd.paradas();
+const tea = await mvd.arribos(546, { lineas: ['405'] });
+// [{ eta: 4, linea: '405', empresa: 'COETC', destino: 'PARQUE RODÓ',
+//    busId: 50, latitud: -34.912666, ... }]  ← eta en minutos
+const variantes = await mvd.variantes();
+
+// Playas (requiere una Aplicación aparte, asociada al servicio "Playas"):
+const playas = await mvd.playas();       // lista de playas con coordenadas
+const casillas = await mvd.casillas();   // banderas por casilla de guardavidas
+// { nombre: 'Batlle y Ordoñez', playa: 'Pocitos', banderaSeguridad: 'green',
+//   banderaSanitaria: true, causaSanitariaDesc: 'Mortandad de peces', ... }
+```
+
+Cualquier otro endpoint del portal se consume autenticado con `mvd.get(path, params)` — por ejemplo el GTFS estático (beta): `GET /buses/gtfs/static/latest/google_transit.zip`.
+
+<Aside type="note">
+El servicio de **playas** es aparte: requiere su propia Aplicación asociada a "Playas". Fuera de temporada las casillas vienen sin banderas (campos opcionales).
+</Aside>
+
+## Tests
+
+Los tests corren contra un mock del portal (Keycloak + API) fiel a las respuestas reales. Para verificar end-to-end:
+
+```bash
+MVD_CLIENT_ID=... MVD_CLIENT_SECRET=... MVD_E2E=1 npx vitest run
+```
+
+## Licencia
+
+MIT. Código en [`packages/montevideo`](https://github.com/olagopirez/factible/tree/main/packages/montevideo).
