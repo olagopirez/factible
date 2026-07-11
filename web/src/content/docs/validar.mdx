@@ -1,0 +1,163 @@
+---
+title: '@factible/validar'
+description: Validación y dígito verificador de CI y RUT uruguayos. Cero dependencias, en TypeScript, Python, PHP, Go y Java.
+sidebar:
+  label: validar — CI y RUT
+  badge:
+    text: Disponible
+    variant: success
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Validación y dígito verificador de documentos uruguayos: **CI** y **RUT**. Cero dependencias.
+
+Es el conector con **ports oficiales a cinco lenguajes**: los cinco implementan el mismo algoritmo con los mismos vectores de test (incluido el RUT real de DGI: `219999830019`) y el CI los corre todos en cada push. Elegí tu lenguaje — la selección se mantiene en toda la página.
+
+## Instalación
+
+<Tabs syncKey="lang">
+  <TabItem label="TypeScript">
+    ```bash
+    npm install @factible/validar
+    ```
+  </TabItem>
+  <TabItem label="Python">
+    ```bash
+    pip install factible-validar
+    ```
+  </TabItem>
+  <TabItem label="PHP">
+    ```bash
+    composer require factible/validar
+    ```
+  </TabItem>
+  <TabItem label="Go">
+    ```bash
+    go get github.com/olagopirez/factible/ports/validar-go
+    ```
+  </TabItem>
+  <TabItem label="Java">
+    ```xml
+    <!-- uy.factible:validar — publicación en Maven Central pendiente -->
+    <dependency>
+      <groupId>uy.factible</groupId>
+      <artifactId>validar</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+    ```
+  </TabItem>
+</Tabs>
+
+## Uso
+
+<Tabs syncKey="lang">
+  <TabItem label="TypeScript">
+    ```ts
+    import {
+      validarCi, digitoVerificadorCi, formatearCi, normalizarCi,
+      validarRut, digitoVerificadorRut, normalizarRut,
+    } from '@factible/validar';
+
+    // Cédula de identidad
+    validarCi('1.234.567-2');       // true — acepta con o sin puntos/guión
+    digitoVerificadorCi('1234567'); // 2
+    formatearCi('12345672');        // '1.234.567-2'
+    normalizarCi('1.234.567-2');    // '12345672'
+
+    // RUT (12 dígitos)
+    validarRut('219999830019');          // true (el RUT de DGI, de hecho)
+    digitoVerificadorRut('21999983001'); // 9 — null si el número no admite RUT válido
+    normalizarRut('21.999983.001-9');    // '219999830019'
+    ```
+  </TabItem>
+  <TabItem label="Python">
+    ```python
+    from factible_validar import (
+        validar_ci, digito_verificador_ci, formatear_ci, normalizar_ci,
+        validar_rut, digito_verificador_rut, normalizar_rut,
+    )
+
+    # Cédula de identidad
+    validar_ci('1.234.567-2')        # True — acepta con o sin puntos/guión
+    digito_verificador_ci('1234567') # 2
+    formatear_ci('12345672')         # '1.234.567-2'
+    normalizar_ci('1.234.567-2')     # '12345672'
+
+    # RUT (12 dígitos)
+    validar_rut('219999830019')           # True (el RUT de DGI, de hecho)
+    digito_verificador_rut('21999983001') # 9 — None si no admite RUT válido
+    normalizar_rut('21.999983.001-9')     # '219999830019'
+    ```
+  </TabItem>
+  <TabItem label="PHP">
+    ```php
+    <?php
+    use Factible\Validar;
+
+    // Cédula de identidad
+    Validar::validarCi('1.234.567-2');       // true — acepta con o sin puntos/guión
+    Validar::digitoVerificadorCi('1234567'); // 2
+    Validar::formatearCi('12345672');        // '1.234.567-2'
+    Validar::normalizarCi('1.234.567-2');    // '12345672'
+
+    // RUT (12 dígitos)
+    Validar::validarRut('219999830019');          // true (el RUT de DGI, de hecho)
+    Validar::digitoVerificadorRut('21999983001'); // 9 — null si no admite RUT válido
+    Validar::normalizarRut('21.999983.001-9');    // '219999830019'
+    ```
+  </TabItem>
+  <TabItem label="Go">
+    ```go
+    import "github.com/olagopirez/factible/ports/validar-go"
+
+    // Cédula de identidad
+    validar.ValidarCI("1.234.567-2")        // true — acepta con o sin puntos/guión
+    dv, _ := validar.DigitoVerificadorCI("1234567") // 2
+    validar.NormalizarCI("1.234.567-2")     // "12345672"
+
+    // RUT (12 dígitos)
+    validar.ValidarRUT("219999830019")      // true (el RUT de DGI, de hecho)
+    dvRut, err := validar.DigitoVerificadorRUT("21999983001") // 9, err si no admite RUT válido
+    validar.NormalizarRUT("21.999983.001-9") // "219999830019"
+    ```
+  </TabItem>
+  <TabItem label="Java">
+    ```java
+    import uy.factible.validar.Validar;
+
+    // Cédula de identidad
+    Validar.validarCi("1.234.567-2");       // true — acepta con o sin puntos/guión
+    Validar.digitoVerificadorCi("1234567"); // 2
+    Validar.formatearCi("12345672");        // "1.234.567-2"
+    Validar.normalizarCi("1.234.567-2");    // "12345672"
+
+    // RUT (12 dígitos)
+    Validar.validarRut("219999830019");          // true (el RUT de DGI, de hecho)
+    Validar.digitoVerificadorRut("21999983001"); // 9 — null si no admite RUT válido
+    Validar.normalizarRut("21.999983.001-9");    // "219999830019"
+    ```
+  </TabItem>
+</Tabs>
+
+## API
+
+| Operación | Qué hace |
+| --- | --- |
+| `validarCi(ci)` | Valida una CI completa (con dígito verificador). Acepta puntos y guión. |
+| `digitoVerificadorCi(numero)` | Dígito verificador para un número de CI (sin dv, hasta 7 dígitos). |
+| `formatearCi(ci)` | Formatea como `1.234.567-2`. |
+| `normalizarCi(ci)` | Quita puntos, guiones y espacios. |
+| `validarRut(rut)` | Valida un RUT de 12 dígitos. |
+| `digitoVerificadorRut(base)` | Dígito verificador para los 11 dígitos base — `null` si el número no admite RUT válido. |
+| `normalizarRut(rut)` | Quita puntos, guiones y espacios. |
+
+Los nombres se adaptan a la convención de cada lenguaje (`validar_ci` en Python, `ValidarCI` en Go, `Validar::validarCi` en PHP, `Validar.validarCi` en Java) pero el comportamiento es idéntico.
+
+## Por qué hay ports
+
+Los paquetes **diminutos, de spec congelada y cero dependencias** se portan a otros lenguajes ([política multi-lenguaje](https://github.com/olagopirez/factible/blob/main/docs/plan-conectores.md)). La lógica pesada (como `@factible/cfe`) no se porta: multi-lenguaje llegará vía [gateway REST](/factible/gateway/).
+
+## Licencia
+
+MIT. Código en [`packages/validar`](https://github.com/olagopirez/factible/tree/main/packages/validar) (TypeScript) y [`ports/`](https://github.com/olagopirez/factible/tree/main/ports) (Python, PHP, Go, Java).

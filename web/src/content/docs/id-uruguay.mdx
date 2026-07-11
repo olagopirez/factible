@@ -1,0 +1,198 @@
+---
+title: '@factible/id-uruguay'
+description: Login con cédula — cliente OpenID Connect para ID Uruguay / Usuario gub.uy (AGESIC), con simulador incluido.
+sidebar:
+  label: id-uruguay — Login con cédula
+  badge:
+    text: Beta
+    variant: caution
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+**Login con cédula** para tu aplicación: cliente OpenID Connect server-side para **ID Uruguay / Usuario gub.uy** (AGESIC).
+
+<Aside type="caution" title="Beta">
+Construido contra la [documentación pública de AGESIC](https://centroderecursos.agesic.gub.uy/web/seguridad/wiki/-/wiki/Main/ID+Uruguay+-+Integraci%C3%B3n+con+OpenID+Connect) (OIDC estándar + descubrimiento automático), verificado contra el mock. Pendiente de probar con credenciales reales del ambiente de testing (trámite ante AGESIC en curso). Las credenciales se solicitan a soporte@agesic.gub.uy.
+</Aside>
+
+## Multi-lenguaje: recetas, no ports
+
+Este conector **no se porta** a otros lenguajes: es código de seguridad, y duplicarlo por stack sería un pasivo. Como ID Uruguay es **OIDC estándar**, la vía multi-lenguaje es otra: cada tab trae la **receta oficial** para integrarlo con la librería OIDC madura de ese lenguaje, y las [particularidades de ID Uruguay](#particularidades-de-id-uruguay) que igual vas a necesitar están documentadas más abajo — valen para todos los stacks.
+
+## Instalación
+
+<Tabs syncKey="lang">
+  <TabItem label="TypeScript">
+    ```bash
+    npm install @factible/id-uruguay
+    ```
+  </TabItem>
+  <TabItem label="Python">
+    ```bash
+    # Con Authlib, el cliente OIDC estándar de Python:
+    pip install authlib
+    ```
+  </TabItem>
+  <TabItem label="PHP">
+    ```bash
+    # Con un cliente OIDC estándar:
+    composer require jumbojett/openid-connect-php
+    ```
+  </TabItem>
+  <TabItem label="Go">
+    ```bash
+    # Con go-oidc, el cliente OIDC estándar de Go:
+    go get github.com/coreos/go-oidc/v3/oidc golang.org/x/oauth2
+    ```
+  </TabItem>
+  <TabItem label="Java">
+    ```xml
+    <!-- Con el cliente OAuth2/OIDC de Spring Security: -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+    ```
+  </TabItem>
+</Tabs>
+
+## Uso
+
+<Tabs syncKey="lang">
+  <TabItem label="TypeScript">
+    ```ts
+    import { IdUruguayClient, NIVELES_ACR } from '@factible/id-uruguay';
+
+    const idUruguay = new IdUruguayClient({
+      clientId: process.env.IDU_CLIENT_ID!,
+      clientSecret: process.env.IDU_CLIENT_SECRET!,
+      redirectUri: 'https://miapp.uy/callback',
+      ambiente: 'testing', // o 'produccion'
+    });
+
+    // 1. Redirigir al usuario a autenticarse
+    const url = await idUruguay.urlAutorizacion({ state, nonce, acr: NIVELES_ACR.NID_2 });
+
+    // 2. En el callback: canjear el código
+    //    (el id_token se verifica contra el JWKS: firma, issuer, audience, nonce)
+    const tokens = await idUruguay.intercambiarCodigo({ code, nonce });
+
+    // 3. Perfil del usuario
+    const usuario = await idUruguay.usuario(tokens.accessToken);
+    usuario.ci;             // '12345672' — extraída del uid y validada con @factible/validar
+    usuario.nombreCompleto; // 'Juana de América'
+    ```
+  </TabItem>
+  <TabItem label="Python">
+    ```python
+    # ID Uruguay como proveedor OIDC estándar con Authlib (ejemplo Flask)
+    from authlib.integrations.flask_client import OAuth
+
+    oauth = OAuth(app)
+    oauth.register(
+        name='id_uruguay',
+        client_id=os.environ['IDU_CLIENT_ID'],
+        client_secret=os.environ['IDU_CLIENT_SECRET'],
+        server_metadata_url='https://auth-testing.iduruguay.gub.uy/oidc/v1/.well-known/openid-configuration',
+        client_kwargs={'scope': 'openid personal_info'},
+    )
+
+    @app.route('/login')
+    def login():
+        return oauth.id_uruguay.authorize_redirect(url_for('callback', _external=True))
+
+    @app.route('/callback')
+    def callback():
+        tokens = oauth.id_uruguay.authorize_access_token()  # verifica firma, issuer y nonce
+        usuario = oauth.id_uruguay.userinfo(token=tokens)   # perfil del usuario
+    ```
+  </TabItem>
+  <TabItem label="PHP">
+    ```php
+    <?php
+    // ID Uruguay como proveedor OIDC estándar
+    use Jumbojett\OpenIDConnectClient;
+
+    $oidc = new OpenIDConnectClient(
+        'https://auth-testing.iduruguay.gub.uy/oidc/v1', // o auth.iduruguay.gub.uy en producción
+        getenv('IDU_CLIENT_ID'),
+        getenv('IDU_CLIENT_SECRET'),
+    );
+    $oidc->setRedirectURL('https://miapp.uy/callback');
+    $oidc->addScope(['openid', 'personal_info']);
+
+    $oidc->authenticate();               // redirige a ID Uruguay y procesa el callback
+    $usuario = $oidc->requestUserInfo(); // perfil del usuario
+    ```
+  </TabItem>
+  <TabItem label="Go">
+    ```go
+    // ID Uruguay como proveedor OIDC estándar con go-oidc
+    provider, err := oidc.NewProvider(ctx, "https://auth-testing.iduruguay.gub.uy/oidc/v1")
+
+    config := oauth2.Config{
+        ClientID:     os.Getenv("IDU_CLIENT_ID"),
+        ClientSecret: os.Getenv("IDU_CLIENT_SECRET"),
+        RedirectURL:  "https://miapp.uy/callback",
+        Endpoint:     provider.Endpoint(),
+        Scopes:       []string{oidc.ScopeOpenID, "personal_info"},
+    }
+
+    // 1. Redirigir: config.AuthCodeURL(state, oidc.Nonce(nonce))
+    // 2. En el callback: canjear el código y verificar el id_token
+    token, err := config.Exchange(ctx, code)
+    rawIDToken, _ := token.Extra("id_token").(string)
+    idToken, err := provider.Verifier(&oidc.Config{ClientID: config.ClientID}).Verify(ctx, rawIDToken)
+    ```
+  </TabItem>
+  <TabItem label="Java">
+    ```yaml
+    # ID Uruguay como proveedor OIDC estándar en Spring Security (application.yaml)
+    spring:
+      security:
+        oauth2:
+          client:
+            registration:
+              id-uruguay:
+                client-id: ${IDU_CLIENT_ID}
+                client-secret: ${IDU_CLIENT_SECRET}
+                scope: openid, personal_info
+                redirect-uri: "{baseUrl}/login/oauth2/code/id-uruguay"
+                authorization-grant-type: authorization_code
+            provider:
+              id-uruguay:
+                issuer-uri: https://auth-testing.iduruguay.gub.uy/oidc/v1
+    ```
+  </TabItem>
+</Tabs>
+
+## Particularidades de ID Uruguay
+
+Uses la librería que uses, esto es lo específico de ID Uruguay que no está en ningún tutorial genérico de OIDC:
+
+| Particularidad | Detalle |
+| --- | --- |
+| **Issuers** | Testing: `https://auth-testing.iduruguay.gub.uy/oidc/v1` · Producción: `https://auth.iduruguay.gub.uy/oidc/v1`. Ambos exponen descubrimiento (`/.well-known/openid-configuration`). |
+| **Scopes** | `openid` + `personal_info` para el perfil (nombre, documento). |
+| **Niveles de autenticación (ACR)** | Se piden vía `acr_values`: `urn:iduruguay:nid:0` a `urn:iduruguay:nid:3`. NID 2+ exige métodos con verificación presencial (p. ej. cédula digital). Verificá el claim `acr` del id_token: el usuario puede autenticarse con un nivel menor al pedido. |
+| **La cédula viene en el `uid`** | El identificador tiene formato `uy-ci-12345672`: la CI va embebida, sin dígitos de formato. Extraela con `^uy-ci-(\d{7,8})$` y validala (por ejemplo con [@factible/validar](/factible/validar/)). |
+| **JWKS sin `x5c`** | Las claves de firma del JWKS no incluyen la cadena de certificados; si tu librería espera `x5c` para validar el id_token, configurala para usar `n`/`e` (RSA) directo. |
+| **Credenciales** | Se tramitan ante AGESIC: [soporte@agesic.gub.uy](mailto:soporte@agesic.gub.uy), indicando redirect URIs y ambiente. |
+
+## Desarrollá sin credenciales (en cualquier lenguaje)
+
+`MockIdUruguay` es un servidor OIDC local que simula a AGESIC: descubrimiento, authorize, token con JWT RS256 real, userinfo y JWKS. Y como es un OP por HTTP, sirve para desarrollar **desde cualquier stack**: levantalo y apuntá el issuer de tu app — sea Spring Security, Authlib o go-oidc — a la URL local. Tu flujo de login se testea completo sin esperar el trámite:
+
+```ts
+import { MockIdUruguay } from '@factible/id-uruguay';
+
+const mock = new MockIdUruguay();
+const issuerUrl = await mock.iniciar();
+const cliente = new IdUruguayClient({ ...config, issuerUrl });
+const { code } = mock.autorizar(await cliente.urlAutorizacion({ state, nonce }));
+```
+
+## Licencia
+
+MIT. Código en [`packages/id-uruguay`](https://github.com/olagopirez/factible/tree/main/packages/id-uruguay).
