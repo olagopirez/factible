@@ -18,14 +18,40 @@ Construido contra la [documentación pública de AGESIC](https://centroderecurso
 
 ## Instalación
 
+El cliente oficial hoy es TypeScript; los ports a otros lenguajes están planificados (Java con Spring Security primero). Mientras tanto no quedás bloqueado: **ID Uruguay es OIDC estándar**, y cada tab muestra cómo integrarlo hoy con la librería OIDC madura de ese lenguaje.
+
 <Tabs syncKey="lang">
   <TabItem label="TypeScript">
     ```bash
     npm install @factible/id-uruguay
     ```
   </TabItem>
-  <TabItem label="Java (Spring Security)">
-    En camino — la integración con Spring Security (cliente OAuth2/OIDC) está planificada. Mientras tanto, ID Uruguay es OIDC estándar: podés configurarlo hoy como `ClientRegistration` manual en Spring Security. [Seguí el avance acá](https://github.com/olagopirez/factible/issues).
+  <TabItem label="Python">
+    ```bash
+    # Port oficial en camino — hoy, con Authlib (OIDC estándar):
+    pip install authlib
+    ```
+  </TabItem>
+  <TabItem label="PHP">
+    ```bash
+    # Port oficial en camino — hoy, con un cliente OIDC estándar:
+    composer require jumbojett/openid-connect-php
+    ```
+  </TabItem>
+  <TabItem label="Go">
+    ```bash
+    # Port oficial en camino — hoy, con go-oidc (OIDC estándar):
+    go get github.com/coreos/go-oidc/v3/oidc golang.org/x/oauth2
+    ```
+  </TabItem>
+  <TabItem label="Java">
+    ```xml
+    <!-- Port oficial en camino — hoy, con el cliente OAuth2/OIDC de Spring Security: -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+    ```
   </TabItem>
 </Tabs>
 
@@ -56,10 +82,71 @@ Construido contra la [documentación pública de AGESIC](https://centroderecurso
     usuario.nombreCompleto; // 'Juana de América'
     ```
   </TabItem>
-  <TabItem label="Java (Spring Security)">
+  <TabItem label="Python">
+    ```python
+    # ID Uruguay como proveedor OIDC estándar con Authlib (ejemplo Flask)
+    from authlib.integrations.flask_client import OAuth
+
+    oauth = OAuth(app)
+    oauth.register(
+        name='id_uruguay',
+        client_id=os.environ['IDU_CLIENT_ID'],
+        client_secret=os.environ['IDU_CLIENT_SECRET'],
+        server_metadata_url='https://auth-testing.iduruguay.gub.uy/oidc/v1/.well-known/openid-configuration',
+        client_kwargs={'scope': 'openid personal_info'},
+    )
+
+    @app.route('/login')
+    def login():
+        return oauth.id_uruguay.authorize_redirect(url_for('callback', _external=True))
+
+    @app.route('/callback')
+    def callback():
+        tokens = oauth.id_uruguay.authorize_access_token()  # verifica firma, issuer y nonce
+        usuario = oauth.id_uruguay.userinfo(token=tokens)   # perfil del usuario
+    ```
+  </TabItem>
+  <TabItem label="PHP">
+    ```php
+    <?php
+    // ID Uruguay como proveedor OIDC estándar
+    use Jumbojett\OpenIDConnectClient;
+
+    $oidc = new OpenIDConnectClient(
+        'https://auth-testing.iduruguay.gub.uy/oidc/v1', // o auth.iduruguay.gub.uy en producción
+        getenv('IDU_CLIENT_ID'),
+        getenv('IDU_CLIENT_SECRET'),
+    );
+    $oidc->setRedirectURL('https://miapp.uy/callback');
+    $oidc->addScope(['openid', 'personal_info']);
+
+    $oidc->authenticate();               // redirige a ID Uruguay y procesa el callback
+    $usuario = $oidc->requestUserInfo(); // perfil del usuario
+    ```
+  </TabItem>
+  <TabItem label="Go">
+    ```go
+    // ID Uruguay como proveedor OIDC estándar con go-oidc
+    provider, err := oidc.NewProvider(ctx, "https://auth-testing.iduruguay.gub.uy/oidc/v1")
+
+    config := oauth2.Config{
+        ClientID:     os.Getenv("IDU_CLIENT_ID"),
+        ClientSecret: os.Getenv("IDU_CLIENT_SECRET"),
+        RedirectURL:  "https://miapp.uy/callback",
+        Endpoint:     provider.Endpoint(),
+        Scopes:       []string{oidc.ScopeOpenID, "personal_info"},
+    }
+
+    // 1. Redirigir: config.AuthCodeURL(state, oidc.Nonce(nonce))
+    // 2. En el callback: canjear el código y verificar el id_token
+    token, err := config.Exchange(ctx, code)
+    rawIDToken, _ := token.Extra("id_token").(string)
+    idToken, err := provider.Verifier(&oidc.Config{ClientID: config.ClientID}).Verify(ctx, rawIDToken)
+    ```
+  </TabItem>
+  <TabItem label="Java">
     ```yaml
-    # Mientras el port oficial no existe: ID Uruguay como proveedor OIDC
-    # estándar en Spring Security (application.yaml)
+    # ID Uruguay como proveedor OIDC estándar en Spring Security (application.yaml)
     spring:
       security:
         oauth2:
