@@ -16,9 +16,11 @@ import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 Construido contra la [documentación pública de AGESIC](https://centroderecursos.agesic.gub.uy/web/seguridad/wiki/-/wiki/Main/ID+Uruguay+-+Integraci%C3%B3n+con+OpenID+Connect) (OIDC estándar + descubrimiento automático), verificado contra el mock. Pendiente de probar con credenciales reales del ambiente de testing (trámite ante AGESIC en curso). Las credenciales se solicitan a soporte@agesic.gub.uy.
 </Aside>
 
-## Instalación
+## Multi-lenguaje: recetas, no ports
 
-El cliente oficial hoy es TypeScript; los ports a otros lenguajes están planificados (Java con Spring Security primero). Mientras tanto no quedás bloqueado: **ID Uruguay es OIDC estándar**, y cada tab muestra cómo integrarlo hoy con la librería OIDC madura de ese lenguaje.
+Este conector **no se porta** a otros lenguajes: es código de seguridad, y duplicarlo por stack sería un pasivo. Como ID Uruguay es **OIDC estándar**, la vía multi-lenguaje es otra: cada tab trae la **receta oficial** para integrarlo con la librería OIDC madura de ese lenguaje, y las [particularidades de ID Uruguay](#particularidades-de-id-uruguay) que igual vas a necesitar están documentadas más abajo — valen para todos los stacks.
+
+## Instalación
 
 <Tabs syncKey="lang">
   <TabItem label="TypeScript">
@@ -28,25 +30,25 @@ El cliente oficial hoy es TypeScript; los ports a otros lenguajes están planifi
   </TabItem>
   <TabItem label="Python">
     ```bash
-    # Port oficial en camino — hoy, con Authlib (OIDC estándar):
+    # Con Authlib, el cliente OIDC estándar de Python:
     pip install authlib
     ```
   </TabItem>
   <TabItem label="PHP">
     ```bash
-    # Port oficial en camino — hoy, con un cliente OIDC estándar:
+    # Con un cliente OIDC estándar:
     composer require jumbojett/openid-connect-php
     ```
   </TabItem>
   <TabItem label="Go">
     ```bash
-    # Port oficial en camino — hoy, con go-oidc (OIDC estándar):
+    # Con go-oidc, el cliente OIDC estándar de Go:
     go get github.com/coreos/go-oidc/v3/oidc golang.org/x/oauth2
     ```
   </TabItem>
   <TabItem label="Java">
     ```xml
-    <!-- Port oficial en camino — hoy, con el cliente OAuth2/OIDC de Spring Security: -->
+    <!-- Con el cliente OAuth2/OIDC de Spring Security: -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
@@ -165,9 +167,22 @@ El cliente oficial hoy es TypeScript; los ports a otros lenguajes están planifi
   </TabItem>
 </Tabs>
 
-## Desarrollá sin credenciales
+## Particularidades de ID Uruguay
 
-Incluye `MockIdUruguay`: un servidor OIDC local que simula a AGESIC (descubrimiento, authorize, token con JWT RS256 real, userinfo, JWKS). Tu flujo de login se testea completo sin esperar el trámite:
+Uses la librería que uses, esto es lo específico de ID Uruguay que no está en ningún tutorial genérico de OIDC:
+
+| Particularidad | Detalle |
+| --- | --- |
+| **Issuers** | Testing: `https://auth-testing.iduruguay.gub.uy/oidc/v1` · Producción: `https://auth.iduruguay.gub.uy/oidc/v1`. Ambos exponen descubrimiento (`/.well-known/openid-configuration`). |
+| **Scopes** | `openid` + `personal_info` para el perfil (nombre, documento). |
+| **Niveles de autenticación (ACR)** | Se piden vía `acr_values`: `urn:iduruguay:nid:0` a `urn:iduruguay:nid:3`. NID 2+ exige métodos con verificación presencial (p. ej. cédula digital). Verificá el claim `acr` del id_token: el usuario puede autenticarse con un nivel menor al pedido. |
+| **La cédula viene en el `uid`** | El identificador tiene formato `uy-ci-12345672`: la CI va embebida, sin dígitos de formato. Extraela con `^uy-ci-(\d{7,8})$` y validala (por ejemplo con [@factible/validar](/factible/validar/)). |
+| **JWKS sin `x5c`** | Las claves de firma del JWKS no incluyen la cadena de certificados; si tu librería espera `x5c` para validar el id_token, configurala para usar `n`/`e` (RSA) directo. |
+| **Credenciales** | Se tramitan ante AGESIC: [soporte@agesic.gub.uy](mailto:soporte@agesic.gub.uy), indicando redirect URIs y ambiente. |
+
+## Desarrollá sin credenciales (en cualquier lenguaje)
+
+`MockIdUruguay` es un servidor OIDC local que simula a AGESIC: descubrimiento, authorize, token con JWT RS256 real, userinfo y JWKS. Y como es un OP por HTTP, sirve para desarrollar **desde cualquier stack**: levantalo y apuntá el issuer de tu app — sea Spring Security, Authlib o go-oidc — a la URL local. Tu flujo de login se testea completo sin esperar el trámite:
 
 ```ts
 import { MockIdUruguay } from '@factible/id-uruguay';

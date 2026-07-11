@@ -26,6 +26,7 @@ npm install @factible/validar @factible/bcu @factible/montevideo
 
 - **TypeScript / JavaScript** es el lenguaje principal: todos los conectores están en npm.
 - **Python, PHP, Go y Java**: los paquetes diminutos y de spec congelada tienen ports oficiales — hoy [`validar`](/factible/validar/), con el mismo algoritmo y los mismos tests en los cinco lenguajes.
+- **Login con cédula desde cualquier stack**: [`id-uruguay`](/factible/id-uruguay/) no se porta (es código de seguridad) — en su lugar hay **recetas por lenguaje** con la librería OIDC estándar de cada uno, más las particularidades de ID Uruguay documentadas.
 - **Cualquier otro stack**: la lógica pesada (como `cfe`) no se porta; llegará vía [gateway REST](/factible/gateway/) para integrar por HTTP desde cualquier lenguaje.
 
 ## Cómo está construido
