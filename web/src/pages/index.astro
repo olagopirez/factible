@@ -20,52 +20,46 @@ const u = (p: string) => `${base}${p}`;
 <body>
 <header class="wrap">
   <div class="logo"><img src={u('/assets/logo-lockup.svg')} alt="factible" /></div>
+  <p class="eyebrow">Open source · MIT · Hecho en Uruguay 🇺🇾</p>
   <h1>Integrarte con el Estado uruguayo,<br />en <em>una tarde</em> y no en un mes</h1>
-  <p class="sub">Un conector open source por organismo — DGI, BCU, AGESIC, Intendencia de Montevideo y más — con la misma experiencia: API tipada, simuladores para desarrollar sin trámites, y todo validado contra las especificaciones oficiales.</p>
+  <p class="sub">Un conector por organismo — DGI, BCU, AGESIC, Intendencia de Montevideo — con la misma experiencia: API tipada, simuladores para desarrollar sin trámites, todo validado contra las especificaciones oficiales.</p>
   <div class="botones">
     <a class="btn btn-primario" href={u('/empezar/')} data-cta="docs">Documentación</a>
     <a class="btn btn-sec" href="https://github.com/olagopirez/factible" data-cta="github">Ver en GitHub</a>
   </div>
-  <pre class="hero-pre"><code><span class="c-com"># ya disponible en npm</span>
+  <div class="term hero-term">
+    <div class="term-bar"><span></span><span></span><span></span></div>
+    <pre><code><span class="c-com"># ya disponible en npm</span>
 npm install <span class="c-str">@factible/validar</span> <span class="c-str">@factible/bcu</span> <span class="c-str">@factible/montevideo</span></code></pre>
+  </div>
+  <ul class="valores">
+    <li>⚡ DX primero</li>
+    <li>🧪 Simuladores incluidos</li>
+    <li>📋 Fiel a la spec oficial</li>
+    <li>🔓 Sin lock-in</li>
+  </ul>
 </header>
 
 <main class="wrap">
   <section>
-    <h2>Los conectores</h2>
-    <p class="intro">Cada organismo estatal habla un dialecto distinto — SOAP de 2012, XMLs firmados, formatos de archivo propios. factible los traduce a una API moderna y consistente. Elegí un conector para ver cómo usarlo:</p>
+    <h2>Elegí tu conector</h2>
+    <p class="intro">Cada organismo habla un dialecto distinto — SOAP de 2012, XMLs firmados, formatos propios. factible los traduce a una API moderna y consistente. Cada card lleva a su guía de uso:</p>
     <div class="grid">
-      <a class="card" href={u('/cfe/')}><span class="estado e-beta">BETA</span><h3>@factible/cfe</h3><p>Facturación electrónica DGI: e-Ticket, e-Factura, firma, sobres, acuses, reporte diario y representación impresa con QR.</p></a>
-      <a class="card" href={u('/validar/')}><span class="estado e-ok">DISPONIBLE</span><h3>@factible/validar</h3><p>Dígito verificador y validación de CI y RUT. Cero dependencias — en TypeScript, Python, PHP, Go y Java.</p><span class="langs">TS · Python · PHP · Go · Java</span></a>
-      <a class="card" href={u('/bcu/')}><span class="estado e-ok">DISPONIBLE</span><h3>@factible/bcu</h3><p>Cotizaciones oficiales del Banco Central, tipadas, sin credenciales — verificado contra el servicio real.</p></a>
-      <a class="card" href={u('/montevideo/')}><span class="estado e-ok">DISPONIBLE</span><h3>@factible/montevideo</h3><p>Intendencia de Montevideo: buses del STM en tiempo real, arribos a tu parada (TEA) y banderas de playas — validado contra las APIs reales.</p></a>
-      <a class="card" href={u('/id-uruguay/')}><span class="estado e-beta">BETA</span><h3>@factible/id-uruguay</h3><p>Login con cédula: cliente OpenID Connect para ID Uruguay (AGESIC), con simulador incluido.</p></a>
+      <a class="card" href={u('/cfe/')}><span class="estado e-beta">BETA</span><h3>@factible/cfe</h3><p>Facturación electrónica DGI: e-Ticket, e-Factura, firma, sobres, acuses y representación impresa con QR.</p><span class="ver">Ver guía →</span></a>
+      <a class="card" href={u('/validar/')}><span class="estado e-ok">DISPONIBLE</span><h3>@factible/validar</h3><p>Dígito verificador y validación de CI y RUT. Cero dependencias.</p><span class="langs">TS · Python · PHP · Go · Java</span><span class="ver">Ver guía →</span></a>
+      <a class="card" href={u('/bcu/')}><span class="estado e-ok">DISPONIBLE</span><h3>@factible/bcu</h3><p>Cotizaciones oficiales del Banco Central, tipadas, sin credenciales.</p><span class="ver">Ver guía →</span></a>
+      <a class="card" href={u('/montevideo/')}><span class="estado e-ok">DISPONIBLE</span><h3>@factible/montevideo</h3><p>Buses del STM en tiempo real, arribos a tu parada (TEA) y banderas de playas.</p><span class="ver">Ver guía →</span></a>
+      <a class="card" href={u('/id-uruguay/')}><span class="estado e-beta">BETA</span><h3>@factible/id-uruguay</h3><p>Login con cédula: cliente OpenID Connect para ID Uruguay (AGESIC), con simulador incluido.</p><span class="langs">TS + recetas: Java, Python, PHP, Go</span><span class="ver">Ver guía →</span></a>
       <div class="card"><span class="estado e-camino">EXPLORANDO</span><h3>@factible/bps</h3><p>Generación tipada de archivos de nómina (GAFI).</p></div>
       <a class="card card-pedido" href="https://github.com/olagopirez/factible/issues/new?template=conector.yml"><span class="estado">¿CUÁL TE FALTA?</span><h3>tu-conector</h3><p><span style="color:var(--acento); font-weight:600">Pedilo acá →</span> contanos qué organismo te hace perder tiempo hoy.</p></a>
-    </div>
-<pre><code><span class="c-com">// La misma experiencia en todos los conectores:</span>
-<span class="c-kw">import</span> {'{'} BcuClient, MONEDAS {'}'} <span class="c-kw">from</span> <span class="c-str">'@factible/bcu'</span>;
-<span class="c-kw">import</span> {'{'} validarRut {'}'} <span class="c-kw">from</span> <span class="c-str">'@factible/validar'</span>;
-<span class="c-kw">import</span> {'{'} MontevideoClient {'}'} <span class="c-kw">from</span> <span class="c-str">'@factible/montevideo'</span>;
-
-<span class="c-kw">const</span> usd = <span class="c-kw">await</span> <span class="c-kw">new</span> <span class="c-fn">BcuClient</span>().<span class="c-fn">cotizacion</span>(MONEDAS.DOLAR_USA); <span class="c-com">// {'{'} venta: 40.35, ... {'}'}</span>
-<span class="c-fn">validarRut</span>(<span class="c-str">'219999830019'</span>); <span class="c-com">// true</span>
-<span class="c-kw">const</span> tea = <span class="c-kw">await</span> mvd.<span class="c-fn">arribos</span>(<span class="c-str">546</span>, {'{'} lineas: [<span class="c-str">'405'</span>] {'}'}); <span class="c-com">// [{'{'} eta: 4, ... {'}'}] minutos</span></code></pre>
-  </section>
-
-  <section>
-    <h2>Cómo está construido</h2>
-    <div class="grid">
-      <div class="card"><h3 style="font-family:inherit">⚡ DX primero</h3><p>Tipos estrictos, quickstart en minutos y errores del Estado traducidos a mensajes útiles en español.</p></div>
-      <div class="card"><h3 style="font-family:inherit">🧪 Simuladores incluidos</h3><p>Cada conector trae un mock del organismo: testeá tu integración completa sin certificados ni trámites.</p></div>
-      <div class="card"><h3 style="font-family:inherit">📋 Fiel a la spec</h3><p>Los esquemas oficiales viven en el repo y los tests validan contra ellos en cada cambio.</p></div>
-      <div class="card"><h3 style="font-family:inherit">🔓 Open source</h3><p>MIT, autohosteable, sin lock-in. El protocolo documentado, no enterrado en una caja negra.</p></div>
     </div>
   </section>
 
   <section id="cfe">
     <h2>Destacado: facturación electrónica (CFE)</h2>
-    <p class="intro">Desde 2025 todo contribuyente de IVA emite factura electrónica. <code>@factible/cfe</code> cubre el ciclo completo contra DGI — con una DGI simulada para desarrollar desde el día uno. <a href={u('/cfe/')} style="color:var(--acento)">Ver la guía completa →</a></p>
+    <p class="intro">Desde 2025 todo contribuyente de IVA emite factura electrónica. <code>@factible/cfe</code> cubre el ciclo completo contra DGI — con una DGI simulada para desarrollar desde el día uno.</p>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
 <pre><code><span class="c-com">// Numeración CAE + XML v25.2 + firma XMLDSig + sello digital, en una llamada</span>
 <span class="c-kw">const</span> cfe = <span class="c-kw">await</span> factible.<span class="c-fn">emitir</span>({'{'}
   <span class="c-prop">tipo</span>: TipoCFE.E_TICKET,
@@ -73,18 +67,17 @@ npm install <span class="c-str">@factible/validar</span> <span class="c-str">@fa
   <span class="c-prop">lineas</span>: [{'{'} <span class="c-prop">cantidad</span>: 2, <span class="c-prop">descripcion</span>: <span class="c-str">'Café'</span>, <span class="c-prop">precioUnitario</span>: 190, <span class="c-prop">indicadorFacturacion</span>: 3 {'}'}],
 {'}'});
 
-<span class="c-com">// Enviar y entender la respuesta — sin descifrar códigos de error de un PDF</span>
-<span class="c-kw">const</span> resultado = <span class="c-kw">await</span> <span class="c-fn">enviarSobreADgi</span>(transporte, sobre);
-resultado.acuseCfe.detalles[0]
+<span class="c-com">// Los rechazos de DGI llegan con glosa en español, no códigos crípticos</span>
 <span class="c-com">// → {'{'} aceptado: false, motivosRechazo: [{'{'} motivo: 'E05', glosa: 'Firma electrónica no es válida' {'}'}] {'}'}</span></code></pre>
-    <div class="aviso">⚠️ <strong>Beta validada contra el ambiente de Testing de DGI.</strong> Sobres generados con la librería ya fueron aceptados por DGI (Estado AS) y el canal SOAP con WS-Security está confirmado contra el WSDL oficial. Falta la homologación formal: no usar en producción todavía.</div>
+    </div>
+    <p class="nota">⚠️ Beta validada contra el ambiente de Testing de DGI — sobres ya aceptados (Estado AS). Falta homologación: no usar en producción todavía. <a href={u('/cfe/')}>Estado completo y guía →</a></p>
   </section>
 
   <div class="cta" id="gateway">
     <h2>¿Preferís no gestionar certificados ni XML?</h2>
-    <p>Estamos evaluando un <strong>gateway hosteado</strong> sobre estas librerías: API REST con certificados gestionados, actualizaciones automáticas de formato y precio transparente por documento. Contanos si te sirve.</p>
+    <p>Estamos evaluando un <strong>gateway hosteado</strong> sobre estas librerías: API REST con certificados gestionados, actualizaciones automáticas de formato y precio transparente por documento.</p>
     <a class="btn btn-primario" href="https://github.com/olagopirez/factible/issues/new?template=gateway.yml" data-cta="gateway">Me interesa — contarles mi caso</a>
-    <p style="margin-top:14px; font-size:13px;">¿Preferís privado? Escribinos: <a href="mailto:olagopirez@gmail.com?subject=Gateway%20factible" style="color:var(--acento)">olagopirez@gmail.com</a></p>
+    <p class="nota" style="margin-top:14px">¿Preferís privado? <a href="mailto:olagopirez@gmail.com?subject=Gateway%20factible">olagopirez@gmail.com</a></p>
   </div>
 </main>
 
@@ -106,28 +99,38 @@ resultado.acuseCfe.detalles[0]
   body { background: var(--fondo); color: var(--texto); font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
   body::before { content: ''; display: block; height: 4px; background: linear-gradient(90deg, var(--acento2), var(--acento) 50%, var(--acento2)); }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-  header.wrap { padding: 96px 24px 48px; text-align: center; }
-  .logo { display: flex; justify-content: center; margin-bottom: 36px; }
+  header.wrap { padding: 88px 24px 40px; text-align: center; position: relative; }
+  header.wrap::before { content: ''; position: absolute; inset: 0; background: radial-gradient(560px 280px at 50% 0, rgba(34, 197, 94, 0.12), transparent 70%); pointer-events: none; }
+  header.wrap > * { position: relative; }
+  .logo { display: flex; justify-content: center; margin-bottom: 32px; }
   .logo img { height: 40px; }
+  .eyebrow { display: inline-block; font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--acento); border: 1px solid #1f4430; background: #12261b; border-radius: 99px; padding: 4px 14px; margin-bottom: 20px; }
   h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.15; margin: 0 0 16px; font-weight: 800; }
   h1 em { color: var(--acento); font-style: normal; }
   .sub { color: var(--tenue); font-size: 18px; max-width: 640px; margin: 0 auto 32px; }
   .botones { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .btn { padding: 12px 22px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; }
-  .btn-primario { background: var(--acento2); color: #04120a; }
+  .btn-primario { background: var(--acento2); color: #04120a; box-shadow: 0 0 24px rgba(34, 197, 94, 0.35); }
   .btn-primario:hover { background: var(--acento); }
   .btn-sec { border: 1px solid var(--borde); color: var(--texto); }
   .btn-sec:hover { border-color: var(--tenue); }
-  pre { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; padding: 20px; overflow-x: auto; font-size: 13.5px; line-height: 1.55; margin: 20px 0; }
+  pre { overflow-x: auto; font-size: 13.5px; line-height: 1.55; padding: 18px 20px; text-align: left; }
   code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; }
   .c-kw { color: #ff7b72; } .c-fn { color: #d2a8ff; } .c-str { color: #a5d6ff; } .c-com { color: #8b949e; } .c-prop { color: #79c0ff; }
+  .term { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; margin: 20px 0; overflow: hidden; }
+  .term-bar { display: flex; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--borde); }
+  .term-bar span { width: 10px; height: 10px; border-radius: 50%; background: var(--borde); }
+  .hero-term { display: inline-block; margin: 32px auto 0; max-width: 100%; }
+  .valores { list-style: none; padding: 0; margin: 28px auto 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 28px; color: var(--tenue); font-size: 14px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 24px 0; }
-  .card { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; padding: 20px; display: block; text-decoration: none; color: var(--texto); }
-  a.card { transition: border-color 0.15s, transform 0.15s; }
-  a.card:hover { border-color: var(--acento2); transform: translateY(-2px); }
+  .card { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: flex-start; text-decoration: none; color: var(--texto); }
+  a.card { transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s; }
+  a.card:hover { border-color: var(--acento2); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(34, 197, 94, 0.12); }
   .card h3 { font-size: 15px; margin-bottom: 6px; font-family: ui-monospace, Menlo, monospace; }
   .card p { color: var(--tenue); font-size: 14px; }
-  .langs { display: block; margin-top: 10px; font-size: 12px; color: var(--acento); font-family: ui-monospace, Menlo, monospace; }
+  .langs { margin-top: 10px; font-size: 12px; color: var(--acento); font-family: ui-monospace, Menlo, monospace; }
+  .ver { margin-top: auto; padding-top: 12px; font-size: 13px; font-weight: 600; color: var(--acento); opacity: 0; transition: opacity 0.15s; }
+  a.card:hover .ver { opacity: 1; }
   .estado { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-bottom: 8px; letter-spacing: 0.03em; }
   .e-ok { background: #12261b; color: var(--acento); border: 1px solid #1f4430; }
   .e-beta { background: #251e10; color: #d29922; border: 1px solid #453413; }
@@ -136,18 +139,17 @@ resultado.acuseCfe.detalles[0]
   .card-pedido:hover { border-color: var(--acento); background: rgba(74, 222, 128, 0.1); }
   .card-pedido .estado { background: #12261b; color: var(--acento); border: 1px solid #1f4430; }
   .card-pedido p { color: var(--texto); }
-  section h2 { font-size: 24px; margin: 72px 0 8px; }
+  section h2 { font-size: 24px; margin: 64px 0 8px; }
   section > p.intro { color: var(--tenue); margin-bottom: 16px; }
-  .aviso { background: #1c2128; border: 1px solid #3d2e1a; border-left: 3px solid #d29922; border-radius: 8px; padding: 14px 18px; color: var(--tenue); font-size: 14px; margin: 20px 0; }
-  .cta { background: var(--panel); border: 1px solid var(--borde); border-radius: 16px; padding: 40px; text-align: center; margin: 72px 0 0; }
+  .nota { color: var(--tenue); font-size: 14px; }
+  .nota a { color: var(--acento); }
+  .cta { background: var(--panel); border: 1px solid var(--borde); border-radius: 16px; padding: 40px; text-align: center; margin: 64px 0 0; }
   .cta h2 { margin: 0 0 8px; font-size: 22px; }
   .cta p { color: var(--tenue); margin-bottom: 24px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .cta p.nota { margin-bottom: 0; }
   footer { border-top: 1px solid var(--borde); padding: 32px 0; color: var(--tenue); font-size: 13px; text-align: center; margin-top: 64px; }
   footer a { color: var(--tenue); }
   img { max-width: 100%; }
-  /* El pre del header es inline-block (se ajusta al contenido): en pantallas
-     chicas hay que taparlo para que no estire la página entera. */
-  .hero-pre { display: inline-block; text-align: left; margin-top: 28px; padding: 12px 20px; max-width: 100%; overflow-x: auto; }
   @media (max-width: 640px) {
     header.wrap { padding: 56px 16px 32px; }
     .wrap { padding-left: 16px; padding-right: 16px; }
@@ -158,5 +160,6 @@ resultado.acuseCfe.detalles[0]
     .cta { padding: 28px 18px; margin-top: 48px; }
     .btn { width: 100%; text-align: center; }
     .botones { flex-direction: column; }
+    .valores { gap: 6px 18px; font-size: 13px; }
   }
 </style>
