@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@factible/validar": "^0.1.0",
-    "jose": "^5.9.0"
+    "jose": "^6.2.12"
   },
   "devDependencies": {
     "typescript": "^5.5.0",
