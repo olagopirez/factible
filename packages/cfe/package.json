@@ -42,7 +42,7 @@
     "vitest": "^2.0.0"
   },
   "dependencies": {
-    "@xmldom/xmldom": "^0.9.10",
+    "@xmldom/xmldom": "^0.9.12",
     "qrcode": "^1.5.4",
     "xml-crypto": "^6.1.2",
     "@factible/validar": "^0.1.0"
