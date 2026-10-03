@@ -1,6 +1,6 @@
 {
   "name": "@factible/id-uruguay",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Login con cédula: cliente OpenID Connect server-side para ID Uruguay / Usuario gub.uy (AGESIC).",
   "keywords": [
